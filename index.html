@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tobiasz Mazurek — Unity Developer Portfolio</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="unity-editor">
+
+    <!-- Toolbar -->
+    <header class="toolbar panel">
+      <div class="toolbar__group toolbar__group--left">
+        <button id="btn-play" class="toolbar__btn" title="Play" aria-label="Play">▶</button>
+        <button id="btn-pause" class="toolbar__btn" title="Pause" aria-label="Pause">⏸</button>
+        <button id="btn-step" class="toolbar__btn" title="Step" aria-label="Step">⏭</button>
+      </div>
+      <div class="toolbar__group toolbar__group--right">
+        <span class="toolbar__fps">FPS: <span id="fps-counter">0</span></span>
+        <span class="toolbar__dev-name">Tobiasz Mazurek</span>
+      </div>
+    </header>
+
+    <div class="main-layout">
+
+      <!-- Hierarchy -->
+      <aside class="hierarchy panel">
+        <div class="panel__header">Hierarchy</div>
+        <ul class="hierarchy__list" id="hierarchy-list">
+          <li class="hierarchy__item" data-section="about" tabindex="0">
+            <span class="hierarchy__icon">◆</span> About Me
+          </li>
+          <li class="hierarchy__item" data-section="cv" tabindex="0">
+            <span class="hierarchy__icon">◆</span> CV
+          </li>
+          <li class="hierarchy__item" data-section="gamesProjects" tabindex="0">
+            <span class="hierarchy__icon">◆</span> Projects — Games
+          </li>
+          <li class="hierarchy__item" data-section="toolsProjects" tabindex="0">
+            <span class="hierarchy__icon">◆</span> Projects — Tools
+          </li>
+          <li class="hierarchy__item" data-section="techStack" tabindex="0">
+            <span class="hierarchy__icon">◆</span> Tech Stack
+          </li>
+          <li class="hierarchy__item" data-section="contact" tabindex="0">
+            <span class="hierarchy__icon">◆</span> Contact
+          </li>
+        </ul>
+      </aside>
+
+      <!-- Scene / Game view -->
+      <main class="scene panel" id="scene-panel">
+        <div class="panel__header">
+          <span>Scene</span>
+          <span class="panel__header-tab">Game</span>
+        </div>
+        <div class="scene__viewport">
+          <div class="scene__placeholder-art" aria-hidden="true"></div>
+          <button id="scene-play-btn" class="scene__play-btn" aria-label="Play game build on itch.io">
+            ▶ Play
+          </button>
+          <div class="scene__caption">Little Bit Luck — WebGL Build</div>
+        </div>
+      </main>
+
+      <!-- Inspector -->
+      <aside class="inspector panel">
+        <div class="panel__header">Inspector</div>
+        <div class="inspector__content" id="inspector-content">
+          <p class="inspector__hint">Select a GameObject in the Hierarchy to inspect it.</p>
+        </div>
+      </aside>
+
+    </div>
+
+    <!-- Console -->
+    <footer class="console panel">
+      <div class="panel__header">Console</div>
+      <div class="console__log-list" id="console-log-list"></div>
+    </footer>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
