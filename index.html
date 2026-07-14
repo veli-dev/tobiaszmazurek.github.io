@@ -10,13 +10,47 @@
   <div class="unity-editor">
 
     <!-- Toolbar -->
-    <header class="toolbar panel">
+    <header class="toolbar">
       <div class="toolbar__group toolbar__group--left">
-        <button id="btn-play" class="toolbar__btn" title="Play" aria-label="Play">▶</button>
-        <button id="btn-pause" class="toolbar__btn" title="Pause" aria-label="Pause">⏸</button>
-        <button id="btn-step" class="toolbar__btn" title="Step" aria-label="Step">⏭</button>
+        <span class="toolbar__logo" aria-hidden="true"></span>
+        <button class="toolbar__menu-btn" id="hamburger-btn" aria-label="Menu" aria-expanded="false">☰</button>
+        <nav class="toolbar__menu" aria-label="Editor menu">
+          <span class="toolbar__menu-item">File</span>
+          <span class="toolbar__menu-item">Edit</span>
+          <span class="toolbar__menu-item">Assets</span>
+          <span class="toolbar__menu-item">GameObject</span>
+          <span class="toolbar__menu-item">Component</span>
+          <span class="toolbar__menu-item">Window</span>
+          <span class="toolbar__menu-item">Help</span>
+        </nav>
       </div>
+
+      <div class="toolbar__separator" aria-hidden="true"></div>
+
+      <div class="toolbar__group toolbar__group--tools">
+        <button class="tool-btn is-active" title="Hand Tool" aria-label="Hand Tool">✋</button>
+        <button class="tool-btn" title="Move Tool" aria-label="Move Tool">✛</button>
+        <button class="tool-btn" title="Rotate Tool" aria-label="Rotate Tool">⟳</button>
+        <button class="tool-btn" title="Scale Tool" aria-label="Scale Tool">⇲</button>
+        <button class="tool-btn" title="Rect Tool" aria-label="Rect Tool">▭</button>
+        <button class="tool-btn" title="Transform Tool" aria-label="Transform Tool">◈</button>
+      </div>
+
+      <div class="toolbar__separator" aria-hidden="true"></div>
+
+      <div class="toolbar__group toolbar__group--playback">
+        <button id="btn-play" class="playback-btn playback-btn--play" title="Play" aria-label="Play">▶</button>
+        <button id="btn-pause" class="playback-btn" title="Pause" aria-label="Pause">⏸</button>
+        <button id="btn-step" class="playback-btn" title="Step" aria-label="Step">⏭</button>
+      </div>
+
+      <div class="toolbar__separator" aria-hidden="true"></div>
+
       <div class="toolbar__group toolbar__group--right">
+        <button class="icon-btn" title="Cloud" aria-label="Cloud">☁</button>
+        <button class="icon-btn" title="Account" aria-label="Account">☺</button>
+        <button class="dropdown-btn">Layers <span class="dropdown-btn__caret">▾</span></button>
+        <button class="dropdown-btn">Layout <span class="dropdown-btn__caret">▾</span></button>
         <span class="toolbar__fps">FPS: <span id="fps-counter">0</span></span>
         <span class="toolbar__dev-name">Tobiasz Mazurek</span>
       </div>
@@ -26,47 +60,89 @@
 
       <!-- Hierarchy -->
       <aside class="hierarchy panel">
-        <div class="panel__header">Hierarchy</div>
+        <div class="panel__header">
+          <span class="panel__header-icon">☰</span>
+          <span class="panel__header-title">Hierarchy</span>
+          <span class="panel__header-spacer"></span>
+          <button class="panel__header-btn" title="Create" aria-label="Create">+</button>
+          <button class="panel__header-btn" title="More options" aria-label="More options">⋮</button>
+        </div>
+        <div class="hierarchy__search">
+          <span class="hierarchy__search-icon" aria-hidden="true">🔍</span>
+          <input type="text" id="hierarchy-search" class="hierarchy__search-input" placeholder="Search..." aria-label="Search Hierarchy" />
+        </div>
+        <div class="panel__divider" role="presentation"></div>
         <ul class="hierarchy__list" id="hierarchy-list">
-          <li class="hierarchy__item" data-section="about" tabindex="0">
-            <span class="hierarchy__icon">◆</span> About Me
+          <li class="hierarchy__item" data-section="about" data-color="teal" tabindex="0">
+            <span class="hierarchy__arrow-spacer"></span>
+            <span class="hierarchy__icon">●</span>
+            <span class="hierarchy__label">About Me</span>
           </li>
-          <li class="hierarchy__item" data-section="cv" tabindex="0">
-            <span class="hierarchy__icon">◆</span> CV
+          <li class="hierarchy__item" data-section="cv" data-color="orange" tabindex="0">
+            <span class="hierarchy__arrow-spacer"></span>
+            <span class="hierarchy__icon">●</span>
+            <span class="hierarchy__label">CV</span>
           </li>
-          <li class="hierarchy__item" data-section="gamesProjects" tabindex="0">
-            <span class="hierarchy__icon">◆</span> Projects — Games
+          <li class="hierarchy__item" data-section="gamesProjects" data-color="purple" tabindex="0">
+            <span class="hierarchy__arrow-spacer"></span>
+            <span class="hierarchy__icon">●</span>
+            <span class="hierarchy__label">Projects — Games</span>
           </li>
-          <li class="hierarchy__item" data-section="toolsProjects" tabindex="0">
-            <span class="hierarchy__icon">◆</span> Projects — Tools
+          <li class="hierarchy__item" data-section="toolsProjects" data-color="cyan" tabindex="0">
+            <span class="hierarchy__arrow-spacer"></span>
+            <span class="hierarchy__icon">●</span>
+            <span class="hierarchy__label">Projects — Tools</span>
           </li>
-          <li class="hierarchy__item" data-section="techStack" tabindex="0">
-            <span class="hierarchy__icon">◆</span> Tech Stack
+          <li class="hierarchy__item" data-section="techStack" data-color="green" tabindex="0">
+            <span class="hierarchy__arrow-spacer"></span>
+            <span class="hierarchy__icon">●</span>
+            <span class="hierarchy__label">Tech Stack</span>
           </li>
-          <li class="hierarchy__item" data-section="contact" tabindex="0">
-            <span class="hierarchy__icon">◆</span> Contact
+          <li class="hierarchy__item" data-section="contact" data-color="pink" tabindex="0">
+            <span class="hierarchy__arrow-spacer"></span>
+            <span class="hierarchy__icon">●</span>
+            <span class="hierarchy__label">Contact</span>
           </li>
         </ul>
       </aside>
 
+      <div class="resize-handle resize-handle--vertical" role="presentation" aria-hidden="true"></div>
+
       <!-- Scene / Game view -->
       <main class="scene panel" id="scene-panel">
-        <div class="panel__header">
-          <span>Scene</span>
-          <span class="panel__header-tab">Game</span>
+        <div class="scene__tabs">
+          <button class="scene__tab is-active" id="tab-scene" type="button">Scene</button>
+          <button class="scene__tab" id="tab-game" type="button">Game</button>
+        </div>
+        <div class="scene__subtoolbar">
+          <button class="dropdown-btn dropdown-btn--small">2D</button>
+          <button class="dropdown-btn dropdown-btn--small">Lighting <span class="dropdown-btn__caret">▾</span></button>
+          <button class="dropdown-btn dropdown-btn--small">Audio <span class="dropdown-btn__caret">▾</span></button>
+          <button class="dropdown-btn dropdown-btn--small">Gizmos <span class="dropdown-btn__caret">▾</span></button>
         </div>
         <div class="scene__viewport">
-          <div class="scene__placeholder-art" aria-hidden="true"></div>
+          <div class="scene__grid" aria-hidden="true"></div>
           <button id="scene-play-btn" class="scene__play-btn" aria-label="Play game build on itch.io">
-            ▶ Play
+            <span class="scene__play-icon">▶</span> Play
           </button>
-          <div class="scene__caption">Little Bit Luck — WebGL Build</div>
+          <div class="scene__caption">
+            <div class="scene__caption-title">Little Bit Luck</div>
+            <div class="scene__caption-sub">WebGL Build</div>
+          </div>
         </div>
       </main>
 
+      <div class="resize-handle resize-handle--vertical" role="presentation" aria-hidden="true"></div>
+
       <!-- Inspector -->
       <aside class="inspector panel">
-        <div class="panel__header">Inspector</div>
+        <div class="panel__header">
+          <span class="panel__header-icon">◧</span>
+          <span class="panel__header-title">Inspector</span>
+          <span class="panel__header-spacer"></span>
+          <button class="panel__header-btn" title="Lock" aria-label="Lock">🔒</button>
+          <button class="panel__header-btn" title="More options" aria-label="More options">⋮</button>
+        </div>
         <div class="inspector__content" id="inspector-content">
           <p class="inspector__hint">Select a GameObject in the Hierarchy to inspect it.</p>
         </div>
@@ -74,9 +150,26 @@
 
     </div>
 
+    <div class="resize-handle resize-handle--horizontal" role="presentation" aria-hidden="true"></div>
+
     <!-- Console -->
     <footer class="console panel">
-      <div class="panel__header">Console</div>
+      <div class="console__header">
+        <span class="console__title">Console</span>
+        <button class="console__btn" id="console-clear-btn" type="button">Clear</button>
+        <button class="console__btn" id="console-collapse-btn" type="button">Collapse</button>
+        <button class="console__btn" id="console-error-pause-btn" type="button">Error Pause</button>
+        <span class="panel__header-spacer"></span>
+        <button class="console__filter-btn" id="filter-error" data-level="error" type="button">
+          <span class="console__filter-icon">❌</span><span class="console__filter-count" id="count-error">0</span>
+        </button>
+        <button class="console__filter-btn" id="filter-warning" data-level="warning" type="button">
+          <span class="console__filter-icon">⚠️</span><span class="console__filter-count" id="count-warning">0</span>
+        </button>
+        <button class="console__filter-btn" id="filter-info" data-level="info" type="button">
+          <span class="console__filter-icon">ℹ️</span><span class="console__filter-count" id="count-info">0</span>
+        </button>
+      </div>
       <div class="console__log-list" id="console-log-list"></div>
     </footer>
 
