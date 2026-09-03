@@ -1,180 +1,1933 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tobiasz Mazurek — Unity Developer Portfolio</title>
-  <link rel="stylesheet" href="styles.css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tobiasz Mazurek — Unity Developer</title>
+<meta name="description" content="Portfolio Tobiasza Mazurka, Unity Developera — gry wydane na Steam, projekty gamejamowe, własne narzędzia i architektura.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0E0F11;
+    --bg-panel:#17191C;
+    --bg-panel-2:#1F2226;
+    --text:#EDEDE9;
+    --text-dim:#9A9D9F;
+    --accent:#7C9A92;
+    --accent-warm:#C9642E;
+    --line:#2A2D31;
+    --maxw:clamp(760px, 45vw, 980px);
+    --ent:1; /* entrance animation strength multiplier — adjustable via the intensity switcher */
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{animation-duration:0.01ms !important; transition-duration:0.01ms !important;}
+  }
+  body{
+    background-color:var(--bg);
+    color:var(--text);
+    font-family:'Inter', sans-serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    transition:background-color 1000ms ease;
+  }
+  @media (prefers-reduced-motion: reduce){
+    body{transition:none;}
+  }
+  h1,h2,h3,.display{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:600;
+    letter-spacing:-0.01em;
+  }
+  a{color:inherit;}
+  code{
+    font-family:'Space Grotesk', monospace;
+    font-size:.92em;
+    color:var(--accent);
+    background:var(--bg-panel);
+    padding:1px 6px;
+    border-radius:4px;
+  }
+  ::selection{background:var(--accent); color:#0E0F11;}
+  :focus-visible{outline:2px solid var(--accent); outline-offset:3px;}
+
+  /* ---- App shell: left nav (~10%) + right scroll panel (~90%) ---- */
+  .app{
+    height:100vh;
+    overflow:hidden;
+  }
+
+  /* TOP NAV — fixed horizontal bar, dots + labels, dropdowns hang below */
+  .sidenav{
+    position:fixed;
+    top:0; left:0; right:0;
+    z-index:50;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:36px;
+    padding:22px 40px;
+    background:linear-gradient(to bottom, rgba(10,11,13,.85), rgba(10,11,13,0));
+    backdrop-filter:blur(6px);
+  }
+  .lang-toggle{
+    position:absolute;
+    left:28px;
+    top:50%;
+    transform:translateY(-50%);
+    display:flex;
+    gap:2px;
+    padding:3px;
+    border-radius:20px;
+    background:var(--bg-panel);
+    border:1px solid var(--line);
+  }
+  .lang-toggle button{
+    font-family:'Space Grotesk', sans-serif;
+    font-size:11px;
+    letter-spacing:.03em;
+    color:var(--text-dim);
+    background:transparent;
+    border:none;
+    padding:6px 11px;
+    border-radius:16px;
+    cursor:pointer;
+    transition:background .2s ease, color .2s ease;
+  }
+  .lang-toggle button:hover{ color:var(--text); }
+  .lang-toggle button.active{ background:var(--accent); color:#0E0F11; }
+  @media (max-width:860px){
+    .lang-toggle{ left:12px; }
+    .lang-toggle button{ padding:5px 9px; font-size:10px; }
+  }
+  .sidenav ul{
+    list-style:none;
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+    gap:30px;
+  }
+  .sidenav a{
+    text-decoration:none;
+    font-family:'Space Grotesk', sans-serif;
+    font-size:14px;
+    color:var(--text-dim);
+    position:relative;
+    padding-left:18px;
+    transition:color .3s ease;
+    display:inline-block;
+  }
+  .sidenav a::before{
+    content:"";
+    position:absolute;
+    left:0; top:50%;
+    transform:translateY(-50%) scale(1);
+    width:5px; height:5px;
+    border-radius:50%;
+    background:var(--text-dim);
+    box-shadow:0 0 0 0 rgba(124,154,146,0);
+    transition:background .3s ease, transform .3s ease, box-shadow .3s ease;
+  }
+  .sidenav a:hover{color:var(--text);}
+  .sidenav a:hover::before{background:var(--text);}
+  .sidenav a.active{color:var(--text);}
+  .sidenav a.active::before{
+    background:var(--accent);
+    transform:translateY(-50%) scale(1.4);
+    box-shadow:0 0 0 4px rgba(124,154,146,.18);
+  }
+
+  /* Expandable sub-list under "Projekty" — shows individual games when a project is open */
+  .sidenav li.has-sub{ position:relative; }
+  .sidenav .subnav{
+    list-style:none;
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+    position:absolute;
+    top:calc(100% + 14px);
+    left:50%;
+    transform:translateX(-50%) translateY(-6px);
+    min-width:190px;
+    padding:14px 16px;
+    background:#14161A;
+    border:1px solid var(--line);
+    border-radius:10px;
+    box-shadow:0 20px 50px -12px rgba(0,0,0,.7);
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .25s ease, transform .25s ease;
+  }
+  .sidenav li.has-sub.expanded .subnav,
+  .sidenav li.has-sub:hover .subnav,
+  .sidenav li.has-sub:focus-within .subnav{
+    opacity:1;
+    pointer-events:auto;
+    transform:translateX(-50%) translateY(0);
+  }
+  .sidenav .subnav-link{
+    font-family:'Inter', sans-serif;
+    font-size:12.5px;
+    line-height:1.2;
+    color:var(--text-dim);
+    position:relative;
+    padding:7px 10px 7px 18px;
+    border-radius:6px;
+    display:block;
+    white-space:nowrap;
+    transition:color .2s ease, background .2s ease;
+  }
+  .sidenav .subnav-link:hover{ background:var(--bg-panel); }
+  .sidenav .subnav-link::before{
+    content:"";
+    position:absolute;
+    left:6px; top:50%;
+    transform:translateY(-50%) scale(1);
+    width:3px; height:3px;
+    border-radius:50%;
+    background:var(--text-dim);
+    transition:background .25s ease, transform .25s ease;
+  }
+  .sidenav .subnav-link:hover{color:var(--text);}
+  .sidenav .subnav-link.active{color:var(--text);}
+  .sidenav .subnav-link.active::before{
+    background:var(--accent);
+    transform:translateY(-50%) scale(1.8);
+  }
+  .subnav-cat{
+    display:block;
+    font-family:'Inter', sans-serif;
+    font-size:10.5px;
+    color:var(--text-dim);
+    opacity:.55;
+    padding-left:13px;
+  }
+  .subnav-cat-spaced{ padding-top:5px; }
+  .sidenav .foot{ display:none; }
+  .sidenav .foot a::before{display:none;}
+  .sidenav .foot a:hover{color:var(--accent);}
+  @media (max-width:860px){
+    .sidenav{ padding:14px 18px; gap:0; justify-content:flex-start; }
+    .sidenav ul{
+      gap:20px;
+      overflow-x:auto;
+      -ms-overflow-style:none;
+      scrollbar-width:none;
+    }
+    .sidenav ul::-webkit-scrollbar{ display:none; }
+    .sidenav a{ font-size:12.5px; white-space:nowrap; }
+    .sidenav .subnav{ display:none; } /* dropdowns are a desktop-hover affordance */
+  }
+
+  /* RIGHT — custom scroll-hijack track: JS animates transform, CSS handles fade */
+  .scrollpane{
+    width:100%;
+    height:100vh;
+    position:relative;
+    overflow:hidden;
+    -webkit-mask-image:linear-gradient(to right, transparent 0, #000 64px, #000 calc(100% - 64px), transparent 100%);
+    mask-image:linear-gradient(to right, transparent 0, #000 64px, #000 calc(100% - 64px), transparent 100%);
+  }
+  .track{
+    display:flex;
+    flex-direction:row;
+    height:100vh;
+    will-change:transform;
+    transition:transform .6s cubic-bezier(.65,0,.35,1);
+  }
+  @media (min-width:861px){
+    /* --- Staggered child reveal: each direct block of .inner / .project-content
+         animates in on its own, one after another, instead of the whole section
+         popping in as a single flat unit --- */
+    .reveal{
+      opacity:0;
+      filter:blur(calc(5px * var(--ent, 1)));
+      transition-property:opacity, transform, filter;
+      transition-duration:.7s;
+    }
+    section.in-view .reveal{
+      opacity:1;
+      transform:none !important;
+      filter:blur(0) !important;
+    }
+    .inner > .reveal:nth-child(1), .project-content > .reveal:nth-child(1){ transition-delay:40ms; }
+    .inner > .reveal:nth-child(2), .project-content > .reveal:nth-child(2){ transition-delay:150ms; }
+    .inner > .reveal:nth-child(3), .project-content > .reveal:nth-child(3){ transition-delay:260ms; }
+    .inner > .reveal:nth-child(4), .project-content > .reveal:nth-child(4){ transition-delay:370ms; }
+    .inner > .reveal:nth-child(5), .project-content > .reveal:nth-child(5){ transition-delay:480ms; }
+
+    /* Icon badge motif entrance: fades/settles in alongside the text */
+    .motif-wrap{
+      opacity:0;
+      transition:opacity .8s ease .1s, transform .8s cubic-bezier(.22,1.4,.36,1) .1s;
+    }
+    section.in-view .motif-wrap{
+      opacity:1;
+      transform:none !important;
+    }
+
+    /* Eight entrance "personalities" — cycled across sections so no two neighbours match */
+    [data-variant="1"] .reveal{ transform:translateY(calc(90px * var(--ent, 1))) rotate(calc(-6deg * var(--ent, 1))) scale(max(.55, calc(1 - .16 * var(--ent, 1)))); transition-timing-function:cubic-bezier(.34,1.56,.64,1); }
+    [data-variant="2"] .reveal{ transform:translateX(calc(-130px * var(--ent, 1))) rotate(calc(-9deg * var(--ent, 1))) skewY(calc(-4deg * var(--ent, 1))); transition-timing-function:cubic-bezier(.22,1,.36,1); }
+    [data-variant="3"] .reveal{ transform:translateX(calc(130px * var(--ent, 1))) rotate(calc(9deg * var(--ent, 1))) skewY(calc(4deg * var(--ent, 1))); transition-timing-function:cubic-bezier(.16,1,.3,1); }
+    [data-variant="4"] .reveal{ transform:translateY(calc(-34px * var(--ent, 1))) rotate(calc(3deg * var(--ent, 1))) scale(max(.5, calc(1 - .12 * var(--ent, 1)))); transition-timing-function:cubic-bezier(.65,0,.35,1); }
+    [data-variant="5"] .reveal{ transform:translate(calc(-38px * var(--ent, 1)), calc(58px * var(--ent, 1))) rotate(calc(-7deg * var(--ent, 1))); transition-timing-function:cubic-bezier(.22,1,.36,1); }
+    [data-variant="6"] .reveal{ transform:translate(calc(60px * var(--ent, 1)), calc(-60px * var(--ent, 1))) rotate(calc(11deg * var(--ent, 1))) skewX(calc(5deg * var(--ent, 1))); transition-timing-function:cubic-bezier(.16,1,.3,1); }
+    [data-variant="7"] .reveal{ transform:scale(max(.1, calc(1 - .32 * var(--ent, 1)))) rotate(calc(-9deg * var(--ent, 1))); transition-timing-function:cubic-bezier(.34,1.56,.64,1); }
+    [data-variant="8"] .reveal{ transform:translateX(calc(78px * var(--ent, 1))) rotate(calc(8deg * var(--ent, 1))); transition-timing-function:cubic-bezier(.65,0,.35,1); }
+
+    [data-variant="1"] .motif-wrap{ transform:scale(max(.1, calc(1 - .6 * var(--ent, 1)))) rotate(calc(-20deg * var(--ent, 1))) translateY(calc(24px * var(--ent, 1))); }
+    [data-variant="2"] .motif-wrap{ transform:scale(max(.15, calc(1 - .5 * var(--ent, 1)))) rotate(calc(16deg * var(--ent, 1))) translateX(calc(-30px * var(--ent, 1))); }
+    [data-variant="3"] .motif-wrap{ transform:scale(max(.15, calc(1 - .45 * var(--ent, 1)))) rotate(calc(-14deg * var(--ent, 1))) translateX(calc(30px * var(--ent, 1))); }
+    [data-variant="4"] .motif-wrap{ transform:scale(max(.1, calc(1 - .65 * var(--ent, 1)))) rotate(calc(24deg * var(--ent, 1))) translateY(calc(-28px * var(--ent, 1))); }
+    [data-variant="5"] .motif-wrap{ transform:scale(max(.15, calc(1 - .5 * var(--ent, 1)))) rotate(calc(-18deg * var(--ent, 1))) translate(calc(-24px * var(--ent, 1)), calc(26px * var(--ent, 1))); }
+    [data-variant="6"] .motif-wrap{ transform:scale(max(.15, calc(1 - .55 * var(--ent, 1)))) rotate(calc(20deg * var(--ent, 1))) translate(calc(28px * var(--ent, 1)), calc(-24px * var(--ent, 1))); }
+    [data-variant="7"] .motif-wrap{ transform:scale(max(.1, calc(1 - .7 * var(--ent, 1)))) rotate(calc(10deg * var(--ent, 1))); }
+    [data-variant="8"] .motif-wrap{ transform:scale(max(.15, calc(1 - .5 * var(--ent, 1)))) rotate(calc(-22deg * var(--ent, 1))) translateX(calc(34px * var(--ent, 1))); }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .reveal, .motif-wrap, .project-media{ transition:none !important; opacity:1 !important; transform:none !important; filter:none !important; }
+  }
+  @media (max-width:860px){
+    .scrollpane{
+      overflow-y:auto;
+      -webkit-mask-image:none;
+      mask-image:none;
+    }
+    .track{
+      display:block !important;
+      transition:none !important;
+      transform:none !important;
+    }
+  }
+
+  section{
+    flex:0 0 auto;
+    height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    padding:100px 56px;
+    border-bottom:1px solid var(--line);
+    opacity:0.2;
+    transition:opacity .8s ease;
+    position:relative;
+    overflow:hidden;
+    box-sizing:border-box;
+  }
+  section.in-view{opacity:1;}
+  @media (prefers-reduced-motion: reduce){
+    section{opacity:1; transition:none;}
+  }
+  @media (max-width:860px){
+    section{padding:90px 24px; height:auto; min-height:100vh; width:100% !important; opacity:1;}
+  }
+  .inner{
+    position:relative;
+    z-index:2;
+    max-width:var(--maxw);
+    margin:0 auto;
+    width:100%;
+  }
+
+  /* --- Ambient background decor: drifting glow + themed motif icon per section --- */
+  .bg-decor{
+    position:absolute;
+    inset:0;
+    z-index:0;
+    pointer-events:none;
+    overflow:hidden;
+  }
+
+  /* --- Icon badge: colored, bordered card holding each project's custom icon --- */
+  .icon-badge{
+    display:flex;
+    width:76px; height:76px;
+    border-radius:20px;
+    align-items:center;
+    justify-content:center;
+    margin-bottom:22px;
+    cursor:pointer;
+    background:color-mix(in srgb, var(--motif-color) 22%, transparent);
+    border:1.5px solid color-mix(in srgb, var(--motif-color) 70%, transparent);
+    box-shadow:0 0 34px -4px color-mix(in srgb, var(--motif-color) 75%, transparent);
+    transition:background .3s ease, box-shadow .3s ease, transform .2s ease;
+  }
+  .icon-badge:hover{ transform:scale(1.06); }
+  .icon-badge.lit{
+    background:color-mix(in srgb, var(--motif-color) 55%, transparent);
+    box-shadow:0 0 50px 4px color-mix(in srgb, var(--motif-color) 95%, transparent);
+  }
+  .icon-badge.lit svg{ color:#fff; }
+  .icon-badge svg{ width:42px; height:42px; color:var(--motif-color); transition:color .3s ease; }
+
+  /* --- Click-anywhere background ripple, tinted per section --- */
+  .click-ripple{
+    position:fixed;
+    left:0; top:0;
+    pointer-events:none;
+    width:60px; height:60px;
+    border-radius:50%;
+    background:radial-gradient(circle, var(--ripple-color, var(--accent)) 0%, transparent 72%);
+    opacity:.5;
+    z-index:40;
+    animation:rippleExpand 1s cubic-bezier(.22,1,.36,1) forwards;
+  }
+  @keyframes rippleExpand{
+    0%{ transform:translate(-50%,-50%) scale(0); opacity:.55; }
+    100%{ transform:translate(-50%,-50%) scale(9); opacity:0; }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .click-ripple{ display:none; }
+  }
+
+  /* --- Intensity switcher (adjust entrance animation strength, 1=subtle, 5=dramatic) --- */
+  .intensity-switcher{
+    position:fixed;
+    left:50%;
+    bottom:22px;
+    transform:translateX(-50%);
+    z-index:200;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:8px 10px;
+    border-radius:30px;
+    background:rgba(10,11,13,.85);
+    border:1px solid var(--line);
+    backdrop-filter:blur(8px);
+  }
+  .intensity-switcher span{
+    font-family:'Space Grotesk', sans-serif;
+    font-size:11px;
+    color:var(--text-dim);
+    padding:0 4px;
+  }
+  .intensity-switcher button{
+    font-family:'Space Grotesk', sans-serif;
+    font-size:12px;
+    color:var(--text-dim);
+    background:transparent;
+    border:none;
+    width:30px; height:30px;
+    border-radius:50%;
+    cursor:pointer;
+    transition:background .2s ease, color .2s ease;
+  }
+  .intensity-switcher button:hover{color:var(--text);}
+  .intensity-switcher button.active{ background:var(--accent); color:#0E0F11; }
+  @media (max-width:860px){ .intensity-switcher{display:none;} }
+  .blob{
+    position:absolute;
+    width:560px;
+    height:560px;
+    border-radius:50%;
+    filter:blur(90px);
+    opacity:.32;
+    background:radial-gradient(circle, var(--blob-color) 0%, transparent 70%);
+    animation:driftBlob 24s ease-in-out infinite alternate;
+  }
+  .motif-wrap{
+    position:absolute;
+    pointer-events:none;
+  }
+  .motif{
+    display:block;
+    width:100%;
+    height:auto;
+    color:var(--motif-color, var(--accent));
+    opacity:.16;
+    transition:opacity .5s ease, filter .5s ease;
+    animation:floatY 8s ease-in-out infinite alternate;
+  }
+  .motif-wrap.motif-clickable{
+    pointer-events:auto;
+    cursor:pointer;
+  }
+  .motif-wrap.motif-clickable.lit .motif{
+    opacity:1;
+    filter:drop-shadow(0 0 22px var(--motif-color)) drop-shadow(0 0 55px var(--motif-color)) drop-shadow(0 0 90px var(--motif-color));
+  }
+  @keyframes driftBlob{
+    0%{transform:translate(0,0) scale(1);}
+    50%{transform:translate(36px,-26px) scale(1.08);}
+    100%{transform:translate(-24px,18px) scale(0.95);}
+  }
+  @keyframes floatY{
+    0%{transform:translateY(0) rotate(0deg);}
+    100%{transform:translateY(-20px) rotate(-2deg);}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .blob, .motif{animation:none;}
+  }
+  @media (max-width:860px){
+    .blob{width:340px; height:340px; filter:blur(60px);}
+    .motif{opacity:.12;}
+  }
+
+  /* Per-section decor placement + color */
+  .blob-hero{ --blob-color:#7C9A92; top:-120px; right:-100px; }
+  .blob-about{ --blob-color:#4C7A9E; bottom:-140px; left:-120px; }
+  .blob-skills{ --blob-color:#C9642E; top:-100px; left:10%; }
+  .blob-warm{ --blob-color:#C9642E; bottom:-150px; right:-90px; }
+  .blob-sage{ --blob-color:#7C9A92; top:-120px; left:-90px; }
+  .blob-contact{ --blob-color:#4C7A9E; top:-130px; right:15%; }
+  .blob-career{ --blob-color:#7C9A92; top:-110px; right:10%; }
+  /* Per-project unique accent — each game/tool gets its own mood, not shared warm/sage */
+  .blob-nerd{ --blob-color:#C9642E; bottom:-150px; right:-90px; }
+  .blob-toilet{ --blob-color:#3FA7B0; top:-120px; left:-90px; }
+  .blob-spacedef{ --blob-color:#8B6FD9; bottom:-150px; right:-90px; }
+  .blob-popiel{ --blob-color:#B8452E; top:-120px; left:-90px; }
+  .blob-lumberjack{ --blob-color:#6B9B5E; bottom:-150px; right:-90px; }
+  .blob-signals{ --blob-color:#5B8FD9; top:-120px; left:-90px; }
+  .blob-inspector{ --blob-color:#3FBF8F; bottom:-150px; right:-90px; }
+  .blob-toolkit{ --blob-color:#8A93A6; top:-120px; left:-90px; }
+  .blob-wip{ --blob-color:#C9A227; bottom:-150px; right:-90px; }
+  .blob-route{ --blob-color:#A67C52; top:-120px; left:-90px; }
+  .blob-fluffy{ --blob-color:#C9789F; top:-120px; left:-90px; }
+  .blob-wildbar{ --blob-color:#9AA84A; bottom:-150px; right:-90px; }
+
+  .motif-hero{ top:14%; right:8%; width:min(30vw,360px); }
+  .motif-about{ bottom:10%; left:6%; width:min(24vw,300px); }
+  .motif-skills{ top:12%; right:10%; width:min(22vw,260px); }
+  .motif-steam{ bottom:8%; right:6%; width:min(26vw,300px); }
+  .motif-jam{ top:10%; left:8%; width:min(20vw,220px); }
+  .motif-tool{ bottom:10%; left:8%; width:min(22vw,260px); }
+  .motif-tree{ top:12%; right:8%; width:min(16vw,190px); }
+  .motif-contact{ bottom:12%; right:10%; width:min(22vw,260px); }
+  .motif-route{ top:10%; right:8%; width:min(20vw,230px); }
+  .motif-signal{ top:12%; left:8%; width:min(18vw,200px); }
+  .motif-console{ bottom:10%; right:8%; width:min(24vw,280px); }
+  .motif-wip{ top:10%; right:10%; width:min(20vw,220px); }
+  .motif-glasses{ top:14%; right:8%; width:min(22vw,240px); }
+  .motif-toilet{ bottom:8%; left:8%; width:min(16vw,170px); }
+  .motif-turret{ top:10%; right:8%; width:min(18vw,200px); }
+  .motif-flame{ bottom:10%; right:8%; width:min(16vw,170px); }
+  .motif-axe{ top:12%; right:10%; width:min(18vw,190px); }
+  .motif-screwdriver{ bottom:8%; left:8%; width:min(14vw,150px); }
+  .motif-paw{ top:12%; right:8%; width:min(18vw,190px); }
+  .motif-grill{ bottom:10%; right:8%; width:min(20vw,210px); }
+  @media (max-width:860px){
+    .motif-wrap{ width:180px !important; }
+  }
+
+  /* HERO */
+  #hero{
+    justify-content:space-between;
+    padding-bottom:60px;
+  }
+  #hero .inner{max-width:900px;}
+  .hero-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    font-size:14px;
+    color:var(--text-dim);
+    margin-bottom:auto;
+    padding-bottom:60px;
+  }
+  .hero-mid{
+    padding:40px 0;
+  }
+  .hero-mid .role{
+    color:var(--accent);
+    font-size:16px;
+    margin-bottom:18px;
+    font-family:'Space Grotesk', sans-serif;
+  }
+  .hero-mid h1{
+    font-size:clamp(40px, 7vw, 76px);
+    line-height:1.04;
+    max-width:11ch;
+  }
+  .hero-sub{
+    margin-top:28px;
+    max-width:46ch;
+    color:var(--text-dim);
+    font-size:18px;
+  }
+  .hero-bottom{
+    display:flex;
+    gap:16px;
+    margin-top:40px;
+    flex-wrap:wrap;
+  }
+  .btn{
+    display:inline-block;
+    padding:13px 26px;
+    border-radius:3px;
+    font-size:15px;
+    font-weight:500;
+    text-decoration:none;
+    transition:background .2s ease, border-color .2s ease, color .2s ease;
+  }
+  .btn-primary{
+    background:var(--accent);
+    color:#0E0F11;
+  }
+  .btn-primary:hover{background:#8FADA5;}
+  .btn-ghost{
+    border:1px solid var(--line);
+    color:var(--text);
+  }
+  .btn-ghost:hover{border-color:var(--accent); color:var(--accent);}
+
+  .scroll-cue{
+    align-self:center;
+    font-size:12px;
+    color:var(--text-dim);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:8px;
+  }
+  .scroll-cue .line{
+    width:1px; height:36px;
+    background:linear-gradient(var(--accent), transparent);
+    animation:pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse{
+    0%,100%{opacity:.3;} 50%{opacity:1;}
+  }
+
+  /* Section headers */
+  .kicker{
+    color:var(--accent);
+    font-size:14px;
+    font-family:'Space Grotesk', sans-serif;
+    margin-bottom:14px;
+  }
+  .sec-title{
+    font-size:clamp(28px, 4vw, 40px);
+    margin-bottom:48px;
+    max-width:16ch;
+  }
+
+  /* ABOUT */
+  #about p{
+    font-size:18px;
+    color:var(--text-dim);
+    max-width:58ch;
+    margin-bottom:18px;
+  }
+  #about p strong{color:var(--text); font-weight:500;}
+  .about-stats{
+    display:flex;
+    gap:48px;
+    margin-top:44px;
+    flex-wrap:wrap;
+  }
+  .stat .n{
+    font-family:'Space Grotesk', sans-serif;
+    font-size:32px;
+    color:var(--accent);
+  }
+  .stat .l{
+    font-size:14px;
+    color:var(--text-dim);
+    margin-top:4px;
+  }
+
+  /* SKILLS */
+  .skills-groups{
+    display:flex;
+    flex-direction:column;
+    gap:0;
+  }
+  .skill-row{
+    display:grid;
+    grid-template-columns:140px 1fr;
+    gap:24px;
+    padding:20px 0;
+    border-top:1px solid var(--line);
+    align-items:start;
+  }
+  .skill-row:last-child{border-bottom:1px solid var(--line);}
+  .skill-row .label{
+    color:var(--text-dim);
+    font-size:14px;
+    font-family:'Space Grotesk', sans-serif;
+    padding-top:2px;
+  }
+  .skill-row .items{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px 12px;
+    font-size:16px;
+  }
+  @media (max-width:560px){
+    .skill-row{grid-template-columns:1fr;}
+  }
+
+  /* PROJECTS — one game per full screen, slide-in transition */
+  .project-slide{
+    position:relative;
+    overflow:hidden;
+    justify-content:center;
+    padding:100px 56px;
+  }
+  .project-slide .ghost-num{
+    position:absolute;
+    top:50%;
+    right:5%;
+    transform:translateY(-50%);
+    font-family:'Space Grotesk', sans-serif;
+    font-size:min(34vw, 420px);
+    font-weight:700;
+    line-height:1;
+    color:var(--bg-panel);
+    z-index:0;
+    user-select:none;
+    pointer-events:none;
+  }
+  .project-content{
+    position:relative;
+    z-index:1;
+    max-width:640px;
+    margin:0 auto;
+    opacity:0;
+    transform:translateY(28px);
+    transition:transform .9s cubic-bezier(.76,0,.24,1), opacity .9s ease;
+  }
+  .project-slide.in-view .project-content{
+    opacity:1;
+    transform:translateY(0);
+  }
+  /* Media + text row for projects that have a real screenshot */
+  .project-row{
+    position:relative;
+    z-index:1;
+    display:flex;
+    align-items:center;
+    gap:56px;
+    max-width:clamp(1000px, 64vw, 1480px);
+    width:100%;
+    margin:0 auto;
+  }
+  .project-slide[data-dir="left"] .project-row{ flex-direction:row-reverse; }
+  .project-row .project-content{ flex:1 1 0%; max-width:none; margin:0; }
+  .project-row .project-content p,
+  .project-row .project-content .tags,
+  .project-row .project-content .links{ max-width:480px; }
+  .project-slide[data-dir="right"] .project-media{ --mdir:1; }
+  .project-slide[data-dir="left"] .project-media{ --mdir:-1; }
+  .project-media{
+    flex:1.15 1 0%;
+    min-width:0;
+    opacity:0;
+    transform:translateX(calc(var(--mdir, 1) * 90px * var(--ent, 1))) rotate(calc(var(--mdir, 1) * -5deg * var(--ent, 1))) scale(max(.55, calc(1 - .14 * var(--ent, 1))));
+    filter:blur(calc(6px * var(--ent, 1)));
+    transition:opacity .8s ease, transform .8s cubic-bezier(.22,1,.36,1), filter .8s ease;
+    transition-delay:180ms;
+  }
+  .project-slide.in-view .project-media{
+    opacity:1;
+    transform:none;
+    filter:blur(0);
+  }
+  .project-media img{
+    width:100%;
+    height:auto;
+    display:block;
+    border-radius:6px;
+    border:1px solid var(--line);
+    box-shadow:0 24px 60px -20px rgba(0,0,0,.65);
+  }
+  .project-slide.has-media .ghost-num{ display:none; }
+
+  /* Multi-image galleries — varied tile positions instead of one big image */
+  .gallery{
+    display:grid;
+    gap:12px;
+  }
+  .gallery img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    aspect-ratio:4/3;
+    display:block;
+    border-radius:6px;
+    border:1px solid var(--line);
+    box-shadow:0 16px 40px -16px rgba(0,0,0,.6);
+  }
+  .gallery-2{ grid-template-columns:1fr 1fr; }
+  .gallery-2 img:nth-child(2){ margin-top:32px; }
+  .gallery-3{ grid-template-columns:1.15fr 1fr; grid-template-rows:1fr 1fr; }
+  .gallery-3 img:first-child{ grid-row:1 / 3; aspect-ratio:3/4; }
+  .gallery-4{ grid-template-columns:1fr 1fr; }
+  .gallery-4 img:nth-child(2){ margin-top:22px; }
+  .gallery-4 img:nth-child(3){ margin-top:-10px; }
+  @media (max-width:860px){
+    .gallery-2 img:nth-child(2), .gallery-4 img:nth-child(2), .gallery-4 img:nth-child(3){ margin-top:0; }
+  }
+  @media (max-width:860px){
+    .project-row{ flex-direction:column !important; gap:28px; }
+    .project-media{ flex:0 0 auto; width:100%; }
+  }
+  .project-content .pindex{
+    display:block;
+    font-family:'Space Grotesk', sans-serif;
+    font-size:14px;
+    color:var(--accent);
+    margin-bottom:16px;
+    letter-spacing:.02em;
+  }
+  .project-content h3{
+    font-size:clamp(30px, 4vw, 46px);
+    margin-bottom:18px;
+    line-height:1.08;
+  }
+  .project-content p{
+    color:var(--text-dim);
+    font-size:17px;
+    max-width:50ch;
+    margin-bottom:22px;
+  }
+  .project-content .tags{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    margin-bottom:28px;
+  }
+  .project-content .tags span{
+    font-size:12px;
+    color:var(--accent);
+    border:1px solid var(--line);
+    padding:4px 10px;
+    border-radius:20px;
+  }
+  .project-content .links{
+    display:flex;
+    gap:24px;
+    flex-wrap:wrap;
+  }
+  .project-content .links a{
+    font-size:14px;
+    text-decoration:none;
+    color:var(--text);
+    border-bottom:1px solid var(--line);
+    padding-bottom:2px;
+    white-space:nowrap;
+    transition:color .2s ease, border-color .2s ease;
+  }
+  .project-content .links a:hover{color:var(--accent); border-color:var(--accent);}
+  @media (max-width:860px){
+    .project-slide{padding:90px 24px;}
+    .project-slide .ghost-num{font-size:40vw; right:0; opacity:.5;}
+  }
+
+  /* CONTACT */
+  #contact{
+    justify-content:center;
+    border-bottom:none;
+  }
+  #contact .sec-title{margin-bottom:24px; max-width:26ch;}
+  #career .sec-title{max-width:24ch;}
+
+  /* --- Testimonial quote --- */
+  .testimonial{
+    margin-top:36px;
+    padding:24px 28px;
+    border-left:2px solid var(--accent);
+    background:var(--bg-panel);
+    border-radius:0 10px 10px 0;
+    max-width:64ch;
+  }
+  .testimonial p{
+    font-family:'Space Grotesk', sans-serif;
+    font-size:16.5px;
+    font-style:italic;
+    color:var(--text);
+    margin-bottom:14px;
+    max-width:none;
+  }
+  .testimonial cite{
+    font-style:normal;
+    font-size:13px;
+    color:var(--text-dim);
+  }
+
+  /* --- Career timeline: continuous scrubber with one moving ball --- */
+  .timeline{
+    position:relative;
+    padding-top:8px;
+    max-width:640px;
+  }
+  .timeline-track{
+    position:relative;
+    height:60px;
+    margin:0 6px;
+  }
+  .timeline-line{
+    position:absolute;
+    left:0; right:0; top:9px;
+    height:2px;
+    background:var(--line);
+  }
+  .timeline-ball{
+    position:absolute;
+    top:10px;
+    width:16px; height:16px;
+    border-radius:50%;
+    background:var(--accent);
+    box-shadow:0 0 8px var(--accent), 0 0 24px var(--accent);
+    transform:translate(-50%,-50%);
+    transition:left .4s cubic-bezier(.22,1,.36,1);
+    z-index:2;
+    pointer-events:none;
+  }
+  .timeline-tick{
+    position:absolute;
+    top:0;
+    transform:translateX(-50%);
+    z-index:1;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:12px;
+    background:none;
+    border:none;
+    cursor:pointer;
+    padding:0;
+    font-family:inherit;
+  }
+  .timeline-dot{
+    width:9px; height:9px;
+    border-radius:50%;
+    background:var(--bg-panel);
+    border:2px solid var(--line);
+    transition:border-color .3s ease;
+  }
+  .timeline-tick:hover .timeline-dot{ border-color:var(--accent); }
+  .timeline-year{
+    font-family:'Space Grotesk', sans-serif;
+    font-size:13px;
+    color:var(--text-dim);
+    white-space:nowrap;
+  }
+  .timeline-panel{
+    margin-top:20px;
+    padding:26px 30px;
+    background:var(--bg-panel);
+    border:1px solid var(--line);
+    border-radius:14px;
+  }
+  .tl-card + .tl-card{
+    margin-top:20px;
+    padding-top:20px;
+    border-top:1px solid var(--line);
+  }
+  .tl-card .tl-date{
+    display:block;
+    font-family:'Space Grotesk', sans-serif;
+    font-size:13px;
+    color:var(--accent);
+    margin-bottom:9px;
+  }
+  .tl-card h4{
+    font-family:'Space Grotesk', sans-serif;
+    font-size:21px;
+    margin-bottom:10px;
+  }
+  .tl-card p{
+    color:var(--text-dim);
+    font-size:15.5px;
+    max-width:64ch;
+  }
+  @media (max-width:860px){
+    .timeline-year{ font-size:10.5px; }
+    .timeline-track{ margin:0 20px; }
+  }
+  #contact p{
+    color:var(--text-dim);
+    font-size:18px;
+    max-width:50ch;
+    margin-bottom:40px;
+  }
+  .contact-links{
+    display:flex;
+    flex-direction:column;
+    gap:0;
+  }
+  .contact-links a{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:20px 0;
+    border-top:1px solid var(--line);
+    text-decoration:none;
+    font-size:18px;
+    font-family:'Space Grotesk', sans-serif;
+    transition:color .2s ease, padding-left .2s ease;
+  }
+  .contact-links a:last-child{border-bottom:1px solid var(--line);}
+  .contact-links a:hover{color:var(--accent); padding-left:8px;}
+  .contact-links a span.arrow{color:var(--text-dim); font-family:'Inter';}
+  footer{
+    text-align:center;
+    padding:32px;
+    color:var(--text-dim);
+    font-size:13px;
+  }
+</style>
 </head>
 <body>
-  <div class="unity-editor">
 
-    <!-- Toolbar -->
-    <header class="toolbar">
-      <div class="toolbar__group toolbar__group--left">
-        <span class="toolbar__logo" aria-hidden="true"></span>
-        <button class="toolbar__menu-btn" id="hamburger-btn" aria-label="Menu" aria-expanded="false">☰</button>
-        <nav class="toolbar__menu" aria-label="Editor menu">
-          <span class="toolbar__menu-item">File</span>
-          <span class="toolbar__menu-item">Edit</span>
-          <span class="toolbar__menu-item">Assets</span>
-          <span class="toolbar__menu-item">GameObject</span>
-          <span class="toolbar__menu-item">Component</span>
-          <span class="toolbar__menu-item">Window</span>
-          <span class="toolbar__menu-item">Help</span>
-        </nav>
-      </div>
+<div class="app" id="app">
 
-      <div class="toolbar__separator" aria-hidden="true"></div>
+<div class="intensity-switcher" role="group" aria-label="Siła animacji wejścia">
+  <span>Siła</span>
+  <button type="button" data-level="1">1</button>
+  <button type="button" data-level="2">2</button>
+  <button type="button" data-level="3" class="active">3</button>
+  <button type="button" data-level="4">4</button>
+  <button type="button" data-level="5">5</button>
+</div>
 
-      <div class="toolbar__group toolbar__group--tools">
-        <button class="tool-btn is-active" title="Hand Tool" aria-label="Hand Tool">✋</button>
-        <button class="tool-btn" title="Move Tool" aria-label="Move Tool">✛</button>
-        <button class="tool-btn" title="Rotate Tool" aria-label="Rotate Tool">⟳</button>
-        <button class="tool-btn" title="Scale Tool" aria-label="Scale Tool">⇲</button>
-        <button class="tool-btn" title="Rect Tool" aria-label="Rect Tool">▭</button>
-        <button class="tool-btn" title="Transform Tool" aria-label="Transform Tool">◈</button>
-      </div>
-
-      <div class="toolbar__separator" aria-hidden="true"></div>
-
-      <div class="toolbar__group toolbar__group--playback">
-        <button id="btn-play" class="playback-btn playback-btn--play" title="Play" aria-label="Play">▶</button>
-        <button id="btn-pause" class="playback-btn" title="Pause" aria-label="Pause">⏸</button>
-        <button id="btn-step" class="playback-btn" title="Step" aria-label="Step">⏭</button>
-      </div>
-
-      <div class="toolbar__separator" aria-hidden="true"></div>
-
-      <div class="toolbar__group toolbar__group--right">
-        <button class="icon-btn" title="Cloud" aria-label="Cloud">☁</button>
-        <button class="icon-btn" title="Account" aria-label="Account">☺</button>
-        <button class="dropdown-btn">Layers <span class="dropdown-btn__caret">▾</span></button>
-        <button class="dropdown-btn">Layout <span class="dropdown-btn__caret">▾</span></button>
-        <span class="toolbar__fps">FPS: <span id="fps-counter">0</span></span>
-        <span class="toolbar__dev-name">Tobiasz Mazurek</span>
-      </div>
-    </header>
-
-    <div class="main-layout">
-
-      <!-- Hierarchy -->
-      <aside class="hierarchy panel">
-        <div class="panel__header">
-          <span class="panel__header-icon">☰</span>
-          <span class="panel__header-title">Hierarchy</span>
-          <span class="panel__header-spacer"></span>
-          <button class="panel__header-btn" title="Create" aria-label="Create">+</button>
-          <button class="panel__header-btn" title="More options" aria-label="More options">⋮</button>
-        </div>
-        <div class="hierarchy__search">
-          <span class="hierarchy__search-icon" aria-hidden="true">🔍</span>
-          <input type="text" id="hierarchy-search" class="hierarchy__search-input" placeholder="Search..." aria-label="Search Hierarchy" />
-        </div>
-        <div class="panel__divider" role="presentation"></div>
-        <ul class="hierarchy__list" id="hierarchy-list">
-          <li class="hierarchy__item" data-section="about" data-color="teal" tabindex="0">
-            <span class="hierarchy__arrow-spacer"></span>
-            <span class="hierarchy__icon">●</span>
-            <span class="hierarchy__label">About Me</span>
-          </li>
-          <li class="hierarchy__item" data-section="cv" data-color="orange" tabindex="0">
-            <span class="hierarchy__arrow-spacer"></span>
-            <span class="hierarchy__icon">●</span>
-            <span class="hierarchy__label">CV</span>
-          </li>
-          <li class="hierarchy__item" data-section="gamesProjects" data-color="purple" tabindex="0">
-            <span class="hierarchy__arrow-spacer"></span>
-            <span class="hierarchy__icon">●</span>
-            <span class="hierarchy__label">Projects — Games</span>
-          </li>
-          <li class="hierarchy__item" data-section="toolsProjects" data-color="cyan" tabindex="0">
-            <span class="hierarchy__arrow-spacer"></span>
-            <span class="hierarchy__icon">●</span>
-            <span class="hierarchy__label">Projects — Tools</span>
-          </li>
-          <li class="hierarchy__item" data-section="techStack" data-color="green" tabindex="0">
-            <span class="hierarchy__arrow-spacer"></span>
-            <span class="hierarchy__icon">●</span>
-            <span class="hierarchy__label">Tech Stack</span>
-          </li>
-          <li class="hierarchy__item" data-section="contact" data-color="pink" tabindex="0">
-            <span class="hierarchy__arrow-spacer"></span>
-            <span class="hierarchy__icon">●</span>
-            <span class="hierarchy__label">Contact</span>
-          </li>
-        </ul>
-      </aside>
-
-      <div class="resize-handle resize-handle--vertical" role="presentation" aria-hidden="true"></div>
-
-      <!-- Scene / Game view -->
-      <main class="scene panel" id="scene-panel">
-        <div class="scene__tabs">
-          <button class="scene__tab is-active" id="tab-scene" type="button">Scene</button>
-          <button class="scene__tab" id="tab-game" type="button">Game</button>
-        </div>
-        <div class="scene__subtoolbar">
-          <button class="dropdown-btn dropdown-btn--small">2D</button>
-          <button class="dropdown-btn dropdown-btn--small">Lighting <span class="dropdown-btn__caret">▾</span></button>
-          <button class="dropdown-btn dropdown-btn--small">Audio <span class="dropdown-btn__caret">▾</span></button>
-          <button class="dropdown-btn dropdown-btn--small">Gizmos <span class="dropdown-btn__caret">▾</span></button>
-        </div>
-        <div class="scene__viewport">
-          <div class="scene__grid" aria-hidden="true"></div>
-          <button id="scene-play-btn" class="scene__play-btn" aria-label="Play game build on itch.io">
-            <span class="scene__play-icon">▶</span> Play
-          </button>
-          <div class="scene__caption">
-            <div class="scene__caption-title">Little Bit Luck</div>
-            <div class="scene__caption-sub">WebGL Build</div>
-          </div>
-        </div>
-      </main>
-
-      <div class="resize-handle resize-handle--vertical" role="presentation" aria-hidden="true"></div>
-
-      <!-- Inspector -->
-      <aside class="inspector panel">
-        <div class="panel__header">
-          <span class="panel__header-icon">◧</span>
-          <span class="panel__header-title">Inspector</span>
-          <span class="panel__header-spacer"></span>
-          <button class="panel__header-btn" title="Lock" aria-label="Lock">🔒</button>
-          <button class="panel__header-btn" title="More options" aria-label="More options">⋮</button>
-        </div>
-        <div class="inspector__content" id="inspector-content">
-          <p class="inspector__hint">Select a GameObject in the Hierarchy to inspect it.</p>
-        </div>
-      </aside>
-
-    </div>
-
-    <div class="resize-handle resize-handle--horizontal" role="presentation" aria-hidden="true"></div>
-
-    <!-- Console -->
-    <footer class="console panel">
-      <div class="console__header">
-        <span class="console__title">Console</span>
-        <button class="console__btn" id="console-clear-btn" type="button">Clear</button>
-        <button class="console__btn" id="console-collapse-btn" type="button">Collapse</button>
-        <button class="console__btn" id="console-error-pause-btn" type="button">Error Pause</button>
-        <span class="panel__header-spacer"></span>
-        <button class="console__filter-btn" id="filter-error" data-level="error" type="button">
-          <span class="console__filter-icon">❌</span><span class="console__filter-count" id="count-error">0</span>
-        </button>
-        <button class="console__filter-btn" id="filter-warning" data-level="warning" type="button">
-          <span class="console__filter-icon">⚠️</span><span class="console__filter-count" id="count-warning">0</span>
-        </button>
-        <button class="console__filter-btn" id="filter-info" data-level="info" type="button">
-          <span class="console__filter-icon">ℹ️</span><span class="console__filter-count" id="count-info">0</span>
-        </button>
-      </div>
-      <div class="console__log-list" id="console-log-list"></div>
-    </footer>
-
+<nav class="sidenav" aria-label="Nawigacja sekcji">
+  <div class="lang-toggle" role="group" aria-label="Język / Language">
+    <button type="button" data-lang="pl" class="active">PL</button>
+    <button type="button" data-lang="en">EN</button>
   </div>
+  <ul>
+    <li><a href="#hero" class="active" data-nav="hero" data-i18n="nav-start">Start</a></li>
+    <li><a href="#about" data-nav="about" data-i18n="nav-about">O mnie</a></li>
+    <li><a href="#career" data-nav="career" data-i18n="nav-career">Kariera</a></li>
+    <li><a href="#skills" data-nav="skills" data-i18n="nav-skills">Umiejętności</a></li>
+    <li class="has-sub" data-group="produkcje">
+      <a href="#project-1" data-nav="produkcje" data-i18n="nav-productions">Produkcje</a>
+      <ul class="subnav">
+        <li><a href="#project-1" data-nav="project-1" class="subnav-link">Nerd Simulator</a></li>
+        <li><a href="#project-2" data-nav="project-2" class="subnav-link">Mr Toilet</a></li>
+        <li><a href="#project-3" data-nav="project-3" class="subnav-link">Wild Bar</a></li>
+      </ul>
+    </li>
+    <li class="has-sub" data-group="gry">
+      <a href="#project-4" data-nav="gry" data-i18n="nav-games">Gry</a>
+      <ul class="subnav">
+        <li><a href="#project-4" data-nav="project-4" class="subnav-link">Space Defense</a></li>
+        <li><a href="#project-5" data-nav="project-5" class="subnav-link">Popiel</a></li>
+        <li><a href="#project-6" data-nav="project-6" class="subnav-link">Lumberjack</a></li>
+        <li><a href="#project-7" data-nav="project-7" class="subnav-link">Fluffy Savior</a></li>
+      </ul>
+    </li>
+    <li class="has-sub" data-group="narzedzia">
+      <a href="#project-8" data-nav="narzedzia" data-i18n="nav-tools">Narzędzia</a>
+      <ul class="subnav">
+        <li><a href="#project-8" data-nav="project-8" class="subnav-link">Simply Signals</a></li>
+        <li><a href="#project-9" data-nav="project-9" class="subnav-link">Runtime Inspector</a></li>
+        <li><a href="#project-10" data-nav="project-10" class="subnav-link" data-i18n="nav-editor">Edytorskie</a></li>
+        <li><a href="#project-11" data-nav="project-11" class="subnav-link" data-i18n="nav-wip">W rozwoju</a></li>
+      </ul>
+    </li>
+    <li><a href="#project-12" data-nav="project-12" data-i18n="nav-software">Oprogramowanie</a></li>
+    <li><a href="#contact" data-nav="contact" data-i18n="nav-contact">Kontakt</a></li>
+  </ul>
+  <div class="foot">
+    <a href="mailto:tobiasz7182@gmail.com">tobiasz7182@gmail.com</a>
+    <a href="https://github.com/veli-dev" target="_blank" rel="noopener">GitHub ↗</a>
+    <a href="https://sites.google.com/view/tobiasz-mazurek-v2/strona-g%C5%82%C3%B3wna" target="_blank" rel="noopener" data-i18n="foot-more">Więcej projektów ↗</a>
+  </div>
+</nav>
 
-  <script src="script.js"></script>
+<main class="scrollpane">
+<div class="track">
+
+<section id="hero" data-bg="#0E0F11" data-variant="1">
+  <div class="bg-decor" aria-hidden="true">
+    <div class="blob blob-hero"></div>
+    <div class="motif-wrap motif-hero motif-clickable" role="button" tabindex="0" aria-label="Zapal ikonę">
+      <svg class="motif" viewBox="0 0 120 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="12" y="26" width="96" height="34" rx="17" stroke="currentColor" stroke-width="3"/>
+      <line x1="34" y1="35" x2="34" y2="51" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+      <line x1="26" y1="43" x2="42" y2="43" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="76" cy="37" r="4" stroke="currentColor" stroke-width="3"/>
+      <circle cx="90" cy="49" r="4" stroke="currentColor" stroke-width="3"/>
+    </svg>
+    </div>
+  </div>
+  <div class="inner">
+    <div class="hero-top reveal">
+      <span>TOBIASZ MAZUREK</span>
+      <span data-i18n="hero-loc">RELOKACJA / ZDALNIE — DOSTĘPNY W KAŻDYM WARIANCIE</span>
+    </div>
+    <div class="hero-mid reveal">
+      <div class="role">Unity Developer</div>
+      <h1 data-i18n="hero-h1">Cześć! Miło Cię tu widzieć.</h1>
+      <p class="hero-sub" data-i18n="hero-sub">To mój mały deweloperski świat — gameplay, systemy sieciowe i własne narzędzia edytorskie, od game jamów po tytuły wydane na Steam.</p>
+    </div>
+    <div class="hero-bottom reveal">
+      <a href="#project-1" class="btn btn-primary" data-jump="project-1" data-i18n="hero-btn-projects">Zobacz projekty</a>
+      <a href="#contact" class="btn btn-ghost" data-jump="contact" data-i18n="hero-btn-contact">Kontakt</a>
+    </div>
+  </div>
+  <div class="scroll-cue"><span class="line"></span>scroll</div>
+</section>
+
+<section id="about" data-bg="#10141A" data-variant="2">
+  <div class="bg-decor" aria-hidden="true">
+    <div class="blob blob-about"></div>
+    <div class="motif-wrap motif-about motif-clickable" role="button" tabindex="0" aria-label="Zapal ikonę">
+      <svg class="motif" viewBox="0 0 120 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M46 20 L24 40 L46 60" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M74 20 L96 40 L74 60" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <line x1="66" y1="16" x2="54" y2="64" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+    </svg>
+    </div>
+  </div>
+  <div class="inner">
+    <div class="kicker reveal" data-i18n="about-kicker">O mnie</div>
+    <h2 class="sec-title reveal" data-i18n="about-h2">Od pierwszego Game Jamu po tytuły wydane na Steam</h2>
+    <p class="reveal" data-i18n="about-p1">Programuję w Unity od 2021 roku, zawodowo od 2022 — współpracowałem z <strong>Radikate</strong>, gdzie współtworzyłem m.in. <strong>Nerd Simulator</strong> i <strong>Mr Toilet</strong> wydane na Steam. Studiowałem informatykę (spec. Programowanie Gier) na Uniwersytecie Dolnośląskim DSW. Mam doświadczenie zarówno w pracy solo, jak i w zespołach 2–4-osobowych (gamejamy, projekty uczelniane), a także w zespole produkcyjnym liczącym 13 osób — równie dobrze radzę sobie z komunikacją i narzędziami jak Jira czy ClickUp, co z samym kodem.</p>
+    <p class="reveal" data-i18n="about-p2">Architekturę projektuję z myślą o reszcie zespołu, nie tylko o sobie: system oparty o ScriptableObjects oraz własny mechanizm wstrzykiwania referencji przez atrybuty i reflection sprawia, że projektant samodzielnie konfiguruje obiekty na scenie — bez czekania na moją interwencję w kodzie. Zero hardcode'u, zero ręcznie podpinanych referencji. Ostatnio rozwijam się w Source Generators i IL Weavingu (Mono.Cecil) — napisałem m.in. własny atrybut <code>[OnValueChange]</code>, który generuje backing field w czasie kompilacji.</p>
+    <div class="about-stats reveal">
+      <div class="stat"><div class="n">4+</div><div class="l" data-i18n="about-stat1">lata w Unity</div></div>
+      <div class="stat"><div class="n">6</div><div class="l" data-i18n="about-stat2">ukończonych projektów</div></div>
+      <div class="stat"><div class="n">2</div><div class="l" data-i18n="about-stat3">tytuły na Steam</div></div>
+    </div>
+    <div class="testimonial reveal">
+      <p data-i18n="about-quote">"Osoba zaangażowana i chętna do nauki, otwarta na feedback i konsekwentnie rozwijająca swoje umiejętności — od pisania czytelnego kodu, przez rozwiązywanie problemów, po pracę z repozytorium. Rzetelny, ambitny i godny zaufania współpracownik."</p>
+      <cite data-i18n="about-quote-cite">— opinia współpracownika z projektu, 2025</cite>
+    </div>
+  </div>
+</section>
+
+<section id="career" data-bg="#12151A" data-variant="5">
+  <div class="bg-decor" aria-hidden="true">
+    <div class="blob blob-career"></div>
+  </div>
+  <div class="inner">
+    <div class="kicker reveal" data-i18n="career-kicker">Kariera</div>
+    <h2 class="sec-title reveal" data-i18n="career-h2">Krok po kroku, od koła naukowego do Steam</h2>
+    <div class="timeline reveal">
+      <div class="timeline-track">
+        <div class="timeline-line"></div>
+        <div class="timeline-ball" id="timelineBall"></div>
+        <button type="button" class="timeline-tick" data-tl="0" style="left:0%">
+          <span class="timeline-dot"></span>
+          <span class="timeline-year">2021</span>
+        </button>
+        <button type="button" class="timeline-tick" data-tl="1" style="left:33.333%">
+          <span class="timeline-dot"></span>
+          <span class="timeline-year">2022–23</span>
+        </button>
+        <button type="button" class="timeline-tick" data-tl="2" style="left:66.666%">
+          <span class="timeline-dot"></span>
+          <span class="timeline-year">2024</span>
+        </button>
+        <button type="button" class="timeline-tick" data-tl="3" style="left:100%">
+          <span class="timeline-dot"></span>
+          <span class="timeline-year">2025</span>
+        </button>
+      </div>
+      <div class="timeline-panel" id="timelinePanel"></div>
+    </div>
+  </div>
+</section>
+
+<section id="skills" data-bg="#14120E" data-variant="6">
+  <div class="bg-decor" aria-hidden="true">
+    <div class="blob blob-skills"></div>
+    <div class="motif-wrap motif-skills motif-clickable" role="button" tabindex="0" aria-label="Zapal ikonę">
+      <svg class="motif" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="50" cy="50" r="14" stroke="currentColor" stroke-width="3.5"/>
+      <path d="M50 20v10M50 70v10M80 50h-10M30 50h-10M70.7 29.3l-7.1 7.1M36.4 63.6l-7.1 7.1M70.7 70.7l-7.1-7.1M36.4 36.4l-7.1-7.1" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/>
+    </svg>
+    </div>
+  </div>
+  <div class="inner">
+    <div class="kicker reveal" data-i18n="skills-kicker">Umiejętności</div>
+    <h2 class="sec-title reveal" data-i18n="skills-h2">Czym się posługuję na co dzień</h2>
+    <div class="skills-groups reveal">
+      <div class="skill-row">
+        <div class="label" data-i18n="skills-lbl1">Języki</div>
+        <div class="items" data-i18n="skills-items1">C# (zaawansowany), C/C++ (podstawowy), Python</div>
+      </div>
+      <div class="skill-row">
+        <div class="label" data-i18n="skills-lbl2">Silniki</div>
+        <div class="items" data-i18n="skills-items2">Unity (zaawansowany, URP), Unreal Engine 5 (podstawowy)</div>
+      </div>
+      <div class="skill-row">
+        <div class="label" data-i18n="skills-lbl3">Architektura</div>
+        <div class="items">Source Generators, IL Weaving (Mono.Cecil), C# Reflection, Custom Injectors, Property Drawers, Interface Drawers</div>
+      </div>
+      <div class="skill-row">
+        <div class="label" data-i18n="skills-lbl4">Sieć i backend</div>
+        <div class="items">Netcode for GameObjects, PurrNet, Photon Pun 2, FishNet, PlayFab, Unity Game Services (Matchmaking, Relay, Lobby, Cloud Save, Authentication)</div>
+      </div>
+      <div class="skill-row">
+        <div class="label" data-i18n="skills-lbl5">Pluginy</div>
+        <div class="items">Zenject, Odin Inspector, DoTween, PrimeTween, Spine 2D, Obi Fluid, Behaviour AI</div>
+      </div>
+      <div class="skill-row">
+        <div class="label" data-i18n="skills-lbl6">Workflow</div>
+        <div class="items">Git, SVN, Fork, JetBrains Rider, Visual Studio, Jira, ClickUp, Trello, Linear, Miro, Codecks, ElixirDraw</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="project-1" class="project-slide has-media" data-dir="right" data-bg="#170F0B" data-variant="1" style="--motif-color:#C9642E">
+  <div class="bg-decor" aria-hidden="true">
+    <div class="blob blob-nerd"></div>
+    <div class="motif-wrap motif-glasses motif-clickable" role="button" tabindex="0" aria-label="Zapal ikonę">
+      <svg class="motif" viewBox="0 0 100 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="28" cy="42" r="19" stroke="currentColor" stroke-width="4"/>
+      <circle cx="72" cy="42" r="19" stroke="currentColor" stroke-width="4"/>
+      <line x1="47" y1="40" x2="53" y2="40" stroke="currentColor" stroke-width="4"/>
+      <path d="M9 38 L1 28" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+      <path d="M91 38 L99 28" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+    </svg>
+    </div>
+  </div>
+  <div class="project-row">
+    <div class="project-content">
+      <span class="pindex reveal">Projekt 01 / 12</span>
+      <h3 class="reveal">Nerd Simulator — Steam</h3>
+      <p class="reveal" data-i18n="p1-p">Krótka, humorystyczna przygodówka point-and-click wydana w Early Access przez Radikate / FreeMind S.A. / PlayWay S.A. Pomagasz czterdziestoletniemu Mervinowi wyprowadzić się od mamy — przez absurdalne prace dorywcze i jeszcze bardziej absurdalne kłopoty. Odpowiadałem za programowanie gameplayu w zespole Radikate.</p>
+      <div class="tags reveal"><span>Unity</span><span>C#</span><span>Steam</span><span>Point & Click</span></div>
+      <div class="links reveal">
+        <a href="https://store.steampowered.com/app/3128220/Nerd_Simulator/?l=polish" target="_blank" rel="noopener">Steam ↗</a>
+      </div>
+    </div>
+    <div class="project-media">
+      <div class="gallery gallery-2">
+        <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3128220/fe1408ee4706ae8419f57ba6ef56916cd3eba126/header_alt_assets_5.jpg?t=1787583687" alt="Nerd Simulator — grafika ze strony Steam" loading="lazy">
+        <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3128220/extras/4867fd7c3eeef04fb2775fb46a594569.avif?t=1787583687" alt="Nerd Simulator — grafika z opisu gry" loading="lazy">
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="project-2" class="project-slide has-media" data-dir="left" data-bg="#0B1517" data-variant="3" style="--motif-color:#3FA7B0">
+  <div class="bg-decor" aria-hidden="true">
+    <div class="blob blob-toilet"></div>
+    <div class="motif-wrap motif-toilet motif-clickable" role="button" tabindex="0" aria-label="Zapal ikonę">
+      <svg class="motif" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="28" y="8" width="34" height="18" rx="3" stroke="currentColor" stroke-width="3.5"/>
+      <path d="M22 30 L68 30 L62 50 Q62 78 45 78 Q28 78 28 50 Z" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round"/>
+    </svg>
+    </div>
+  </div>
+  <span class="ghost-num">02</span>
+  <div class="project-row">
+    <div class="project-content">
+      <span class="pindex reveal">Projekt 02 / 12</span>
+      <h3 class="reveal">Mr Toilet — Steam</h3>
+      <p class="reveal" data-i18n="p2-p">Pierwszoosobowy symulator zarządzania publiczną toaletą — sprzątasz, pobierasz opłaty, wyrzucasz nieuczciwych klientów i rozbudowujesz swoje toaletowe imperium. Wydany przez Radikate / FreeMind S.A. / PlayWay S.A., współtworzony przeze mnie jako część zespołu Unity.</p>
+      <div class="tags reveal"><span>Unity</span><span>C#</span><span>Steam</span><span>First-person</span></div>
+      <div class="links reveal">
+        <a href="https://store.steampowered.com/app/3930150/Mr_Toilet/" target="_blank" rel="noopener">Steam ↗</a>
+      </div>
+    </div>
+    <div class="project-media">
+      <div class="gallery gallery-2">
+        <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3930150/85074f78bfeefe980b461771801c2ecade6bb04c/header.jpg?t=1785694980" alt="Mr Toilet — grafika ze strony Steam" loading="lazy">
+        <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3930150/extras/997b9d22035fa7a8d2efc24abd2d378f.avif?t=1785694980" alt="Mr Toilet — grafika z opisu gry" loading="lazy">
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="project-3" class="project-slide has-media" data-dir="right" data-bg="#12140D" data-variant="8" style="--motif-color:#9AA84A">
+  <div class="bg-decor" aria-hidden="true">
+    <div class="blob blob-wildbar"></div>
+    <div class="motif-wrap motif-grill motif-clickable" role="button" tabindex="0" aria-label="Zapal ikonę">
+      <svg class="motif" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <line x1="20" y1="90" x2="30" y2="55" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/>
+      <line x1="80" y1="90" x2="70" y2="55" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/>
+      <ellipse cx="50" cy="50" rx="38" ry="14" stroke="currentColor" stroke-width="3.5"/>
+      <path d="M32 44 Q50 30 68 44" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+    </svg>
+    </div>
+  </div>
+  <div class="project-row">
+    <div class="project-content">
+      <span class="pindex reveal">Projekt 03 / 12</span>
+      <h3 class="reveal" data-i18n="p7-h3">Wild Bar — w produkcji</h3>
+      <p class="reveal" data-i18n="p7-p">Własna gra, którą tworzę solo — pozycjonowana jako <em>"Overcooked spotyka obronę bazy"</em>. Bronisz podwórka przed żywym, atakującym jedzeniem, przyrządzasz je na grillu i musisz zdążyć obsłużyć głodnych gości, zanim las przełamie płot. Co-op dla 1–4 graczy. Demo planuję wypuścić w styczniu 2027 — resztę zostawiam na niespodziankę.</p>
+      <div class="tags reveal"><span>Unity</span><span>C#</span><span>Co-op</span><span>Solo Dev</span></div>
+    </div>
+    <div class="project-media">
+      <img src="images/wildbar-menu.jpg" alt="Wild Bar — ekran startowy lobby" loading="lazy">
+    </div>
+  </div>
+</section>
+
+<section id="project-4" class="project-slide has-media" data-dir="right" data-bg="#130F1A" data-variant="8" style="--motif-color:#8B6FD9">
+  <div class="bg-decor" aria-hidden="true">
+    <div class="blob blob-spacedef"></div>
+    <div class="motif-wrap motif-turret motif-clickable" role="button" tabindex="0" aria-label="Zapal ikonę">
+      <svg class="motif" viewBox="0 11 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <line x1="50" y1="88" x2="50" y2="34" stroke="currentColor" stroke-width="3.5"/>
+      <path d="M30 88 L70 88 L60 68 L40 68 Z" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round"/>
+      <path d="M30 34 A20 20 0 0 1 70 34" stroke="currentColor" stroke-width="3.5"/>
+      <circle cx="50" cy="34" r="4.5" fill="currentColor" stroke="none"/>
+    </svg>
+    </div>
+  </div>
+  <div class="project-row">
+    <div class="project-content">
+      <span class="pindex reveal">Projekt 04 / 12</span>
+      <h3 class="reveal" data-i18n="p3-h3">Space Defense — projekt uczelniany</h3>
+      <p class="reveal" data-i18n="p3-p">Tower Defense w cyberpunkowej stylistyce, zrealizowany w czteroosobowym zespole w ramach projektu uczelnianego, w pełni według metodyki SCRUM — krótkie sprinty, stand-upy, retrospektywy, planowanie. Odpowiadałem za programowanie gameplayu, razem z Michałem Rudeliczem. Design: Paulina Śliwka, Michał Tofel.</p>
+      <div class="tags reveal"><span>Unity</span><span>C#</span><span>Tower Defense</span><span>SCRUM</span></div>
+    </div>
+    <div class="project-media">
+      <div class="gallery gallery-3">
+        <img src="images/spacedefense-wide.jpg" alt="Space Defense — widok z góry na całą mapę" loading="lazy">
+        <img src="images/spacedefense.jpg" alt="Space Defense — bliższy widok na tor wroga" loading="lazy">
+        <img src="images/spacedefense-menu.jpg" alt="Space Defense — ekran menu głównego" loading="lazy">
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="project-5" class="project-slide has-media" data-dir="left" data-bg="#170D0B" data-variant="7" style="--motif-color:#B8452E">
+  <div class="bg-decor" aria-hidden="true">
+    <div class="blob blob-popiel"></div>
+    <div class="motif-wrap motif-flame motif-clickable" role="button" tabindex="0" aria-label="Zapal ikonę">
+      <svg class="motif" viewBox="0 -8 100 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M50 8 C30 32 24 48 29 64 C33 78 42 86 50 86 C58 86 67 78 71 64 C76 48 70 32 50 8 Z" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round"/>
+      <path d="M50 42 C42 56 42 68 50 74 C58 68 58 56 50 42 Z" stroke="currentColor" stroke-width="3"/>
+    </svg>
+    </div>
+  </div>
+  <div class="project-row">
+    <div class="project-content">
+      <span class="pindex reveal">Projekt 05 / 12</span>
+      <h3 class="reveal">Popiel — Game Jam</h3>
+      <p class="reveal" data-i18n="p4-p">Pierwsza gra, jaką stworzyłem — solo, na Game Jamie PolskiGamedev.pl. Celem jest pokonanie Popiela poprzez zbieranie myszy na trzech różniących się mapach, które zmieniają się po skompletowaniu wszystkiego, co potrzebne w danej rundzie.</p>
+      <div class="tags reveal"><span>Unity</span><span>C#</span><span>Game Jam</span><span>Solo Dev</span></div>
+    </div>
+    <div class="project-media">
+      <img src="images/popiel.jpg" alt="Popiel — zrzut ekranu z rozgrywki" loading="lazy">
+    </div>
+  </div>
+</section>
+
+<section id="project-6" class="project-slide has-media" data-dir="right" data-bg="#0D130E" data-variant="5" style="--motif-color:#6B9B5E">
+  <div class="bg-decor" aria-hidden="true">
+    <div class="blob blob-lumberjack"></div>
+    <div class="motif-wrap motif-axe motif-clickable" role="button" tabindex="0" aria-label="Zapal ikonę">
+      <svg class="motif" viewBox="5 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <line x1="28" y1="90" x2="66" y2="24" stroke="currentColor" stroke-width="4.5" stroke-linecap="round"/>
+      <path d="M56 16 Q82 8 80 34 Q77 46 58 34 Z" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round"/>
+    </svg>
+    </div>
+  </div>
+  <div class="project-row">
+    <div class="project-content">
+      <span class="pindex reveal">Projekt 06 / 12</span>
+      <h3 class="reveal">Indian Lumberjack</h3>
+      <p class="reveal" data-i18n="p5-p">Zręcznościowa, niekończąca się gra — Indianin musi zebrać odpowiednią ilość drewna, aby przetrwać zimę, rozbijając drzewo na części jednym uderzeniem. Zaprogramowałem całość solo, koordynując przy tym pracę zewnętrznych grafików, kompozytorów i twórcy dźwięku.</p>
+      <div class="tags reveal"><span>Unity</span><span>C#</span><span>Arcade</span><span>Solo Dev</span></div>
+    </div>
+    <div class="project-media">
+      <div class="gallery gallery-4">
+        <img src="images/lumberjack.jpg" alt="Indian Lumberjack — rozgrywka, wariant leśny" loading="lazy">
+        <img src="images/lumberjack-blue.jpg" alt="Indian Lumberjack — rozgrywka, wariant nocny" loading="lazy">
+        <img src="images/lumberjack-menu.jpg" alt="Indian Lumberjack — menu główne" loading="lazy">
+        <img src="images/lumberjack-map.jpg" alt="Indian Lumberjack — wybór mapy" loading="lazy">
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="project-7" class="project-slide has-media" data-dir="left" data-bg="#170D14" data-variant="6" style="--motif-color:#C9789F">
+  <div class="bg-decor" aria-hidden="true">
+    <div class="blob blob-fluffy"></div>
+    <div class="motif-wrap motif-paw motif-clickable" role="button" tabindex="0" aria-label="Zapal ikonę">
+      <svg class="motif" viewBox="5 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="50" cy="68" rx="26" ry="20" stroke="currentColor" stroke-width="3.5"/>
+      <circle cx="22" cy="40" r="10" stroke="currentColor" stroke-width="3.5"/>
+      <circle cx="45" cy="24" r="10" stroke="currentColor" stroke-width="3.5"/>
+      <circle cx="68" cy="24" r="10" stroke="currentColor" stroke-width="3.5"/>
+      <circle cx="88" cy="42" r="10" stroke="currentColor" stroke-width="3.5"/>
+    </svg>
+    </div>
+  </div>
+  <div class="project-row">
+    <div class="project-content">
+      <span class="pindex reveal">Projekt 07 / 12</span>
+      <h3 class="reveal">Fluffy Savior — Game Jam</h3>
+      <p class="reveal" data-i18n="p6-p">Kilkupoziomowa gra zręcznościowa stworzona na Hello Game Jam — wcielasz się w obrońcę galaktyki i ratujesz kocią planetę przed zagładą, niszcząc wrogie komety i unikając ataków. Dwie planety w pełni grywalne, kolejne wciąż w budowie. Grafika: Paulina Śliwka.</p>
+      <div class="tags reveal"><span>Unity</span><span>C#</span><span>Game Jam</span><span>Arcade</span></div>
+    </div>
+    <div class="project-media">
+      <div class="gallery gallery-2">
+        <img src="images/fluffy-gameplay.jpg" alt="Fluffy Savior — rozgrywka, niszczenie komet" loading="lazy">
+        <img src="images/fluffy-menu.jpg" alt="Fluffy Savior — ekran tytułowy" loading="lazy">
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="project-8" class="project-slide has-media" data-dir="left" data-bg="#0B121A" data-variant="3" style="--motif-color:#5B8FD9">
+  <div class="bg-decor" aria-hidden="true">
+    <div class="blob blob-signals"></div>
+    <div class="motif-wrap motif-signal motif-clickable" role="button" tabindex="0" aria-label="Zapal ikonę">
+      <svg class="motif" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="50" cy="50" r="6" fill="currentColor" stroke="none"/>
+      <path d="M32 32a25.5 25.5 0 0 1 36 0" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/>
+      <path d="M20 20a41 41 0 0 1 60 0" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/>
+      <path d="M32 68a25.5 25.5 0 0 0 36 0" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/>
+      <path d="M20 80a41 41 0 0 0 60 0" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/>
+    </svg>
+    </div>
+  </div>
+  <div class="project-row">
+    <div class="project-content">
+      <span class="pindex reveal">Projekt 08 / 12</span>
+      <h3 class="reveal">Simply Signals</h3>
+      <p class="reveal" data-i18n="p8-p">Silnie typowany, zero-alokacyjny kanał komunikacji między systemami gry. Sygnał deklaruje się przez okno edytorowe zamiast ręcznie pisanych interfejsów — Source Generator (Roslyn) buduje z tego publiczne API i logikę rejestracji, a Cecil (IL Weaving) odpowiada wyłącznie za wstrzyknięcie wywołań rejestrujących w <code>Awake</code> i <code>OnDestroy</code>. Struktura assembly wzorowana na sprawdzonym podejściu Zenject, DOTween i Odin.</p>
+      <div class="tags reveal"><span>Source Generators</span><span>IL Weaving</span><span>Cecil</span><span>Zero-Allocation</span></div>
+    </div>
+    <div class="project-media">
+      <img src="images/architecture-assets.png" alt="Struktura projektu Unity z folderem SimplySignals w Plugins" loading="lazy">
+    </div>
+  </div>
+</section>
+
+<section id="project-9" class="project-slide has-media" data-dir="right" data-bg="#0B1712" data-variant="2" style="--motif-color:#3FBF8F">
+  <div class="bg-decor" aria-hidden="true">
+    <div class="blob blob-inspector"></div>
+    <div class="motif-wrap motif-console motif-clickable" role="button" tabindex="0" aria-label="Zapal ikonę">
+      <svg class="motif" viewBox="0 0 110 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="10" y="10" width="90" height="70" rx="6" stroke="currentColor" stroke-width="3.5"/>
+      <path d="M24 34 L36 45 L24 56" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <line x1="44" y1="56" x2="64" y2="56" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/>
+    </svg>
+    </div>
+  </div>
+  <div class="project-row">
+    <div class="project-content">
+      <span class="pindex reveal">Projekt 09 / 12</span>
+      <h3 class="reveal">Runtime Inspector</h3>
+      <p class="reveal" data-i18n="p9-p">Wysuwana konsola deweloperska działająca na żywej scenie — dowolna metoda w kodzie staje się wywoływalną komendą dzięki resolverowi opartemu o reflection, bezpiecznemu w IL2CPP release dzięki punktowemu atrybutowi <code>[Preserve]</code>. Pełny autocomplete z podpowiedziami sygnatur, zagnieżdżanie wywołań (wynik jednej komendy jako argument drugiej) oraz undo/redo i wsparcie dla komend asynchronicznych.</p>
+      <div class="tags reveal"><span>Reflection</span><span>Editor Tools</span><span>Debug Console</span><span>IL2CPP</span></div>
+    </div>
+    <div class="project-media">
+      <img src="images/runtime-inspector.jpg" alt="Runtime Inspector — konsola deweloperska z listą komend" loading="lazy">
+    </div>
+  </div>
+</section>
+
+<section id="project-10" class="project-slide has-media" data-dir="left" data-bg="#13151A" data-variant="6" style="--motif-color:#8A93A6">
+  <div class="bg-decor" aria-hidden="true">
+    <div class="blob blob-toolkit"></div>
+    <div class="motif-wrap motif-screwdriver motif-clickable" role="button" tabindex="0" aria-label="Zapal ikonę">
+      <svg class="motif" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="38" y="8" width="24" height="32" rx="4" stroke="currentColor" stroke-width="3.5"/>
+      <line x1="50" y1="40" x2="50" y2="78" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+      <line x1="41" y1="86" x2="59" y2="86" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+    </svg>
+    </div>
+  </div>
+  <div class="project-row">
+    <div class="project-content">
+      <span class="pindex reveal">Projekt 10 / 12</span>
+      <h3 class="reveal" data-i18n="p10-h3">Narzędzia edytorskie</h3>
+      <p class="reveal" data-i18n="p10-p">Zestaw mniejszych narzędzi przyspieszających pracę reszty zespołu: Anchor Converter konwertujący UI na anchory względne do ekranu, Font Auto-Size Converter ujednolicający skalowanie tekstów pod różne rozdzielczości, oraz Interface Drawer serializujący interfejsy w Inspectorze — czego Unity domyślnie nie potrafi. Całość spięta własnym systemem wstrzykiwania referencji przez atrybuty i reflection oraz atrybutem <code>[OnValueChange]</code> generującym backing field przez IL Weaving.</p>
+      <div class="tags reveal"><span>Custom Editor</span><span>Property Drawer</span><span>C# Reflection</span><span>IL Weaving</span></div>
+    </div>
+    <div class="project-media">
+      <div class="gallery gallery-2">
+        <img src="images/architecture-assets.png" alt="Struktura projektu — foldery Plugins i Resources" loading="lazy">
+        <img src="images/architecture-onvaluechange.png" alt="Struktura atrybutu OnValueChange z IL Weaverem" loading="lazy">
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="project-11" class="project-slide has-media" data-dir="right" data-bg="#171208" data-variant="7" style="--motif-color:#C9A227">
+  <div class="bg-decor" aria-hidden="true">
+    <div class="blob blob-wip"></div>
+    <div class="motif-wrap motif-wip motif-clickable" role="button" tabindex="0" aria-label="Zapal ikonę">
+      <svg class="motif" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M50 8 L88 29 L88 71 L50 92 L12 71 L12 29 Z" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round" stroke-dasharray="6 6"/>
+      <circle cx="50" cy="50" r="14" stroke="currentColor" stroke-width="3.5"/>
+    </svg>
+    </div>
+  </div>
+  <div class="project-row">
+    <div class="project-content">
+      <span class="pindex reveal">Projekt 11 / 12</span>
+      <h3 class="reveal" data-i18n="p11-h3">W rozwoju — kolejne systemy</h3>
+      <p class="reveal" data-i18n="p11-p">Równolegle rozwijam kilka większych systemów, które upublicznię, gdy osiągną stabilną wersję beta: <strong>LScene</strong> — loader scen wspierający ładowanie sieciowe, z architekturą core / menu / mapa; <strong>Storex</strong> — system zapisu stanu gry; <strong>Config Injector</strong> — wstrzykiwanie configów z Resources przez reflection; oraz <strong>Hermes</strong> — własna, sztywna architektura DI inspirowana Zenjectem.</p>
+      <div class="tags reveal"><span>Scene Loading</span><span>Save System</span><span>Dependency Injection</span><span>Work in Progress</span></div>
+    </div>
+    <div class="project-media">
+      <img src="images/architecture-wip.png" alt="Folder wip z systemami ConfigInjector, LScene i Storex" loading="lazy">
+    </div>
+  </div>
+</section>
+
+<section id="project-12" class="project-slide" data-dir="left" data-bg="#14100B" data-variant="8" style="--motif-color:#A67C52">
+  <div class="bg-decor" aria-hidden="true">
+    <div class="blob blob-route"></div>
+    <div class="motif-wrap motif-route motif-clickable" role="button" tabindex="0" aria-label="Zapal ikonę">
+      <svg class="motif" viewBox="0 0 100 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M50 8 C68 8 82 22 82 40 C82 62 50 100 50 100 C50 100 18 62 18 40 C18 22 32 8 50 8 Z" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round"/>
+      <circle cx="50" cy="40" r="10" stroke="currentColor" stroke-width="3.5"/>
+      <path d="M14 88 L34 78 L54 86 L86 70" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="2 7"/>
+    </svg>
+    </div>
+  </div>
+  <span class="ghost-num">12</span>
+  <div class="project-content">
+      <span class="pindex reveal">Projekt 12 / 12</span>
+    <h3 class="reveal" data-i18n="p12-h3">System tras — branża odpadowa</h3>
+    <p class="reveal" data-i18n="p12-p">Aplikacja transportowa napisana na zlecenie firmy z branży gospodarki odpadami. System generuje trasy zbiórki w formacie GPX, a moduł nawigacji prowadzi kierowcę punkt po punkcie zgodnie z zaplanowaną trasą — bez konieczności ręcznego wyznaczania kolejnych przystanków.</p>
+    <div class="tags reveal"><span>C#</span><span>GPX</span><span>Nawigacja</span><span>Zlecenie komercyjne</span></div>
+  </div>
+</section>
+
+<section id="contact" data-bg="#0F1113" data-variant="4">
+  <div class="bg-decor" aria-hidden="true">
+    <div class="blob blob-contact"></div>
+    <div class="motif-wrap motif-contact motif-clickable" role="button" tabindex="0" aria-label="Zapal ikonę">
+      <svg class="motif" viewBox="0 0 100 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M50 6 L92 30 L92 80 L50 104 L8 80 L8 30 Z" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round"/>
+      <path d="M50 6 L50 54 L92 30 M50 54 L92 80 M50 54 L8 80 M50 54 L8 30" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>
+    </svg>
+    </div>
+  </div>
+  <div class="inner">
+    <div class="kicker reveal" data-i18n="contact-kicker">Kontakt</div>
+    <h2 class="sec-title reveal" data-i18n="contact-h2">Otwarty na współpracę<br>i rozmowę o projektach</h2>
+    <p class="reveal" data-i18n="contact-p1">Szukasz Unity Developera do współpracy — na stałe, projektowo albo przy pojedynczym zleceniu? Napisz, odpowiadam zwykle w ciągu 24h.</p>
+    <p class="reveal" data-i18n="contact-p2">Jeśli masz ochotę pogadać o branży albo po prostu o game devie — zawsze chętnie się spotkam, a jeśli akurat jesteś w okolicy, może się nawet uda wyskoczyć na piwo.</p>
+    <div class="contact-links reveal">
+      <a href="mailto:tobiasz7182@gmail.com">Email <span class="arrow">tobiasz7182@gmail.com</span></a>
+      <a href="https://github.com/veli-dev" target="_blank" rel="noopener">GitHub <span class="arrow">↗</span></a>
+      <a href="https://sites.google.com/view/tobiasz-mazurek-v2/strona-g%C5%82%C3%B3wna" target="_blank" rel="noopener" data-i18n="contact-more">Więcej projektów <span class="arrow">↗</span></a>
+      <a href="CV_Tobiasz_Mazurek.pdf" target="_blank" rel="noopener">CV (PDF) <span class="arrow">↓</span></a>
+    </div>
+    <p style="margin-top:40px; font-size:13px;" data-i18n="contact-copyright">© 2026 Tobiasz Mazurek</p>
+  </div>
+</section>
+
+</div>
+</main>
+</div>
+
+<script>
+(function(){
+  const scrollpane = document.querySelector('.scrollpane');
+  const track = document.querySelector('.track');
+  const app = document.getElementById('app');
+  const sections = Array.from(document.querySelectorAll('.track > section[id]'));
+  const navLinks = document.querySelectorAll('.sidenav a[data-nav]');
+  const navMap = {};
+  navLinks.forEach(a => navMap[a.dataset.nav] = a);
+
+  const TRANSITION_MS = 600;
+  const isDesktop = () => window.matchMedia('(min-width: 861px)').matches;
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  let index = 0;
+  let animating = false;
+
+  const PRODUCTION_IDS = ['project-1','project-2','project-3'];
+  const GAME_IDS = ['project-4','project-5','project-6','project-7'];
+  const TOOL_IDS = ['project-8','project-9','project-10','project-11'];
+
+  function idToNavKey(id){
+    if(PRODUCTION_IDS.includes(id)) return 'produkcje';
+    if(GAME_IDS.includes(id)) return 'gry';
+    if(TOOL_IDS.includes(id)) return 'narzedzia';
+    return id; // hero, about, skills, project-12 (Oprogramowanie), contact
+  }
+
+  function setActiveNav(id){
+    const key = idToNavKey(id);
+    navLinks.forEach(a => a.classList.remove('active'));
+    const link = navMap[key];
+    if(link) link.classList.add('active');
+    // Highlight the exact sub-link too (data-nav matches the section id directly)
+    const exact = navMap[id];
+    if(exact && exact.classList.contains('subnav-link')) exact.classList.add('active');
+    // Expand only the relevant group (Gry / Narzędzia), collapse the other
+    const prodLi = document.querySelector('.sidenav li.has-sub[data-group="produkcje"]');
+    const gryLi = document.querySelector('.sidenav li.has-sub[data-group="gry"]');
+    const narzLi = document.querySelector('.sidenav li.has-sub[data-group="narzedzia"]');
+    if(prodLi) prodLi.classList.toggle('expanded', PRODUCTION_IDS.includes(id));
+    if(gryLi) gryLi.classList.toggle('expanded', GAME_IDS.includes(id));
+    if(narzLi) narzLi.classList.toggle('expanded', TOOL_IDS.includes(id));
+  }
+
+  function sizeSections(){
+    if(!isDesktop()) return;
+    const w = scrollpane.offsetWidth;
+    sections.forEach(s => { s.style.width = w + 'px'; });
+  }
+
+  function render(){
+    // Fade: only current section is fully visible
+    sections.forEach((s, i) => s.classList.toggle('in-view', i === index));
+    setActiveNav(sections[index].id);
+    // Smooth page-wide background color wash, D&D-style
+    const bg = sections[index].dataset.bg;
+    if(bg) document.body.style.backgroundColor = bg;
+    if(isDesktop() && !reduceMotion){
+      const w = scrollpane.offsetWidth;
+      track.style.transform = `translateX(-${index * w}px)`;
+    }
+  }
+
+  function goTo(newIndex){
+    newIndex = Math.max(0, Math.min(sections.length - 1, newIndex));
+    if(newIndex === index) return;
+    index = newIndex;
+    animating = true;
+    render();
+    window.clearTimeout(goTo._t);
+    goTo._t = window.setTimeout(() => { animating = false; }, TRANSITION_MS);
+  }
+
+  // Initialize
+  sizeSections();
+  render();
+
+  // --- Wheel hijack (desktop only) ---
+  let wheelAccum = 0;
+  window.addEventListener('wheel', (e) => {
+    if(!isDesktop()) return; // let mobile scroll natively
+    e.preventDefault();
+    if(animating) return;
+    wheelAccum += e.deltaY;
+    if(Math.abs(wheelAccum) > 35){
+      const dir = wheelAccum > 0 ? 1 : -1;
+      wheelAccum = 0;
+      // On the Career slide, step through the timeline first; only change page section
+      // once the timeline is already at that end.
+      if(sections[index].id === 'career' && window.__timeline){
+        const moved = dir > 0 ? window.__timeline.next() : window.__timeline.prev();
+        if(moved) return;
+      }
+      goTo(index + dir);
+    }
+  }, { passive:false });
+
+  // --- Keyboard nav (desktop only) ---
+  window.addEventListener('keydown', (e) => {
+    if(!isDesktop() || animating) return;
+    if(['ArrowDown','ArrowRight','PageDown',' '].includes(e.key)){ e.preventDefault(); goTo(index + 1); }
+    if(['ArrowUp','ArrowLeft','PageUp'].includes(e.key)){ e.preventDefault(); goTo(index - 1); }
+  });
+
+  // --- Touch swipe (desktop trackpad-as-touch fallback; mobile keeps native scroll) ---
+  let touchStartY = null;
+  window.addEventListener('touchstart', (e) => {
+    if(!isDesktop()) return;
+    touchStartY = e.touches[0].clientY;
+  }, { passive:true });
+  window.addEventListener('touchend', (e) => {
+    if(!isDesktop() || touchStartY === null || animating) return;
+    const dy = touchStartY - e.changedTouches[0].clientY;
+    if(Math.abs(dy) > 50){ goTo(index + (dy > 0 ? 1 : -1)); }
+    touchStartY = null;
+  }, { passive:true });
+
+  // --- Sidebar links jump straight to target index ---
+  navLinks.forEach(a => {
+    a.addEventListener('click', (e) => {
+      e.preventDefault();
+      const targetId = a.dataset.nav === 'produkcje' ? 'project-1' : a.dataset.nav === 'gry' ? 'project-4' : a.dataset.nav === 'narzedzia' ? 'project-8' : a.dataset.nav;
+      if(isDesktop()){
+        const i = sections.findIndex(s => s.id === targetId);
+        if(i !== -1) goTo(i);
+      } else {
+        document.getElementById(targetId)?.scrollIntoView({ behavior:'smooth', block:'start' });
+      }
+    });
+  });
+
+  // --- Hero CTA buttons (Zobacz projekty / Kontakt) use the same jump logic ---
+  document.querySelectorAll('[data-jump]').forEach(a => {
+    a.addEventListener('click', (e) => {
+      e.preventDefault();
+      const targetId = a.dataset.jump;
+      if(isDesktop()){
+        const i = sections.findIndex(s => s.id === targetId);
+        if(i !== -1) goTo(i);
+      } else {
+        document.getElementById(targetId)?.scrollIntoView({ behavior:'smooth', block:'start' });
+      }
+    });
+  });
+
+  // --- On resize, resync section widths and slide position ---
+  window.addEventListener('resize', () => {
+    if(isDesktop()){
+      sizeSections();
+      const w = scrollpane.offsetWidth;
+      track.style.transform = `translateX(-${index * w}px)`;
+    } else {
+      track.style.transform = 'none';
+    }
+  });
+
+  // --- Mobile: fall back to IntersectionObserver so sidebar/fade state stays correct if ever shown ---
+  if(!isDesktop()){
+    const mo = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if(entry.intersectionRatio > 0.5){
+          const i = sections.indexOf(entry.target);
+          if(i !== -1){
+            index = i;
+            setActiveNav(entry.target.id);
+            entry.target.classList.add('in-view');
+            const bg = entry.target.dataset.bg;
+            if(bg) document.body.style.backgroundColor = bg;
+          }
+        }
+      });
+    }, { root: scrollpane, threshold: 0.5 });
+    sections.forEach(s => { s.classList.add('in-view'); mo.observe(s); });
+  }
+})();
+</script>
+
+<script>
+  // --- PL/EN language toggle ---
+  (function(){
+    const EN = {
+      'nav-start':'Home','nav-about':'About','nav-career':'Career','nav-skills':'Skills','nav-productions':'Productions','nav-games':'Games',
+      'nav-tools':'Tools','nav-software':'Software','nav-contact':'Contact',
+      'nav-editor':'Editor Tools','nav-wip':'In Progress',
+
+      'hero-loc':'RELOCATION / REMOTE — OPEN TO EITHER',
+      'hero-h1':'Hey! Great to have you here.',
+      'hero-sub':"This is my little corner of game dev — gameplay, networking systems, and custom editor tools, from game jams to titles shipped on Steam.",
+      'hero-btn-projects':'View projects',
+      'hero-btn-contact':'Contact',
+
+      'about-kicker':'About',
+      'about-h2':'From my first game jam to titles shipped on Steam',
+      'about-p1':'I\'ve been coding in Unity since 2021, professionally since 2022 — I worked with <strong>Radikate</strong>, where I co-created <strong>Nerd Simulator</strong> and <strong>Mr Toilet</strong>, both shipped on Steam. I studied Computer Science (Game Programming track) at the University of Lower Silesia. I\'ve worked solo, in small 2–4 person teams (game jams, university projects), and in a 13-person production team — I\'m just as comfortable with communication and tools like Jira or ClickUp as I am with code.',
+      'about-p2':'I design architecture with the rest of the team in mind, not just myself: a system built on ScriptableObjects plus my own attribute- and reflection-based dependency injection lets designers configure scene objects on their own — no waiting on me to touch the code. Zero hardcoding, zero manually wired references. Lately I\'ve been getting deeper into Source Generators and IL Weaving (Mono.Cecil) — I wrote a custom <code>[OnValueChange]</code> attribute that generates a backing field at compile time, among other things.',
+      'about-stat1':'years in Unity','about-stat2':'completed projects','about-stat3':'titles on Steam',
+      'about-quote':'"An engaged, eager learner — open to feedback and consistently leveling up, from writing clean code, to problem-solving, to working with a repo. A reliable, ambitious, trustworthy collaborator."',
+      'about-quote-cite':'— feedback from a project collaborator, 2025',
+
+      'career-kicker':'Career',
+      'career-h2':'Step by step, from a student club to Steam',
+
+      'skills-kicker':'Skills',
+      'skills-h2':'What I work with day to day',
+      'skills-lbl1':'Languages','skills-lbl2':'Engines','skills-lbl3':'Architecture',
+      'skills-lbl4':'Networking & Backend','skills-lbl5':'Plugins','skills-lbl6':'Workflow',
+      'skills-items1':'C# (advanced), C/C++ (basic), Python',
+      'skills-items2':'Unity (advanced, URP), Unreal Engine 5 (basic)',
+
+      'p1-p':'A short, comedic point-and-click adventure released in Early Access by Radikate / FreeMind S.A. / PlayWay S.A. You help forty-year-old Mervin move out of his mom\'s house — through absurd odd jobs and even more absurd trouble. I handled gameplay programming on the Radikate team.',
+      'p2-p':'A first-person public restroom management sim — clean up, charge fees, kick out freeloaders, and grow your bathroom empire. Published by Radikate / FreeMind S.A. / PlayWay S.A., co-developed by me as part of the Unity team.',
+      'p3-h3':'Space Defense — university project',
+      'p3-p':'A cyberpunk-styled Tower Defense built with a four-person team as a university project, run fully by SCRUM — short sprints, stand-ups, retrospectives, planning. I handled gameplay programming alongside Michał Rudelicz. Design by Paulina Śliwka and Michał Tofel.',
+      'p4-p':'The first game I ever made — solo, at the PolskiGamedev.pl Game Jam. The goal is to defeat Popiel by collecting mice across three different maps, which change once you\'ve gathered everything needed for that round.',
+      'p5-p':'An endless arcade game — a lumberjack has to gather enough wood to survive winter, chopping a tree into pieces with a single hit. I coded the whole thing solo, coordinating external artists, composers, and a sound designer.',
+      'p6-p':"A multi-level arcade game made at Hello Game Jam — you play a galaxy defender saving a cat planet from destruction, destroying enemy comets and dodging attacks. Two planets are fully playable, more are still in progress. Art by Paulina Śliwka.",
+      'p7-h3':'Wild Bar — in development',
+      'p7-p':'My own solo project — pitched as <em>"Overcooked meets base defense"</em>. You defend a backyard from living, attacking food, cook it up on the grill, and race to serve hungry guests before the forest breaks through the fence. Co-op for 1–4 players. I\'m aiming to release a demo in January 2027 — I\'ll leave the rest as a surprise.',
+      'p8-p':'A strongly-typed, zero-allocation communication channel between game systems. Signals are declared through an editor window instead of hand-written interfaces — a Source Generator (Roslyn) builds the public API and registration logic from that, while Cecil (IL Weaving) only handles injecting the registration calls into <code>Awake</code> and <code>OnDestroy</code>. Assembly structure modeled on the proven approach used by Zenject, DOTween, and Odin.',
+      'p9-p':'A slide-out developer console that runs on the live scene — any method in the code becomes a callable command through a reflection-based resolver, made safe for IL2CPP release builds via a targeted <code>[Preserve]</code> attribute. Full autocomplete with signature hints, command nesting (using one command\'s result as another\'s argument), undo/redo, and support for async commands.',
+      'p10-h3':'Editor Tools',
+      'p10-p':'A set of smaller tools that speed up the rest of the team\'s work: an Anchor Converter that turns UI elements into screen-relative anchors, a Font Auto-Size Converter that unifies text scaling across resolutions, and an Interface Drawer that serializes interfaces in the Inspector — something Unity can\'t do out of the box. All tied together by my own attribute- and reflection-based reference injection system, plus the <code>[OnValueChange]</code> attribute that generates a backing field via IL Weaving.',
+      'p11-h3':'In Progress — More Systems',
+      'p11-p':'I\'m developing several bigger systems in parallel, which I\'ll open up once they hit a stable beta: <strong>LScene</strong> — a scene loader with network-loading support, built around a core / menu / map architecture; <strong>Storex</strong> — a game-state save system; <strong>Config Injector</strong> — reflection-based config injection from Resources; and <strong>Hermes</strong> — my own opinionated DI architecture inspired by Zenject.',
+      'p12-h3':'Route System — Waste Management',
+      'p12-p':'A transport app built for a waste management company. The system generates collection routes in GPX format, and the navigation module guides the driver point by point along the planned route — no manual stop-by-stop planning needed.',
+
+      'contact-kicker':'Contact',
+      'contact-h2':'Open to collaboration<br>and project talk',
+      'contact-p1':'Looking for a Unity Developer to work with — full-time, project-based, or a one-off job? Reach out, I usually reply within 24h.',
+      'contact-p2':"If you'd like to talk shop or just chat about game dev in general — I'm always up for it, and if you're nearby, we might even grab a beer.",
+      'contact-more':'More projects <span class="arrow">↗</span>',
+      'foot-more':'More projects ↗',
+      'contact-copyright':'© 2026 Tobiasz Mazurek',
+    };
+
+    let PL = null; // captured from the DOM on first run
+    let currentLang = 'pl';
+
+    function captureOriginal(){
+      PL = {};
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        PL[el.dataset.i18n] = el.innerHTML;
+      });
+    }
+
+    function applyLang(lang){
+      if(!PL) captureOriginal();
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.dataset.i18n;
+        if(lang === 'en' && EN[key] !== undefined){
+          el.innerHTML = EN[key];
+        } else {
+          el.innerHTML = PL[key];
+        }
+      });
+      currentLang = lang;
+      document.documentElement.lang = lang;
+      document.querySelectorAll('.lang-toggle button').forEach(b => {
+        b.classList.toggle('active', b.dataset.lang === lang);
+      });
+      try{ localStorage.setItem('site-lang', lang); }catch(e){}
+      document.dispatchEvent(new CustomEvent('langchange'));
+    }
+
+    document.querySelectorAll('.lang-toggle button').forEach(btn => {
+      btn.addEventListener('click', () => applyLang(btn.dataset.lang));
+    });
+
+    let saved = null;
+    try{ saved = localStorage.getItem('site-lang'); }catch(e){}
+    if(saved === 'en'){ applyLang('en'); }
+  })();
+
+  // --- Career timeline ---
+  (function(){
+    const TL = [
+      {
+        date: { pl:'Maj 2021 – Marzec 2024', en:'May 2021 – March 2024' },
+        title: { pl:'Koło naukowe Hello IT', en:'Hello IT student club' },
+        desc: {
+          pl:'Dołączyłem do koła naukowego na uczelni — pierwsze realne projekty w Unity, gamejamy (Popiel, Fluffy Savior) i pierwszy kontakt z pracą w zespole nad wspólnym celem.',
+          en:"I joined a student tech club at university — my first real Unity projects, game jams (Popiel, Fluffy Savior), and my first taste of working in a team toward a shared goal."
+        }
+      },
+      {
+        date: { pl:'Listopad 2022 – Czerwiec 2023', en:'November 2022 – June 2023' },
+        title: { pl:'Dream Eater Interactive', en:'Dream Eater Interactive' },
+        desc: {
+          pl:'Pracowałem nad dwoma nieukończonymi prototypami: <strong>Projekt G</strong> — system multiplayer (zarządzanie sesjami, matchmaking, synchronizacja danych między klientami), oraz <strong>Projekt D</strong> — AI przeciwników sterująca ich zachowaniem względem gracza. Żaden z nich finalnie nie doczekał się premiery.',
+          en:'I worked on two unfinished prototypes: <strong>Project G</strong> — a multiplayer system (session management, matchmaking, cross-client data sync), and <strong>Project D</strong> — enemy AI driving their behavior toward the player. Neither one ultimately made it to release.'
+        }
+      },
+      {
+        date: { pl:'Lipiec 2024 – 2025', en:'July 2024 – 2025' },
+        title: { pl:'Unity Developer Freelance', en:'Unity Developer, Freelance' },
+        desc: {
+          pl:'Dołączyłem do 13-osobowej grupy, gdzie rozbijałem funkcjonalności w ramach większego projektu na osobne, samodzielne moduły. Zajmowałem się architekturą ECS, stawianiem serwera dedykowanego oraz sieciówką w Unity — w tym Unity Game Services (matchmaking, relay, lobby). To właśnie tam nauczyłem się pracy przy większej, rozproszonej infrastrukturze sieciowej, nie tylko przy lokalnym multiplayerze.',
+          en:"I joined a 13-person group, where I broke functionality within a larger project down into separate, self-contained modules. I worked on ECS architecture, standing up a dedicated server, and Unity networking — including Unity Game Services (matchmaking, relay, lobby). That's where I really learned to work with larger, distributed network infrastructure, not just local multiplayer."
+        }
+      },
+      {
+        date: { pl:'Kwiecień 2025', en:'April 2025' },
+        title: { pl:'Radikate', en:'Radikate' },
+        desc: {
+          pl:'Współtworzyłem <strong>Nerd Simulator</strong> i <strong>Mr Toilet</strong>, oba wydane na Steam. Programowanie gameplayu w czteroosobowym zespole.',
+          en:'I co-created <strong>Nerd Simulator</strong> and <strong>Mr Toilet</strong>, both shipped on Steam. Gameplay programming in a four-person team.'
+        }
+      }
+    ];
+
+    const ticks = document.querySelectorAll('.timeline-tick');
+    const ball = document.getElementById('timelineBall');
+    const panel = document.getElementById('timelinePanel');
+    const STEP = 0.16;          // how far one wheel "tick" moves the ball (0..last index)
+    const SNAP_EDGE = 0.14;     // how close to a milestone counts as "at" it, not "between"
+    let progress = 0;           // continuous position: 0 .. TL.length-1
+    const maxProgress = TL.length - 1;
+
+    function cardHTML(entry, lang){
+      return '<div class="tl-card"><span class="tl-date">' + entry.date[lang] + '</span>'
+           + '<h4>' + entry.title[lang] + '</h4><p>' + entry.desc[lang] + '</p></div>';
+    }
+
+    function render(){
+      if(!panel || !ball) return;
+      const lang = document.documentElement.lang === 'en' ? 'en' : 'pl';
+      ball.style.left = (progress / maxProgress * 100) + '%';
+
+      const lo = Math.floor(progress);
+      const hi = Math.min(TL.length - 1, Math.ceil(progress));
+      const frac = progress - lo;
+
+      let html;
+      if(hi === lo || frac <= SNAP_EDGE){
+        html = cardHTML(TL[lo], lang);
+      } else if(frac >= 1 - SNAP_EDGE){
+        html = cardHTML(TL[hi], lang);
+      } else {
+        // Resting between two milestones — show both, so nothing gets lost.
+        html = cardHTML(TL[lo], lang) + cardHTML(TL[hi], lang);
+      }
+      panel.innerHTML = html;
+    }
+
+    function setProgress(p){
+      progress = Math.max(0, Math.min(maxProgress, p));
+      render();
+    }
+
+    ticks.forEach(btn => {
+      btn.addEventListener('click', () => setProgress(parseInt(btn.dataset.tl, 10)));
+    });
+    document.addEventListener('langchange', render);
+    render();
+
+    // Exposed so the page's global wheel handler can scrub the timeline continuously
+    // while the Career slide is active, before it hands scroll control back to page navigation.
+    window.__timeline = {
+      next(){ if(progress < maxProgress){ setProgress(progress + STEP); return true; } return false; },
+      prev(){ if(progress > 0){ setProgress(progress - STEP); return true; } return false; }
+    };
+  })();
+
+  // --- Icon badge click-to-toggle glow ---
+  document.querySelectorAll('.icon-badge').forEach(badge => {
+    badge.addEventListener('click', (e) => {
+      e.stopPropagation();
+      badge.classList.toggle('lit');
+    });
+  });
+
+  // --- Big background icon click-to-toggle glow (test variant) ---
+  document.querySelectorAll('.motif-wrap.motif-clickable').forEach(wrap => {
+    const toggle = (e) => { e.stopPropagation(); wrap.classList.toggle('lit'); };
+    wrap.addEventListener('click', toggle);
+    wrap.addEventListener('keydown', (e) => {
+      if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); toggle(e); }
+    });
+  });
+
+  // --- Click-anywhere background ripple, tinted to the active section's accent color ---
+  document.querySelector('.scrollpane').addEventListener('click', (e) => {
+    // Don't ripple when clicking interactive elements — they have their own feedback
+    if(e.target.closest('a, button, .icon-badge, .contact-links a')) return;
+    const activeSection = document.querySelector('section.in-view');
+    const color = activeSection
+      ? (getComputedStyle(activeSection).getPropertyValue('--motif-color').trim() || getComputedStyle(document.documentElement).getPropertyValue('--accent').trim())
+      : getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
+    const ripple = document.createElement('div');
+    ripple.className = 'click-ripple';
+    ripple.style.setProperty('--ripple-color', color || 'var(--accent)');
+    ripple.style.left = e.clientX + 'px';
+    ripple.style.top = e.clientY + 'px';
+    document.body.appendChild(ripple);
+    ripple.addEventListener('animationend', () => ripple.remove());
+  });
+
+  // --- Intensity switcher: adjusts --ent custom property (entrance animation strength) ---
+  (function(){
+    const root = document.documentElement;
+    const btns = document.querySelectorAll('.intensity-switcher button');
+    const LEVELS = { 1: 0.4, 2: 0.7, 3: 1, 4: 1.7, 5: 2.6 };
+    btns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const lvl = btn.dataset.level;
+        root.style.setProperty('--ent', LEVELS[lvl]);
+        btns.forEach(b => b.classList.toggle('active', b === btn));
+      });
+    });
+  })();
+</script>
+
 </body>
 </html>
