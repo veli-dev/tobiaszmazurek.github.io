@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="500" height="500">
+  <g fill="none" stroke="#FFFFFF" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" transform="translate(10, 15)">
+    <!-- Głowa -->
+    <circle cx="195" cy="85" r="32" />
+    
+    <!-- Krawat -->
+    <path d="M195 117 L185 130 L190 160 L195 170 L200 160 L205 130 Z" fill="#FFFFFF" />
+    
+    <!-- Tułów i ramiona -->
+    <path d="M165 130 L135 155 L160 190 L180 150 M210 135 L285 75 M250 100 L270 120" />
+    
+    <!-- Nogi -->
+    <path d="M180 200 L145 340 L115 340 M210 200 L235 240 L240 300 L250 300" />
+    
+    <!-- Schody / Podłoże -->
+    <path d="M100 340 L210 340 L210 280 L275 280" />
+    
+    <!-- Strzałka wzrostu -->
+    <path d="M275 280 L370 185 M320 185 L370 185 L370 235" />
+  </g>
+</svg>

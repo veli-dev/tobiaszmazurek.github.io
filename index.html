@@ -1018,6 +1018,7 @@
   #about-technical .tile-collage{
     position:relative;
     width:min(38rem, calc((var(--media-max-h) - 3rem) / 1));
+    max-width:none;
     aspect-ratio:1/1;
     margin:2.5rem auto 0.5rem;
   }
@@ -1036,6 +1037,7 @@
   #about-life .tile-collage{
     position:relative;
     width:min(40rem, calc((var(--media-max-h) - 3rem) / 1));
+    max-width:none;
     aspect-ratio:1/1;
     margin:2.5rem auto 0.5rem;
   }
@@ -1073,16 +1075,114 @@
   .tile-collage[data-count="4"][data-layout="2"] .tile-b{ width:44%; aspect-ratio:4/5; top:7%; right:8%; transform:rotate(-7.2deg); z-index:1; }
   .tile-collage[data-count="4"][data-layout="2"] .tile-c{ width:58%; top:7%; left:8%; height:46%; aspect-ratio:auto; bottom:7%; transform:rotate(-3.6deg); z-index:3; }
   .tile-collage[data-count="4"][data-layout="2"] .tile-d{ width:34%; aspect-ratio:4/5; bottom:7%; right:2%; transform:rotate(10.8deg); z-index:4; }
-  #project-6 .project-media{ flex-basis:44rem; }
-  #project-6 .tile-collage{ aspect-ratio:1/0.78; width:min(44rem, calc((var(--media-max-h) - 3rem) / 0.78)); }
-  .tile-collage[data-count="4"][data-layout="3"] .tile-a{ width:54%; aspect-ratio:16/9; top:6%; left:4%; transform:rotate(-3.6deg); z-index:1; }
-  .tile-collage[data-count="4"][data-layout="3"] .tile-b{ width:54%; aspect-ratio:16/9; top:2%; right:4%; transform:rotate(3.6deg); z-index:2; }
-  .tile-collage[data-count="4"][data-layout="3"] .tile-c{ width:54%; aspect-ratio:16/9; bottom:2%; left:4%; transform:rotate(3.6deg); z-index:3; }
-  .tile-collage[data-count="4"][data-layout="3"] .tile-d{ width:54%; aspect-ratio:16/9; bottom:6%; right:4%; transform:rotate(-3.6deg); z-index:4; }
+  #project-6 .project-media{ flex:0 1 34vw; max-width:34vw; }
+  #project-6 .project-row{ gap:0.5rem; max-width:none; }
+  #project-6 .tile-collage{ width:100%; max-width:none; aspect-ratio:1/0.55; }
+  #project-6 .tile-a{ width:42%; aspect-ratio:16/9; top:2%; left:4%; transform:rotate(-3.6deg); z-index:1; }
+  #project-6 .tile-b{ width:42%; aspect-ratio:16/9; top:0%; left:54%; transform:rotate(3.6deg); z-index:2; }
+  #project-6 .tile-c{ width:42%; aspect-ratio:16/9; bottom:0%; left:4%; transform:rotate(3.6deg); z-index:3; }
+  #project-6 .tile-d{ width:42%; aspect-ratio:16/9; bottom:2%; left:54%; transform:rotate(-3.6deg); z-index:4; }
   .tile-collage[data-count="4"][data-layout="4"] .tile-a{ width:58%; aspect-ratio:4/5; top:7%; left:8%; transform:rotate(-3.6deg); z-index:4; }
   .tile-collage[data-count="4"][data-layout="4"] .tile-b{ width:36%; aspect-ratio:4/5; top:7%; right:8%; transform:rotate(7.2deg); z-index:3; }
   .tile-collage[data-count="4"][data-layout="4"] .tile-c{ width:36%; aspect-ratio:4/5; bottom:7%; right:8%; transform:rotate(-7.2deg); z-index:2; }
   .tile-collage[data-count="4"][data-layout="4"] .tile-d{ width:36%; aspect-ratio:4/5; bottom:7%; left:2%; transform:rotate(9deg); z-index:1; }
+
+  /* Photo lightbox — click any photo to preview it large, centered, with an X to close. */
+  .lightbox{
+    position:fixed;
+    inset:0;
+    z-index:1000;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:20px;
+    background:rgba(6,6,8,.88);
+    backdrop-filter:blur(4px);
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .3s ease;
+    padding:2rem;
+  }
+  .lightbox.active{ opacity:1; pointer-events:auto; }
+  .lightbox-img{
+    max-width:min(85vw, 50rem);
+    max-height:85vh;
+    width:auto;
+    height:auto;
+    border-radius:0.5rem;
+    border:0.5rem solid #F2EEE6;
+    box-shadow:0 40px 90px -20px rgba(0,0,0,.8);
+    background:var(--bg-panel);
+    transform:scale(1);
+    transform-origin:center center;
+    transition:transform .15s ease;
+    cursor:zoom-in;
+  }
+  .lightbox-stage{
+    max-width:min(85vw, 50rem);
+    max-height:85vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    transform:scale(.94);
+    transition:transform .3s cubic-bezier(.22,1,.36,1);
+  }
+  .lightbox.active .lightbox-stage{ transform:scale(1); }
+  .lightbox-hint{
+    position:absolute;
+    bottom:28px;
+    left:50%;
+    transform:translateX(-50%);
+    margin:0;
+    padding:8px 16px;
+    background:rgba(23,25,28,.8);
+    border:1px solid var(--line);
+    border-radius:32px;
+    color:var(--text-dim);
+    font-size:13px;
+    white-space:nowrap;
+    pointer-events:none;
+  }
+  .lightbox-close{
+    position:absolute;
+    top:28px;
+    right:28px;
+    width:44px;
+    height:44px;
+    flex:none;
+    border-radius:50%;
+    border:1px solid var(--line);
+    background:var(--bg-panel);
+    color:var(--text);
+    font-size:20px;
+    line-height:1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    transition:background .2s ease, transform .2s ease;
+  }
+  .lightbox-close:hover{ background:var(--bg-panel-2); transform:scale(1.08); }
+  .lightbox-arrow{
+    flex:none;
+    width:44px;
+    height:44px;
+    border-radius:50%;
+    border:1px solid var(--line);
+    background:var(--bg-panel);
+    color:var(--text);
+    font-size:20px;
+    line-height:1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    transition:background .2s ease, transform .2s ease;
+  }
+  .lightbox-arrow:hover{ background:var(--bg-panel-2); transform:scale(1.08); }
+  .lightbox-arrow[hidden]{ display:none; }
+  .about-photo, .solo-photo{ cursor:zoom-in; }
 
   .layout-picker{
     position:absolute;
@@ -1500,7 +1600,8 @@
   <div class="bg-decor" aria-hidden="true">
     <div class="blob blob-hero"></div>
     <div class="motif-wrap motif-hero motif-clickable lit" role="button" tabindex="0" aria-label="Zgaś ikonę">
-      <svg class="motif" viewBox="0 0 120 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <img class="motif motif-custom" src="images/icons/hero.svg" alt="" style="display:none" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
+      <svg class="motif motif-default" viewBox="0 0 120 80" fill="none" xmlns="http://www.w3.org/2000/svg">
       <rect x="12" y="26" width="96" height="34" rx="17" stroke="currentColor" stroke-width="3"/>
       <line x1="34" y1="35" x2="34" y2="51" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
       <line x1="26" y1="43" x2="42" y2="43" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
@@ -1546,7 +1647,8 @@
   <div class="bg-decor" aria-hidden="true">
     <div class="blob blob-career"></div>
     <div class="motif-wrap motif-flag motif-clickable" role="button" tabindex="0" aria-label="Zapal ikonę">
-      <svg class="motif" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <img class="motif motif-custom" src="images/icons/career.svg" alt="" style="display:none" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
+      <svg class="motif motif-default" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
       <line x1="20" y1="90" x2="20" y2="10" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
       <path d="M20 12 L82 12 L62 28 L82 44 L20 44 Z" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round"/>
     </svg>
@@ -1603,7 +1705,8 @@
   <div class="bg-decor" aria-hidden="true">
     <div class="blob blob-skills"></div>
     <div class="motif-wrap motif-skills motif-clickable" role="button" tabindex="0" aria-label="Zapal ikonę">
-      <svg class="motif" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <img class="motif motif-custom" src="images/icons/skills.svg" alt="" style="display:none" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
+      <svg class="motif motif-default" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
       <circle cx="50" cy="50" r="14" stroke="currentColor" stroke-width="3.5"/>
       <path d="M50 20v10M50 70v10M80 50h-10M30 50h-10M70.7 29.3l-7.1 7.1M36.4 63.6l-7.1 7.1M70.7 70.7l-7.1-7.1M36.4 36.4l-7.1-7.1" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/>
     </svg>
@@ -1645,7 +1748,8 @@
   <div class="bg-decor" aria-hidden="true">
     <div class="blob blob-toilet"></div>
     <div class="motif-wrap motif-toilet motif-clickable" role="button" tabindex="0" aria-label="Zapal ikonę">
-      <svg class="motif" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <img class="motif motif-custom" src="images/icons/project-1.svg" alt="" style="display:none" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
+      <svg class="motif motif-default" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
       <rect x="28" y="8" width="34" height="18" rx="3" stroke="currentColor" stroke-width="3.5"/>
       <path d="M22 30 L68 30 L62 50 Q62 78 45 78 Q28 78 28 50 Z" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round"/>
     </svg>
@@ -1679,7 +1783,8 @@
   <div class="bg-decor" aria-hidden="true">
     <div class="blob blob-nerd"></div>
     <div class="motif-wrap motif-glasses motif-clickable" role="button" tabindex="0" aria-label="Zapal ikonę">
-      <svg class="motif" viewBox="0 0 100 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <img class="motif motif-custom" src="images/icons/project-2.svg" alt="" style="display:none" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
+      <svg class="motif motif-default" viewBox="0 0 100 80" fill="none" xmlns="http://www.w3.org/2000/svg">
       <circle cx="28" cy="42" r="19" stroke="currentColor" stroke-width="4"/>
       <circle cx="72" cy="42" r="19" stroke="currentColor" stroke-width="4"/>
       <line x1="47" y1="40" x2="53" y2="40" stroke="currentColor" stroke-width="4"/>
@@ -1715,7 +1820,8 @@
   <div class="bg-decor" aria-hidden="true">
     <div class="blob blob-wildbar"></div>
     <div class="motif-wrap motif-grill motif-clickable" role="button" tabindex="0" aria-label="Zapal ikonę">
-      <svg class="motif" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <img class="motif motif-custom" src="images/icons/project-3.svg" alt="" style="display:none" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
+      <svg class="motif motif-default" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
       <line x1="20" y1="90" x2="30" y2="55" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/>
       <line x1="80" y1="90" x2="70" y2="55" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/>
       <ellipse cx="50" cy="50" rx="38" ry="14" stroke="currentColor" stroke-width="3.5"/>
@@ -1740,7 +1846,8 @@
   <div class="bg-decor" aria-hidden="true">
     <div class="blob blob-spacedef"></div>
     <div class="motif-wrap motif-turret motif-clickable" role="button" tabindex="0" aria-label="Zapal ikonę">
-      <svg class="motif" viewBox="0 11 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <img class="motif motif-custom" src="images/icons/project-4.svg" alt="" style="display:none" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
+      <svg class="motif motif-default" viewBox="0 11 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
       <line x1="50" y1="88" x2="50" y2="34" stroke="currentColor" stroke-width="3.5"/>
       <path d="M30 88 L70 88 L60 68 L40 68 Z" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round"/>
       <path d="M30 34 A20 20 0 0 1 70 34" stroke="currentColor" stroke-width="3.5"/>
@@ -1775,7 +1882,8 @@
   <div class="bg-decor" aria-hidden="true">
     <div class="blob blob-popiel"></div>
     <div class="motif-wrap motif-flame motif-clickable" role="button" tabindex="0" aria-label="Zapal ikonę">
-      <svg class="motif" viewBox="0 -8 100 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <img class="motif motif-custom" src="images/icons/project-5.svg" alt="" style="display:none" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
+      <svg class="motif motif-default" viewBox="0 -8 100 110" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M50 8 C30 32 24 48 29 64 C33 78 42 86 50 86 C58 86 67 78 71 64 C76 48 70 32 50 8 Z" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round"/>
       <path d="M50 42 C42 56 42 68 50 74 C58 68 58 56 50 42 Z" stroke="currentColor" stroke-width="3"/>
     </svg>
@@ -1805,7 +1913,8 @@
   <div class="bg-decor" aria-hidden="true">
     <div class="blob blob-lumberjack"></div>
     <div class="motif-wrap motif-axe motif-clickable" role="button" tabindex="0" aria-label="Zapal ikonę">
-      <svg class="motif" viewBox="5 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <img class="motif motif-custom" src="images/icons/project-6.svg" alt="" style="display:none" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
+      <svg class="motif motif-default" viewBox="5 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
       <line x1="28" y1="90" x2="66" y2="24" stroke="currentColor" stroke-width="4.5" stroke-linecap="round"/>
       <path d="M56 16 Q82 8 80 34 Q77 46 58 34 Z" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round"/>
     </svg>
@@ -1841,7 +1950,8 @@
   <div class="bg-decor" aria-hidden="true">
     <div class="blob blob-fluffy"></div>
     <div class="motif-wrap motif-paw motif-clickable" role="button" tabindex="0" aria-label="Zapal ikonę">
-      <svg class="motif" viewBox="5 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <img class="motif motif-custom" src="images/icons/project-7.svg" alt="" style="display:none" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
+      <svg class="motif motif-default" viewBox="5 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
       <ellipse cx="50" cy="68" rx="26" ry="20" stroke="currentColor" stroke-width="3.5"/>
       <circle cx="22" cy="40" r="10" stroke="currentColor" stroke-width="3.5"/>
       <circle cx="45" cy="24" r="10" stroke="currentColor" stroke-width="3.5"/>
@@ -1874,7 +1984,8 @@
   <div class="bg-decor" aria-hidden="true">
     <div class="blob blob-signals"></div>
     <div class="motif-wrap motif-signal motif-clickable" role="button" tabindex="0" aria-label="Zapal ikonę">
-      <svg class="motif" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <img class="motif motif-custom" src="images/icons/project-8.svg" alt="" style="display:none" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
+      <svg class="motif motif-default" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
       <circle cx="50" cy="50" r="6" fill="currentColor" stroke="none"/>
       <path d="M32 32a25.5 25.5 0 0 1 36 0" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/>
       <path d="M20 20a41 41 0 0 1 60 0" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/>
@@ -1907,7 +2018,8 @@
   <div class="bg-decor" aria-hidden="true">
     <div class="blob blob-inspector"></div>
     <div class="motif-wrap motif-console motif-clickable" role="button" tabindex="0" aria-label="Zapal ikonę">
-      <svg class="motif" viewBox="0 0 110 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <img class="motif motif-custom" src="images/icons/project-9.svg" alt="" style="display:none" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
+      <svg class="motif motif-default" viewBox="0 0 110 90" fill="none" xmlns="http://www.w3.org/2000/svg">
       <rect x="10" y="10" width="90" height="70" rx="6" stroke="currentColor" stroke-width="3.5"/>
       <path d="M24 34 L36 45 L24 56" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
       <line x1="44" y1="56" x2="64" y2="56" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/>
@@ -1938,7 +2050,8 @@
   <div class="bg-decor" aria-hidden="true">
     <div class="blob blob-toolkit"></div>
     <div class="motif-wrap motif-screwdriver motif-clickable" role="button" tabindex="0" aria-label="Zapal ikonę">
-      <svg class="motif" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <img class="motif motif-custom" src="images/icons/project-10.svg" alt="" style="display:none" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
+      <svg class="motif motif-default" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
       <rect x="38" y="8" width="24" height="32" rx="4" stroke="currentColor" stroke-width="3.5"/>
       <line x1="50" y1="40" x2="50" y2="78" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
       <line x1="41" y1="86" x2="59" y2="86" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
@@ -1969,9 +2082,20 @@
   <div class="bg-decor" aria-hidden="true">
     <div class="blob blob-wip"></div>
     <div class="motif-wrap motif-wip motif-clickable" role="button" tabindex="0" aria-label="Zapal ikonę">
-      <svg class="motif" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M50 8 L88 29 L88 71 L50 92 L12 71 L12 29 Z" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round" stroke-dasharray="6 6"/>
-      <circle cx="50" cy="50" r="14" stroke="currentColor" stroke-width="3.5"/>
+      <img class="motif motif-custom" src="images/icons/project-11.svg" alt="" style="display:none" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
+      <svg class="motif motif-default" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <g stroke="currentColor" stroke-width="3.5" stroke-linejoin="round">
+        <rect x="45" y="4" width="10" height="16" transform="rotate(0 50 50)"/>
+        <rect x="45" y="4" width="10" height="16" transform="rotate(45 50 50)"/>
+        <rect x="45" y="4" width="10" height="16" transform="rotate(90 50 50)"/>
+        <rect x="45" y="4" width="10" height="16" transform="rotate(135 50 50)"/>
+        <rect x="45" y="4" width="10" height="16" transform="rotate(180 50 50)"/>
+        <rect x="45" y="4" width="10" height="16" transform="rotate(225 50 50)"/>
+        <rect x="45" y="4" width="10" height="16" transform="rotate(270 50 50)"/>
+        <rect x="45" y="4" width="10" height="16" transform="rotate(315 50 50)"/>
+      </g>
+      <circle cx="50" cy="50" r="26" stroke="currentColor" stroke-width="3.5"/>
+      <circle cx="50" cy="50" r="10" stroke="currentColor" stroke-width="3.5"/>
     </svg>
     </div>
   </div>
@@ -1999,7 +2123,8 @@
   <div class="bg-decor" aria-hidden="true">
     <div class="blob blob-route"></div>
     <div class="motif-wrap motif-route motif-clickable" role="button" tabindex="0" aria-label="Zapal ikonę">
-      <svg class="motif" viewBox="0 0 100 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <img class="motif motif-custom" src="images/icons/project-12.svg" alt="" style="display:none" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
+      <svg class="motif motif-default" viewBox="0 0 100 110" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M50 8 C68 8 82 22 82 40 C82 62 50 100 50 100 C50 100 18 62 18 40 C18 22 32 8 50 8 Z" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round"/>
       <circle cx="50" cy="40" r="10" stroke="currentColor" stroke-width="3.5"/>
       <path d="M14 88 L34 78 L54 86 L86 70" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="2 7"/>
@@ -2019,7 +2144,8 @@
   <div class="bg-decor" aria-hidden="true">
     <div class="blob blob-about"></div>
     <div class="motif-wrap motif-about motif-clickable" role="button" tabindex="0" aria-label="Zapal ikonę">
-      <svg class="motif" viewBox="0 0 120 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <img class="motif motif-custom" src="images/icons/about-technical.svg" alt="" style="display:none" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
+      <svg class="motif motif-default" viewBox="0 0 120 80" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M46 20 L24 40 L46 60" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
       <path d="M74 20 L96 40 L74 60" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
       <line x1="66" y1="16" x2="54" y2="64" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
@@ -2120,7 +2246,8 @@
   <div class="bg-decor" aria-hidden="true">
     <div class="blob blob-contact"></div>
     <div class="motif-wrap motif-contact motif-clickable" role="button" tabindex="0" aria-label="Zapal ikonę">
-      <svg class="motif" viewBox="0 0 100 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <img class="motif motif-custom" src="images/icons/contact.svg" alt="" style="display:none" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
+      <svg class="motif motif-default" viewBox="0 0 100 110" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M50 6 L92 30 L92 80 L50 104 L8 80 L8 30 Z" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round"/>
       <path d="M50 6 L50 54 L92 30 M50 54 L92 80 M50 54 L8 80 M50 54 L8 30" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>
     </svg>
@@ -2255,6 +2382,8 @@
   window.addEventListener('wheel', (e) => {
     if(!isDesktop()) return; // let mobile scroll natively
     if(animating) return;
+    const lb = document.getElementById('lightbox');
+    if(lb && lb.classList.contains('active')) return; // preview open — don't touch page scroll
 
     const activeSection = sections[index];
 
@@ -2295,6 +2424,8 @@
   // --- Keyboard nav (desktop only) ---
   window.addEventListener('keydown', (e) => {
     if(!isDesktop() || animating) return;
+    const lb = document.getElementById('lightbox');
+    if(lb && lb.classList.contains('active')) return; // preview open — arrows belong to it, not page nav
     if(['ArrowDown','ArrowRight','PageDown',' '].includes(e.key)){ e.preventDefault(); goTo(index + 1); }
     if(['ArrowUp','ArrowLeft','PageUp'].includes(e.key)){ e.preventDefault(); goTo(index - 1); }
   });
@@ -2670,6 +2801,119 @@
     ripple.addEventListener('animationend', () => ripple.remove());
   });
 
+</script>
+
+<div class="lightbox" id="lightbox" aria-hidden="true">
+  <button type="button" class="lightbox-close" id="lightbox-close" aria-label="Zamknij podgląd">✕</button>
+  <button type="button" class="lightbox-arrow prev" id="lightbox-prev" aria-label="Poprzednie zdjęcie">‹</button>
+  <div class="lightbox-stage" id="lightbox-stage">
+    <img class="lightbox-img" id="lightbox-img" src="" alt="">
+  </div>
+  <button type="button" class="lightbox-arrow next" id="lightbox-next" aria-label="Następne zdjęcie">›</button>
+  <p class="lightbox-hint">Przewiń, aby przybliżyć/oddalić · Esc, aby zamknąć</p>
+</div>
+<script>
+(function(){
+  const lightbox = document.getElementById('lightbox');
+  const lbImg = document.getElementById('lightbox-img');
+  const lbClose = document.getElementById('lightbox-close');
+  const lbPrev = document.getElementById('lightbox-prev');
+  const lbNext = document.getElementById('lightbox-next');
+
+  let currentGroup = [];
+  let currentIndex = 0;
+  let zoomLevel = 1;
+
+  function resetZoom(){
+    zoomLevel = 1;
+    lbImg.style.transform = 'scale(1)';
+    lbImg.style.transformOrigin = 'center center';
+    lbImg.style.cursor = 'zoom-in';
+  }
+
+  function getImageUrl(el){
+    const bg = getComputedStyle(el).backgroundImage;
+    const m = bg.match(/url\(["']?(.*?)["']?\)/);
+    return (m && m[1] && m[1] !== 'none') ? m[1] : null;
+  }
+
+  function showIndex(i){
+    if(!currentGroup.length) return;
+    currentIndex = (i + currentGroup.length) % currentGroup.length;
+    const item = currentGroup[currentIndex];
+    lbImg.src = item.url;
+    lbImg.alt = item.alt || '';
+    resetZoom();
+    const multiple = currentGroup.length > 1;
+    lbPrev.hidden = !multiple;
+    lbNext.hidden = !multiple;
+  }
+
+  function openLightbox(el){
+    const scope = el.closest('.project-media') || el.parentElement;
+    const els = scope ? Array.from(scope.querySelectorAll('.about-photo, .solo-photo')) : [el];
+    currentGroup = els.map(function(g){
+      return { url: getImageUrl(g), alt: g.getAttribute('aria-label') };
+    }).filter(function(item){ return item.url; });
+    const startEl = getImageUrl(el);
+    let startIndex = currentGroup.findIndex(function(item){ return item.url === startEl; });
+    if(startIndex < 0) startIndex = 0;
+    showIndex(startIndex);
+    lightbox.classList.add('active');
+    lightbox.setAttribute('aria-hidden', 'false');
+  }
+  function closeLightbox(){
+    lightbox.classList.remove('active');
+    lightbox.setAttribute('aria-hidden', 'true');
+    resetZoom();
+  }
+
+  function zoomAtPoint(clientX, clientY, newLevel){
+    const rect = lbImg.getBoundingClientRect();
+    const originX = ((clientX - rect.left) / rect.width) * 100;
+    const originY = ((clientY - rect.top) / rect.height) * 100;
+    lbImg.style.transformOrigin = originX + '% ' + originY + '%';
+    zoomLevel = Math.min(4, Math.max(1, newLevel));
+    lbImg.style.transform = 'scale(' + zoomLevel.toFixed(2) + ')';
+    lbImg.style.cursor = zoomLevel > 1.02 ? 'zoom-out' : 'zoom-in';
+  }
+
+  lbImg.addEventListener('wheel', function(e){
+    e.preventDefault();
+    const step = 0.18;
+    zoomAtPoint(e.clientX, e.clientY, zoomLevel + (e.deltaY < 0 ? step : -step));
+  }, { passive:false });
+
+  lbImg.addEventListener('contextmenu', function(e){
+    e.preventDefault();
+    zoomAtPoint(e.clientX, e.clientY, zoomLevel > 1.02 ? 1 : 2.5);
+  });
+
+  lbImg.addEventListener('click', function(e){
+    e.stopPropagation();
+    zoomAtPoint(e.clientX, e.clientY, zoomLevel > 1.02 ? 1 : 2.5);
+  });
+
+  document.querySelectorAll('.about-photo, .solo-photo').forEach(function(el){
+    el.addEventListener('click', function(e){
+      e.stopPropagation();
+      openLightbox(el);
+    });
+  });
+
+  lbClose.addEventListener('click', closeLightbox);
+  lbPrev.addEventListener('click', function(e){ e.stopPropagation(); showIndex(currentIndex - 1); });
+  lbNext.addEventListener('click', function(e){ e.stopPropagation(); showIndex(currentIndex + 1); });
+  lightbox.addEventListener('click', function(e){
+    if(e.target === lightbox) closeLightbox();
+  });
+  document.addEventListener('keydown', function(e){
+    if(!lightbox.classList.contains('active')) return;
+    if(e.key === 'Escape'){ closeLightbox(); return; }
+    if(e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A'){ e.preventDefault(); e.stopPropagation(); showIndex(currentIndex - 1); }
+    if(e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D'){ e.preventDefault(); e.stopPropagation(); showIndex(currentIndex + 1); }
+  }, true);
+})();
 </script>
 
 </body>
