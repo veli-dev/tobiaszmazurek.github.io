@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tobiasz Mazurek — Unity Developer</title>
-<meta name="description" content="Portfolio Tobiasza Mazurka, Unity Developera — gry wydane na Steam, projekty gamejamowe, własne narzędzia i architektura.">
+<meta name="description" content="Portfolio Tobiasza Mazurka, Unity Developera — gry wydane na Steam, projekty z game jamów, własne narzędzia i architektura.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -17,11 +17,28 @@
     --accent:#7C9A92;
     --accent-warm:#C9642E;
     --line:#2A2D31;
-    --maxw:clamp(760px, 45vw, 980px);
+    --maxw:61.25rem;
+    --media-max-h:calc(100vh - 170px - 6.25rem);
     --ent:1; /* entrance animation strength multiplier — adjustable via the intensity switcher */
   }
   *{box-sizing:border-box; margin:0; padding:0;}
-  html{scroll-behavior:smooth;}
+  html{
+    scroll-behavior:smooth;
+    /* Jeden wspólny mechanizm skalowania całego layoutu (czcionki, odstępy, wymiary w rem).
+       Referencja: 16px przy szerokości okna ~2552px (projektowana wielkość).
+       Poniżej 861px włącza się dedykowany układ mobilny (patrz media queries), więc tam
+       font-size zostaje płaski na dolnej granicy i nie wchodzi w konflikt z tamtymi regułami. */
+    font-size:16px;
+  }
+  @media (min-width:861px){
+    html{
+      /* Sekcje są height:100vh, więc skalowanie MUSI reagować też na wysokość okna, nie tylko
+         szerokość — inaczej przy niskim/krótkim oknie treść nie mieści się w pionie i się tnie.
+         Bierzemy mniejszą z dwóch wartości (węższy wymiar rządzi skalą), z tą samą podłogą/sufitem
+         czytelności co wcześniej: 14px na dole, 16px na górze (referencja: 1920px szer. / 1000px wys.). */
+      font-size:clamp(8px, 0.62696vw, 22px);
+    }
+  }
   @media (prefers-reduced-motion: reduce){
     html{scroll-behavior:auto;}
     *{animation-duration:0.01ms !important; transition-duration:0.01ms !important;}
@@ -48,8 +65,8 @@
     font-size:.92em;
     color:var(--accent);
     background:var(--bg-panel);
-    padding:1px 6px;
-    border-radius:4px;
+    padding:0.0625rem 0.375rem;
+    border-radius:0.25rem;
   }
   ::selection{background:var(--accent); color:#0E0F11;}
   :focus-visible{outline:2px solid var(--accent); outline-offset:3px;}
@@ -70,8 +87,15 @@
     justify-content:center;
     gap:36px;
     padding:22px 40px;
+  }
+  .sidenav::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    z-index:-1;
     background:linear-gradient(to bottom, rgba(10,11,13,.85), rgba(10,11,13,0));
     backdrop-filter:blur(6px);
+    pointer-events:none;
   }
   .lang-toggle{
     position:absolute;
@@ -140,33 +164,36 @@
     box-shadow:0 0 0 4px rgba(124,154,146,.18);
   }
 
-  /* Expandable sub-list under "Projekty" — shows individual games when a project is open */
-  .sidenav li.has-sub{ position:relative; }
+  /* Expandable sub-list — a slim strip docked directly under the main nav bar (part of the
+     fixed top chrome), never floating over page content, so it can never overlap the title,
+     paragraph, quote or tags below, regardless of section length or window size. */
+  .sidenav li.has-sub{ position:static; }
   .sidenav .subnav{
     list-style:none;
     display:flex;
-    flex-direction:column;
-    gap:4px;
+    flex-direction:row;
+    flex-wrap:wrap;
+    align-items:center;
+    justify-content:center;
+    gap:4px 8px;
     position:absolute;
-    top:calc(100% + 14px);
-    left:50%;
-    transform:translateX(-50%) translateY(-6px);
-    min-width:190px;
-    padding:14px 16px;
-    background:#14161A;
-    border:1px solid var(--line);
-    border-radius:10px;
-    box-shadow:0 20px 50px -12px rgba(0,0,0,.7);
+    top:100%;
+    left:0;
+    right:0;
+    padding:10px 16px 20px;
+    background:transparent;
+    border:none;
+    box-shadow:none;
     opacity:0;
     pointer-events:none;
     transition:opacity .25s ease, transform .25s ease;
+    transform:translateY(-6px);
   }
   .sidenav li.has-sub.expanded .subnav,
-  .sidenav li.has-sub:hover .subnav,
-  .sidenav li.has-sub:focus-within .subnav{
+  .sidenav li.has-sub:hover .subnav{
     opacity:1;
     pointer-events:auto;
-    transform:translateX(-50%) translateY(0);
+    transform:translateY(0);
   }
   .sidenav .subnav-link{
     font-family:'Inter', sans-serif;
@@ -200,12 +227,12 @@
   .subnav-cat{
     display:block;
     font-family:'Inter', sans-serif;
-    font-size:10.5px;
+    font-size:0.6562rem;
     color:var(--text-dim);
     opacity:.55;
-    padding-left:13px;
+    padding-left:0.8125rem;
   }
-  .subnav-cat-spaced{ padding-top:5px; }
+  .subnav-cat-spaced{ padding-top:0.3125rem; }
   .sidenav .foot{ display:none; }
   .sidenav .foot a::before{display:none;}
   .sidenav .foot a:hover{color:var(--accent);}
@@ -253,11 +280,15 @@
       transform:none !important;
       filter:blur(0) !important;
     }
-    .inner > .reveal:nth-child(1), .project-content > .reveal:nth-child(1){ transition-delay:40ms; }
-    .inner > .reveal:nth-child(2), .project-content > .reveal:nth-child(2){ transition-delay:150ms; }
-    .inner > .reveal:nth-child(3), .project-content > .reveal:nth-child(3){ transition-delay:260ms; }
+    .inner > .reveal:nth-child(1), .project-content > .reveal:nth-child(1), .career-left > .reveal:nth-child(1){ transition-delay:40ms; }
+    .inner > .reveal:nth-child(2), .project-content > .reveal:nth-child(2), .career-left > .reveal:nth-child(2){ transition-delay:150ms; }
+    .inner > .reveal:nth-child(3), .project-content > .reveal:nth-child(3), .career-left > .reveal:nth-child(3){ transition-delay:260ms; }
     .inner > .reveal:nth-child(4), .project-content > .reveal:nth-child(4){ transition-delay:370ms; }
     .inner > .reveal:nth-child(5), .project-content > .reveal:nth-child(5){ transition-delay:480ms; }
+    .project-content > .reveal:nth-child(6){ transition-delay:590ms; }
+    .project-content > .reveal:nth-child(7){ transition-delay:700ms; }
+    .inner > .reveal:nth-child(6){ transition-delay:560ms; }
+    .inner > .reveal:nth-child(7){ transition-delay:640ms; }
 
     /* Icon badge motif entrance: fades/settles in alongside the text */
     .motif-wrap{
@@ -309,8 +340,7 @@
     height:100vh;
     display:flex;
     flex-direction:column;
-    justify-content:center;
-    padding:100px 56px;
+    padding:170px 3.5rem 6.25rem;
     border-bottom:1px solid var(--line);
     opacity:0.2;
     transition:opacity .8s ease;
@@ -329,9 +359,14 @@
     position:relative;
     z-index:2;
     max-width:var(--maxw);
-    margin:0 auto;
+    margin:auto;
     width:100%;
+    max-height:100%;
+    overflow-y:auto;
+    overflow-x:hidden;
+    scrollbar-width:none;
   }
+  .inner::-webkit-scrollbar{ display:none; }
 
   /* --- Ambient background decor: drifting glow + themed motif icon per section --- */
   .bg-decor{
@@ -345,11 +380,11 @@
   /* --- Icon badge: colored, bordered card holding each project's custom icon --- */
   .icon-badge{
     display:flex;
-    width:76px; height:76px;
-    border-radius:20px;
+    width:4.75rem; height:4.75rem;
+    border-radius:1.25rem;
     align-items:center;
     justify-content:center;
-    margin-bottom:22px;
+    margin-bottom:1.375rem;
     cursor:pointer;
     background:color-mix(in srgb, var(--motif-color) 22%, transparent);
     border:1.5px solid color-mix(in srgb, var(--motif-color) 70%, transparent);
@@ -362,14 +397,14 @@
     box-shadow:0 0 50px 4px color-mix(in srgb, var(--motif-color) 95%, transparent);
   }
   .icon-badge.lit svg{ color:#fff; }
-  .icon-badge svg{ width:42px; height:42px; color:var(--motif-color); transition:color .3s ease; }
+  .icon-badge svg{ width:2.625rem; height:2.625rem; color:var(--motif-color); transition:color .3s ease; }
 
   /* --- Click-anywhere background ripple, tinted per section --- */
   .click-ripple{
     position:fixed;
     left:0; top:0;
     pointer-events:none;
-    width:60px; height:60px;
+    width:3.75rem; height:3.75rem;
     border-radius:50%;
     background:radial-gradient(circle, var(--ripple-color, var(--accent)) 0%, transparent 72%);
     opacity:.5;
@@ -384,46 +419,10 @@
     .click-ripple{ display:none; }
   }
 
-  /* --- Intensity switcher (adjust entrance animation strength, 1=subtle, 5=dramatic) --- */
-  .intensity-switcher{
-    position:fixed;
-    left:50%;
-    bottom:22px;
-    transform:translateX(-50%);
-    z-index:200;
-    display:flex;
-    align-items:center;
-    gap:8px;
-    padding:8px 10px;
-    border-radius:30px;
-    background:rgba(10,11,13,.85);
-    border:1px solid var(--line);
-    backdrop-filter:blur(8px);
-  }
-  .intensity-switcher span{
-    font-family:'Space Grotesk', sans-serif;
-    font-size:11px;
-    color:var(--text-dim);
-    padding:0 4px;
-  }
-  .intensity-switcher button{
-    font-family:'Space Grotesk', sans-serif;
-    font-size:12px;
-    color:var(--text-dim);
-    background:transparent;
-    border:none;
-    width:30px; height:30px;
-    border-radius:50%;
-    cursor:pointer;
-    transition:background .2s ease, color .2s ease;
-  }
-  .intensity-switcher button:hover{color:var(--text);}
-  .intensity-switcher button.active{ background:var(--accent); color:#0E0F11; }
-  @media (max-width:860px){ .intensity-switcher{display:none;} }
   .blob{
     position:absolute;
-    width:560px;
-    height:560px;
+    width:35rem;
+    height:35rem;
     border-radius:50%;
     filter:blur(90px);
     opacity:.32;
@@ -449,7 +448,7 @@
   }
   .motif-wrap.motif-clickable.lit .motif{
     opacity:1;
-    filter:drop-shadow(0 0 22px var(--motif-color)) drop-shadow(0 0 55px var(--motif-color)) drop-shadow(0 0 90px var(--motif-color));
+    filter:drop-shadow(0 0 22px var(--motif-color, var(--accent))) drop-shadow(0 0 55px var(--motif-color, var(--accent))) drop-shadow(0 0 90px var(--motif-color, var(--accent)));
   }
   @keyframes driftBlob{
     0%{transform:translate(0,0) scale(1);}
@@ -469,47 +468,48 @@
   }
 
   /* Per-section decor placement + color */
-  .blob-hero{ --blob-color:#7C9A92; top:-120px; right:-100px; }
-  .blob-about{ --blob-color:#4C7A9E; bottom:-140px; left:-120px; }
-  .blob-skills{ --blob-color:#C9642E; top:-100px; left:10%; }
-  .blob-warm{ --blob-color:#C9642E; bottom:-150px; right:-90px; }
-  .blob-sage{ --blob-color:#7C9A92; top:-120px; left:-90px; }
-  .blob-contact{ --blob-color:#4C7A9E; top:-130px; right:15%; }
-  .blob-career{ --blob-color:#7C9A92; top:-110px; right:10%; }
+  .blob-hero{ --blob-color:#7C9A92; top:-7.5rem; right:-6.25rem; }
+  .blob-about{ --blob-color:#4C7A9E; bottom:-8.75rem; left:-7.5rem; }
+  .blob-skills{ --blob-color:#C9642E; top:-6.25rem; left:10%; }
+  .blob-warm{ --blob-color:#C9642E; bottom:-9.375rem; right:-5.625rem; }
+  .blob-sage{ --blob-color:#7C9A92; top:-7.5rem; left:-5.625rem; }
+  .blob-contact{ --blob-color:#4C7A9E; top:-8.125rem; right:15%; }
+  .blob-career{ --blob-color:#7C9A92; top:-6.875rem; right:10%; }
   /* Per-project unique accent — each game/tool gets its own mood, not shared warm/sage */
-  .blob-nerd{ --blob-color:#C9642E; bottom:-150px; right:-90px; }
-  .blob-toilet{ --blob-color:#3FA7B0; top:-120px; left:-90px; }
-  .blob-spacedef{ --blob-color:#8B6FD9; bottom:-150px; right:-90px; }
-  .blob-popiel{ --blob-color:#B8452E; top:-120px; left:-90px; }
-  .blob-lumberjack{ --blob-color:#6B9B5E; bottom:-150px; right:-90px; }
-  .blob-signals{ --blob-color:#5B8FD9; top:-120px; left:-90px; }
-  .blob-inspector{ --blob-color:#3FBF8F; bottom:-150px; right:-90px; }
-  .blob-toolkit{ --blob-color:#8A93A6; top:-120px; left:-90px; }
-  .blob-wip{ --blob-color:#C9A227; bottom:-150px; right:-90px; }
-  .blob-route{ --blob-color:#A67C52; top:-120px; left:-90px; }
-  .blob-fluffy{ --blob-color:#C9789F; top:-120px; left:-90px; }
-  .blob-wildbar{ --blob-color:#9AA84A; bottom:-150px; right:-90px; }
+  .blob-nerd{ --blob-color:#C9642E; bottom:-9.375rem; right:-5.625rem; }
+  .blob-toilet{ --blob-color:#3FA7B0; top:-7.5rem; left:-5.625rem; }
+  .blob-spacedef{ --blob-color:#8B6FD9; bottom:-9.375rem; right:-5.625rem; }
+  .blob-popiel{ --blob-color:#B8452E; top:-7.5rem; left:-5.625rem; }
+  .blob-lumberjack{ --blob-color:#6B9B5E; bottom:-9.375rem; right:-5.625rem; }
+  .blob-signals{ --blob-color:#5B8FD9; top:-7.5rem; left:-5.625rem; }
+  .blob-inspector{ --blob-color:#3FBF8F; bottom:-9.375rem; right:-5.625rem; }
+  .blob-toolkit{ --blob-color:#8A93A6; top:-7.5rem; left:-5.625rem; }
+  .blob-wip{ --blob-color:#C9A227; bottom:-9.375rem; right:-5.625rem; }
+  .blob-route{ --blob-color:#A67C52; top:-7.5rem; left:-5.625rem; }
+  .blob-fluffy{ --blob-color:#C9789F; top:-7.5rem; left:-5.625rem; }
+  .blob-wildbar{ --blob-color:#9AA84A; bottom:-9.375rem; right:-5.625rem; }
 
-  .motif-hero{ top:14%; right:8%; width:min(30vw,360px); }
-  .motif-about{ bottom:10%; left:6%; width:min(24vw,300px); }
-  .motif-skills{ top:12%; right:10%; width:min(22vw,260px); }
-  .motif-steam{ bottom:8%; right:6%; width:min(26vw,300px); }
-  .motif-jam{ top:10%; left:8%; width:min(20vw,220px); }
-  .motif-tool{ bottom:10%; left:8%; width:min(22vw,260px); }
-  .motif-tree{ top:12%; right:8%; width:min(16vw,190px); }
-  .motif-contact{ bottom:12%; right:10%; width:min(22vw,260px); }
-  .motif-route{ top:10%; right:8%; width:min(20vw,230px); }
-  .motif-signal{ top:12%; left:8%; width:min(18vw,200px); }
-  .motif-console{ bottom:10%; right:8%; width:min(24vw,280px); }
-  .motif-wip{ top:10%; right:10%; width:min(20vw,220px); }
-  .motif-glasses{ top:14%; right:8%; width:min(22vw,240px); }
-  .motif-toilet{ bottom:8%; left:8%; width:min(16vw,170px); }
-  .motif-turret{ top:10%; right:8%; width:min(18vw,200px); }
-  .motif-flame{ bottom:10%; right:8%; width:min(16vw,170px); }
-  .motif-axe{ top:12%; right:10%; width:min(18vw,190px); }
-  .motif-screwdriver{ bottom:8%; left:8%; width:min(14vw,150px); }
-  .motif-paw{ top:12%; right:8%; width:min(18vw,190px); }
-  .motif-grill{ bottom:10%; right:8%; width:min(20vw,210px); }
+  .motif-hero{ top:14%; right:8%; width:22.5rem; }
+  .motif-about{ bottom:10%; left:6%; width:18.75rem; }
+  .motif-skills{ top:12%; right:10%; width:16.25rem; }
+  .motif-steam{ bottom:8%; right:6%; width:18.75rem; }
+  .motif-jam{ top:10%; left:8%; width:13.75rem; }
+  .motif-tool{ bottom:10%; left:8%; width:16.25rem; }
+  .motif-tree{ top:12%; right:8%; width:11.875rem; }
+  .motif-contact{ bottom:12%; right:10%; width:16.25rem; }
+  .motif-route{ top:10%; right:8%; width:14.375rem; }
+  .motif-signal{ top:12%; left:8%; width:12.5rem; }
+  .motif-console{ bottom:10%; right:8%; width:17.5rem; }
+  .motif-wip{ top:10%; right:10%; width:13.75rem; }
+  .motif-glasses{ top:14%; right:8%; width:15rem; }
+  .motif-toilet{ bottom:8%; left:8%; width:10.625rem; }
+  .motif-turret{ top:10%; right:8%; width:12.5rem; }
+  .motif-flame{ bottom:10%; right:8%; width:10.625rem; }
+  .motif-axe{ top:12%; right:10%; width:11.875rem; }
+  .motif-screwdriver{ bottom:8%; left:8%; width:9.375rem; }
+  .motif-paw{ top:12%; right:8%; width:11.875rem; }
+  .motif-flag{ top:10%; right:8%; width:11.25rem; }
+  .motif-grill{ bottom:10%; right:8%; width:13.125rem; }
   @media (max-width:860px){
     .motif-wrap{ width:180px !important; }
   }
@@ -517,49 +517,68 @@
   /* HERO */
   #hero{
     justify-content:space-between;
-    padding-bottom:60px;
+    padding-bottom:3.75rem;
   }
-  #hero .inner{max-width:900px;}
+  #hero .inner{max-width:56.25rem;}
   .hero-top{
     display:flex;
     justify-content:space-between;
     align-items:baseline;
-    font-size:14px;
+    font-size:0.875rem;
     color:var(--text-dim);
     margin-bottom:auto;
-    padding-bottom:60px;
+    padding-bottom:3.75rem;
   }
   .hero-mid{
-    padding:40px 0;
+    padding:2.5rem 0;
   }
   .hero-mid .role{
     color:var(--accent);
-    font-size:16px;
-    margin-bottom:18px;
+    font-size:1rem;
+    margin-bottom:1.125rem;
     font-family:'Space Grotesk', sans-serif;
   }
   .hero-mid h1{
-    font-size:clamp(40px, 7vw, 76px);
+    font-size:4.75rem;
     line-height:1.04;
     max-width:11ch;
   }
   .hero-sub{
-    margin-top:28px;
+    margin-top:1.75rem;
     max-width:46ch;
     color:var(--text-dim);
-    font-size:18px;
+    font-size:1.125rem;
   }
   .hero-bottom{
     display:flex;
-    gap:16px;
-    margin-top:40px;
+    gap:1rem;
+    margin-top:2.5rem;
     flex-wrap:wrap;
+  }
+  .hero-stats{
+    display:flex;
+    gap:2rem;
+    margin-top:3.5rem;
+    flex-wrap:wrap;
+  }
+  .hero-stats span{
+    font-size:0.875rem;
+    color:var(--text-dim);
+  }
+  .hero-stats strong{
+    font-family:'Space Grotesk', sans-serif;
+    color:var(--accent);
+    font-weight:600;
+    margin-right:0.3125rem;
+  }
+  @media (max-width:860px){
+    .hero-stats{ gap:20px; margin-top:36px; }
   }
   .btn{
     display:inline-block;
-    padding:13px 26px;
-    border-radius:3px;
-    font-size:15px;
+    padding:0.8125rem 1.625rem;
+    border-radius:0.1875rem;
+    font-size:0.9375rem;
     font-weight:500;
     text-decoration:none;
     transition:background .2s ease, border-color .2s ease, color .2s ease;
@@ -575,17 +594,41 @@
   }
   .btn-ghost:hover{border-color:var(--accent); color:var(--accent);}
 
-  .scroll-cue{
+  .cue-row{
     align-self:center;
-    font-size:12px;
+    display:flex;
+    align-items:flex-start;
+    gap:2.5rem;
+  }
+  .scroll-cue{
+    font-size:0.75rem;
     color:var(--text-dim);
     display:flex;
     flex-direction:column;
     align-items:center;
-    gap:8px;
+    gap:0.5rem;
+  }
+  .click-cue{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:0.5rem;
+    padding-top:0.4375rem;
+    font-size:0.6875rem;
+    color:var(--text-dim);
+    opacity:.7;
+  }
+  .click-cue svg{
+    width:1.375rem; height:1.375rem;
+    color:var(--accent);
+    animation:tapPulse 1.8s ease-in-out infinite;
+  }
+  @keyframes tapPulse{
+    0%, 100%{ opacity:1; transform:scale(1); }
+    50%{ opacity:.6; transform:scale(.9); }
   }
   .scroll-cue .line{
-    width:1px; height:36px;
+    width:0.0625rem; height:2.25rem;
     background:linear-gradient(var(--accent), transparent);
     animation:pulse 2s ease-in-out infinite;
   }
@@ -596,39 +639,55 @@
   /* Section headers */
   .kicker{
     color:var(--accent);
-    font-size:14px;
+    font-size:0.875rem;
     font-family:'Space Grotesk', sans-serif;
-    margin-bottom:14px;
+    margin-bottom:0.875rem;
   }
   .sec-title{
-    font-size:clamp(28px, 4vw, 40px);
-    margin-bottom:48px;
+    font-size:2.5rem;
+    margin-bottom:3rem;
     max-width:16ch;
   }
 
   /* ABOUT */
-  #about p{
-    font-size:18px;
-    color:var(--text-dim);
-    max-width:58ch;
-    margin-bottom:18px;
+  .project-content ul{
+    list-style:none;
+    display:flex;
+    flex-direction:column;
+    gap:0.625rem;
+    margin:0.25rem 0 1.625rem;
+    max-width:50ch;
   }
-  #about p strong{color:var(--text); font-weight:500;}
+  .project-content ul li{
+    font-size:1.0625rem;
+    color:var(--text-dim);
+    padding-left:1.25rem;
+    position:relative;
+  }
+  .project-content ul li::before{
+    content:"";
+    position:absolute;
+    left:0; top:0.625rem;
+    width:0.375rem; height:0.375rem;
+    border-radius:50%;
+    background:var(--accent);
+  }
+  .project-content .testimonial{ margin-top:0.5rem; margin-bottom:1.625rem; max-width:50ch; }
   .about-stats{
     display:flex;
-    gap:48px;
-    margin-top:44px;
+    gap:3rem;
+    margin-top:2.75rem;
     flex-wrap:wrap;
   }
   .stat .n{
     font-family:'Space Grotesk', sans-serif;
-    font-size:32px;
+    font-size:2rem;
     color:var(--accent);
   }
   .stat .l{
-    font-size:14px;
+    font-size:0.875rem;
     color:var(--text-dim);
-    margin-top:4px;
+    margin-top:0.25rem;
   }
 
   /* SKILLS */
@@ -639,24 +698,24 @@
   }
   .skill-row{
     display:grid;
-    grid-template-columns:140px 1fr;
-    gap:24px;
-    padding:20px 0;
+    grid-template-columns:8.75rem 1fr;
+    gap:1.5rem;
+    padding:1.25rem 0;
     border-top:1px solid var(--line);
     align-items:start;
   }
   .skill-row:last-child{border-bottom:1px solid var(--line);}
   .skill-row .label{
     color:var(--text-dim);
-    font-size:14px;
+    font-size:0.875rem;
     font-family:'Space Grotesk', sans-serif;
-    padding-top:2px;
+    padding-top:0.125rem;
   }
   .skill-row .items{
     display:flex;
     flex-wrap:wrap;
-    gap:10px 12px;
-    font-size:16px;
+    gap:0.625rem 0.75rem;
+    font-size:1rem;
   }
   @media (max-width:560px){
     .skill-row{grid-template-columns:1fr;}
@@ -667,15 +726,15 @@
     position:relative;
     overflow:hidden;
     justify-content:center;
-    padding:100px 56px;
+    padding:170px 3.5rem 6.25rem;
   }
   .project-slide .ghost-num{
     position:absolute;
     top:50%;
-    right:5%;
+    right:8%;
     transform:translateY(-50%);
     font-family:'Space Grotesk', sans-serif;
-    font-size:min(34vw, 420px);
+    font-size:26.25rem;
     font-weight:700;
     line-height:1;
     color:var(--bg-panel);
@@ -686,12 +745,17 @@
   .project-content{
     position:relative;
     z-index:1;
-    max-width:640px;
-    margin:0 auto;
+    max-width:40rem;
+    margin:auto;
+    max-height:100%;
+    overflow-y:auto;
+    overflow-x:hidden;
+    scrollbar-width:none;
     opacity:0;
     transform:translateY(28px);
     transition:transform .9s cubic-bezier(.76,0,.24,1), opacity .9s ease;
   }
+  .project-content::-webkit-scrollbar{ display:none; }
   .project-slide.in-view .project-content{
     opacity:1;
     transform:translateY(0);
@@ -702,27 +766,32 @@
     z-index:1;
     display:flex;
     align-items:center;
-    gap:56px;
-    max-width:clamp(1000px, 64vw, 1480px);
+    justify-content:center;
+    gap:3rem;
+    max-width:92.5rem;
     width:100%;
-    margin:0 auto;
+    margin:auto;
   }
   .project-slide[data-dir="left"] .project-row{ flex-direction:row-reverse; }
-  .project-row .project-content{ flex:1 1 0%; max-width:none; margin:0; }
+  .project-row .project-content{ flex:0 1 34rem; max-width:34rem; margin:0; max-height:calc(100vh - 170px - 6.25rem); }
   .project-row .project-content p,
   .project-row .project-content .tags,
-  .project-row .project-content .links{ max-width:480px; }
+  .project-row .project-content .links{ max-width:34rem; }
   .project-slide[data-dir="right"] .project-media{ --mdir:1; }
   .project-slide[data-dir="left"] .project-media{ --mdir:-1; }
   .project-media{
-    flex:1.15 1 0%;
+    flex:0 1 34rem;
     min-width:0;
+    max-height:calc(100vh - 170px - 6.25rem);
+    overflow-y:auto;
+    scrollbar-width:none;
     opacity:0;
     transform:translateX(calc(var(--mdir, 1) * 90px * var(--ent, 1))) rotate(calc(var(--mdir, 1) * -5deg * var(--ent, 1))) scale(max(.55, calc(1 - .14 * var(--ent, 1))));
     filter:blur(calc(6px * var(--ent, 1)));
     transition:opacity .8s ease, transform .8s cubic-bezier(.22,1,.36,1), filter .8s ease;
     transition-delay:180ms;
   }
+  .project-media::-webkit-scrollbar{ display:none; }
   .project-slide.in-view .project-media{
     opacity:1;
     transform:none;
@@ -732,16 +801,341 @@
     width:100%;
     height:auto;
     display:block;
-    border-radius:6px;
+    border-radius:0.375rem;
     border:1px solid var(--line);
     box-shadow:0 24px 60px -20px rgba(0,0,0,.65);
+  }
+  .about-photo{
+    width:100%;
+    aspect-ratio:4/5;
+    border-radius:0.25rem;
+    background-color:var(--bg-panel);
+    background-size:cover;
+    background-position:center;
+    border-style:solid;
+    border-color:#F2EEE6;
+    border-width:0.5rem 0.5rem 1.75rem 0.5rem;
+    box-shadow:0 24px 60px -20px rgba(0,0,0,.65);
+  }
+  .photo-collage{
+    position:relative;
+    width:100%;
+    max-width:31.25rem;
+    aspect-ratio:1/1.35;
+    margin:1.5rem 0;
+  }
+  .photo-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:0.875rem;
+    width:100%;
+    max-width:27.5rem;
+  }
+  .photo-grid .about-photo{
+    aspect-ratio:1/1;
+    border-radius:0.75rem;
+  }
+  .photo-collage .about-photo{
+    position:absolute;
+    aspect-ratio:4/5;
+    border:4px solid var(--bg-panel);
+    box-shadow:0 20px 45px -15px rgba(0,0,0,.75);
+  }
+  /* Layout A — "To moja działka": one tall anchor photo on the left, two stacked on the
+     right, a small accent tucked in the bottom-left seam. */
+  .photo-collage.style-a .pc-1{ width:52%; top:0; left:0; height:64%; aspect-ratio:auto; transform:rotate(-3deg); z-index:2; }
+  .photo-collage.style-a .pc-2{ width:46%; top:2%; right:0; transform:rotate(4deg); z-index:3; }
+  .photo-collage.style-a .pc-3{ width:42%; bottom:0; right:4%; transform:rotate(-5deg); z-index:4; }
+  .photo-collage.style-a .pc-4{ width:33%; bottom:0; left:10%; transform:rotate(6deg); z-index:1; }
+  /* Layout B — "Tak to ja": two photos side by side up top, one wide photo anchoring the
+     bottom, a small accent overlapping the seam — visibly different rhythm from Layout A. */
+  .photo-collage.style-b .pc-1{ width:47%; top:0; left:2%; transform:rotate(4deg); z-index:2; }
+  .photo-collage.style-b .pc-2{ width:44%; top:7%; right:0; transform:rotate(-4deg); z-index:1; }
+  .photo-collage.style-b .pc-3{ width:58%; bottom:0; left:0; height:46%; aspect-ratio:auto; transform:rotate(-2deg); z-index:3; }
+  .photo-collage.style-b .pc-4{ width:34%; bottom:7%; right:2%; transform:rotate(6deg); z-index:4; }
+  @media (max-width:860px){
+    .photo-collage{ aspect-ratio:1/1.15; max-width:340px; margin:1.5rem auto; }
+    .photo-grid{ max-width:340px; margin:0 auto; }
+  }
+  .game-highlights{
+    position:relative;
+    width:100%;
+    max-width:26.25rem;
+    aspect-ratio:1/1.15;
+  }
+  .game-highlight{ position:absolute; aspect-ratio:4/5; }
+  .game-highlight .about-photo{
+    width:100%; height:100%;
+    aspect-ratio:auto;
+    border-radius:0.75rem;
+    border:4px solid var(--bg-panel);
+    transition:transform .3s ease;
+  }
+  .game-highlight:hover .about-photo{ transform:scale(1.02); }
+  .game-highlight:nth-child(1){ width:56%; top:0; left:2%; transform:rotate(-4deg); z-index:2; }
+  .game-highlight:nth-child(2){ width:44%; top:8%; right:0; transform:rotate(5deg); z-index:3; }
+  .game-highlight:nth-child(3){ width:42%; bottom:0; left:0; transform:rotate(4deg); z-index:1; }
+  .game-highlight-cap{
+    position:absolute;
+    left:50%;
+    bottom:-2.75rem;
+    transform:translateX(-50%);
+    width:max-content;
+    max-width:220%;
+    margin:0;
+    padding:0.5625rem 1rem;
+    background:var(--bg-panel);
+    border:1px solid var(--line);
+    border-radius:1rem;
+    font-size:0.8438rem;
+    color:var(--text);
+    text-align:center;
+  }
+
+  /* Single-photo sections — same visual treatment as the collages (rounded, bordered,
+     shadowed) instead of a bare <img> that shows a broken-image icon when the file is missing. */
+  .photo-stack{
+    position:relative;
+    width:56%;
+    max-width:24rem;
+    max-height:var(--media-max-h);
+    aspect-ratio:16/10;
+    margin:1.5rem auto;
+  }
+  .stack-photo{
+    position:absolute;
+    inset:0;
+    border-radius:0.25rem;
+    background-color:var(--bg-panel);
+    background-size:cover;
+    background-position:center;
+    border-style:solid;
+    border-color:#F2EEE6;
+    border-width:0.5rem 0.5rem 1.75rem 0.5rem;
+    box-shadow:0 24px 60px -20px rgba(0,0,0,.65);
+    transition:transform .45s cubic-bezier(.22,1,.36,1), box-shadow .45s ease;
+  }
+  .stack-photo.stack-back{ transform:rotate(8deg); z-index:1; }
+  .stack-photo.stack-front{ transform:rotate(-4deg); z-index:2; cursor:default; }
+  .photo-stack:hover .stack-front{
+    transform:rotate(-10deg) translate(-12%, 5%);
+    box-shadow:0 28px 55px -18px rgba(0,0,0,.85);
+  }
+  .photo-stack:hover .stack-back{
+    transform:rotate(2deg) scale(1.02);
+    box-shadow:0 28px 55px -18px rgba(0,0,0,.85);
+  }
+
+  .solo-photo{
+    position:relative;
+    width:82%;
+    max-width:34rem;
+    max-height:var(--media-max-h);
+    aspect-ratio:16/10;
+    border-radius:0.25rem;
+    background-color:var(--bg-panel);
+    background-size:cover;
+    background-position:center;
+    border-style:solid;
+    border-color:#F2EEE6;
+    border-width:0.5rem 0.5rem 1.75rem 0.5rem;
+    box-shadow:0 24px 60px -20px rgba(0,0,0,.65);
+    transform:rotate(-3deg);
+    margin:1.5rem auto;
+    display:block;
+    transition:transform .35s cubic-bezier(.22,1,.36,1);
+    cursor:default;
+  }
+  .solo-photo:hover{ transform:rotate(0deg) scale(1.05); box-shadow:0 28px 55px -18px rgba(0,0,0,.85); }
+
+  /* Washi-tape accent — a small strip that makes a photo look physically taped down. */
+  .tile.has-tape::before{
+    content:"";
+    position:absolute;
+    top:-0.8125rem;
+    left:50%;
+    width:3.75rem;
+    height:1.625rem;
+    background:linear-gradient(to bottom, rgba(237,224,190,.68), rgba(237,224,190,.5));
+    box-shadow:0 2px 5px rgba(0,0,0,.25);
+    z-index:6;
+    pointer-events:none;
+  }
+  .tile.has-tape.tape-left::before{ left:22%; transform:translateX(-50%) rotate(-8deg); }
+  .tile.has-tape.tape-right::before{ left:78%; transform:translateX(-50%) rotate(6deg); }
+
+  /* Reusable "duo" collage — two larger overlapping photos with a switcher for 3 layouts.
+     Used anywhere a single flat screenshot used to sit alone; drop this in with two images
+     and it comes with its own layout picker. */
+  .tile-collage{
+    position:relative;
+    width:min(34rem, calc((var(--media-max-h) - 3rem) / 0.82));
+    max-width:34rem;
+    aspect-ratio:1/0.82;
+    margin:2.5rem auto 0.5rem;
+    padding:1.25rem 1.75rem;
+  }
+  .tile-collage[data-count="3"]{ aspect-ratio:1/1.15; width:min(34rem, calc((var(--media-max-h) - 3rem) / 1.15)); }
+  .tile-collage[data-count="4"]{ aspect-ratio:1/1.35; width:min(34rem, calc((var(--media-max-h) - 3rem) / 1.35)); }
+  .tile{ position:absolute; transition:width .35s ease, height .35s ease, top .35s ease, left .35s ease, right .35s ease, bottom .35s ease, transform .35s cubic-bezier(.22,1,.36,1); cursor:default; }
+  .tile:hover{ transform:rotate(0deg) scale(1.06) !important; z-index:9 !important; }
+  .tile:hover .about-photo{ box-shadow:0 28px 55px -18px rgba(0,0,0,.85); }
+  .tile .about-photo{
+    width:100%; height:100%;
+    aspect-ratio:auto;
+    border-radius:0.25rem;
+    border-style:solid;
+    border-color:#F2EEE6;
+    border-width:0.5rem 0.5rem 1.75rem 0.5rem;
+    box-shadow:0 20px 45px -15px rgba(0,0,0,.75);
+  }
+
+  /* ===== 2 photos ===== */
+  .tile-collage[data-count="2"]{ aspect-ratio:1/0.82; }
+  .tile-collage[data-count="2"][data-layout="1"] .tile-a{ width:64%; aspect-ratio:16/10; top:7%; left:8%; transform:rotate(-5.4deg); z-index:1; }
+  .tile-collage[data-count="2"][data-layout="1"] .tile-b{ width:54%; aspect-ratio:16/10; bottom:7%; right:8%; transform:rotate(5.4deg); z-index:2; }
+  .tile-collage[data-count="2"][data-layout="2"] .tile-a{ width:68%; aspect-ratio:16/10; top:7%; left:8%; transform:rotate(-3.6deg); z-index:1; }
+  .tile-collage[data-count="2"][data-layout="2"] .tile-b{ width:38%; aspect-ratio:4/5; bottom:7%; right:2%; transform:rotate(7.2deg); z-index:2; }
+  .tile-collage[data-count="2"][data-layout="3"] .tile-a{ width:40%; aspect-ratio:4/5; top:7%; left:4%; transform:rotate(5.4deg); z-index:2; }
+  .tile-collage[data-count="2"][data-layout="3"] .tile-b{ width:64%; aspect-ratio:16/10; bottom:7%; right:8%; transform:rotate(-5.4deg); z-index:1; }
+  .tile-collage[data-count="2"][data-layout="4"] .tile-a{ width:46%; aspect-ratio:4/5; top:7%; left:8%; transform:rotate(-7.2deg); z-index:1; }
+  .tile-collage[data-count="2"][data-layout="4"] .tile-b{ width:46%; aspect-ratio:4/5; bottom:7%; right:8%; transform:rotate(7.2deg); z-index:2; }
+  #project-1 .project-media{ flex-basis:39rem; }
+  #project-1 .tile-collage{ aspect-ratio:1/0.95; width:min(39rem, calc((var(--media-max-h) - 3rem) / 0.95)); max-width:39rem; }
+  #project-1 .tile-a{ width:70%; aspect-ratio:16/10; top:4%; left:4%; transform:rotate(-5deg); z-index:1; }
+  #project-1 .tile-b{ width:60%; aspect-ratio:16/10; bottom:3%; right:3%; transform:rotate(4deg); z-index:2; }
+  #project-8 .project-media{ flex-basis:36rem; }
+  #project-8 .tile-collage{ aspect-ratio:1/0.95; width:min(36rem, calc((var(--media-max-h) - 3rem) / 0.95)); max-width:36rem; }
+  #project-8 .tile-a{ width:68%; aspect-ratio:16/10; top:4%; left:4%; transform:rotate(-4deg); z-index:1; }
+  #project-8 .tile-b{ width:58%; aspect-ratio:16/10; bottom:3%; right:3%; transform:rotate(3deg); z-index:2; }
+  #project-9 .project-media{ flex-basis:36rem; }
+  #project-9 .tile-collage{ aspect-ratio:1/0.95; width:min(36rem, calc((var(--media-max-h) - 3rem) / 0.95)); max-width:36rem; }
+  #project-9 .tile-a{ width:68%; aspect-ratio:16/10; top:3%; left:3%; transform:rotate(4deg); z-index:2; }
+  #project-9 .tile-b{ width:58%; aspect-ratio:16/10; bottom:4%; right:4%; transform:rotate(-3deg); z-index:1; }
+  /* "To moja działka" — wachlarz: jedno zdjęcie na środku (proste, na wierzchu, największe),
+     reszta wygląda zza niego pod różnymi kątami, jak rozrzucone/przypięte zdjęcia na biurku. */
+  #about-technical .project-media{ flex-basis:38rem; }
+  #about-technical .tile-collage{
+    position:relative;
+    width:min(38rem, calc((var(--media-max-h) - 3rem) / 1));
+    aspect-ratio:1/1;
+    margin:2.5rem auto 0.5rem;
+  }
+  #about-technical .tile{ transition:transform .35s cubic-bezier(.22,1,.36,1), z-index 0s; cursor:default; }
+  #about-technical .tile:hover{ transform:rotate(0deg) scale(1.07) !important; z-index:9 !important; }
+  #about-technical .tile:hover .about-photo{ box-shadow:0 28px 55px -18px rgba(0,0,0,.85); }
+  #about-technical .tile-b{ width:36%; aspect-ratio:4/5; top:2%; left:2%; transform:rotate(-13deg); z-index:1; }
+  #about-technical .tile-c{ width:36%; aspect-ratio:4/5; top:3%; right:2%; transform:rotate(11deg); z-index:2; }
+  #about-technical .tile-d{ width:36%; aspect-ratio:4/5; bottom:2%; left:32%; transform:rotate(9deg); z-index:3; }
+  #about-technical .tile-a{ width:48%; aspect-ratio:4/5; top:20%; left:26%; transform:rotate(-2deg); z-index:5; }
+  #about-technical .tile .about-photo{ width:100%; height:100%; aspect-ratio:auto; }
+
+  /* "Tak to ja" — ten sam wachlarz co w "To moja działka", ale lustrzane kąty obrotu,
+     żeby obie sekcje O mnie nie wyglądały identycznie mimo wspólnego wzorca. */
+  #about-life .project-media{ flex-basis:40rem; }
+  #about-life .tile-collage{
+    position:relative;
+    width:min(40rem, calc((var(--media-max-h) - 3rem) / 1));
+    aspect-ratio:1/1;
+    margin:2.5rem auto 0.5rem;
+  }
+  #about-life .tile{ transition:transform .35s cubic-bezier(.22,1,.36,1), z-index 0s; cursor:default; }
+  #about-life .tile:hover{ transform:rotate(0deg) scale(1.07) !important; z-index:9 !important; }
+  #about-life .tile:hover .about-photo{ box-shadow:0 28px 55px -18px rgba(0,0,0,.85); }
+  #about-life .tile-b{ width:36%; aspect-ratio:4/5; top:2%; right:2%; transform:rotate(14deg); z-index:1; }
+  #about-life .tile-d{ width:42%; aspect-ratio:4/3; top:4%; left:1%; transform:rotate(-10deg); z-index:2; }
+  #about-life .tile-c{ width:36%; aspect-ratio:4/5; bottom:2%; right:32%; transform:rotate(-9deg); z-index:3; }
+  #about-life .tile-a{ width:48%; aspect-ratio:4/5; top:20%; left:26%; transform:rotate(2deg); z-index:5; }
+  #about-life .tile .about-photo{ width:100%; height:100%; aspect-ratio:auto; }
+
+  /* ===== 3 photos ===== */
+  /* aspect-ratio + width formula for count=3 defined above, alongside base rule */
+  .tile-collage[data-count="3"][data-layout="1"] .tile-a{ width:56%; aspect-ratio:4/5; top:7%; left:2%; transform:rotate(-7.2deg); z-index:2; }
+  .tile-collage[data-count="3"][data-layout="1"] .tile-b{ width:44%; aspect-ratio:4/5; top:8%; right:8%; transform:rotate(9deg); z-index:3; }
+  .tile-collage[data-count="3"][data-layout="1"] .tile-c{ width:42%; aspect-ratio:4/5; bottom:7%; left:8%; transform:rotate(7.2deg); z-index:1; }
+  .tile-collage[data-count="3"][data-layout="2"] .tile-a{ width:46%; aspect-ratio:16/10; top:7%; left:8%; transform:rotate(-5.4deg); z-index:1; }
+  .tile-collage[data-count="3"][data-layout="2"] .tile-b{ width:46%; aspect-ratio:16/10; top:2%; right:8%; transform:rotate(5.4deg); z-index:2; }
+  .tile-collage[data-count="3"][data-layout="2"] .tile-c{ width:64%; aspect-ratio:16/10; bottom:7%; left:18%; transform:rotate(-3.6deg); z-index:3; }
+  .tile-collage[data-count="3"][data-layout="3"] .tile-a{ width:38%; aspect-ratio:4/5; top:7%; left:8%; transform:rotate(-9deg); z-index:1; }
+  .tile-collage[data-count="3"][data-layout="3"] .tile-b{ width:38%; aspect-ratio:4/5; top:20%; left:31%; transform:rotate(3.6deg); z-index:2; }
+  .tile-collage[data-count="3"][data-layout="3"] .tile-c{ width:38%; aspect-ratio:4/5; bottom:7%; right:8%; transform:rotate(9deg); z-index:3; }
+  .tile-collage[data-count="3"][data-layout="4"] .tile-a{ width:84%; aspect-ratio:16/9; top:7%; left:8%; transform:rotate(-1.8deg); z-index:1; }
+  .tile-collage[data-count="3"][data-layout="4"] .tile-b{ width:44%; aspect-ratio:4/3; bottom:7%; left:4%; transform:rotate(5.4deg); z-index:2; }
+  .tile-collage[data-count="3"][data-layout="4"] .tile-c{ width:48%; aspect-ratio:4/3; bottom:7%; right:2%; transform:rotate(-5.4deg); z-index:2; }
+
+  /* ===== 4 photos ===== */
+  /* aspect-ratio + width formula for count=4 defined above, alongside base rule */
+  .tile-collage[data-count="4"][data-layout="1"] .tile-a{ width:52%; top:7%; left:8%; height:64%; aspect-ratio:auto; transform:rotate(-5.4deg); z-index:2; }
+  .tile-collage[data-count="4"][data-layout="1"] .tile-b{ width:46%; aspect-ratio:4/5; top:2%; right:8%; transform:rotate(7.2deg); z-index:3; }
+  .tile-collage[data-count="4"][data-layout="1"] .tile-c{ width:42%; aspect-ratio:4/5; bottom:7%; right:4%; transform:rotate(-9deg); z-index:4; }
+  .tile-collage[data-count="4"][data-layout="1"] .tile-d{ width:33%; aspect-ratio:4/5; bottom:7%; left:10%; transform:rotate(10.8deg); z-index:1; }
+  .tile-collage[data-count="4"][data-layout="2"] .tile-a{ width:47%; aspect-ratio:4/5; top:7%; left:2%; transform:rotate(7.2deg); z-index:2; }
+  .tile-collage[data-count="4"][data-layout="2"] .tile-b{ width:44%; aspect-ratio:4/5; top:7%; right:8%; transform:rotate(-7.2deg); z-index:1; }
+  .tile-collage[data-count="4"][data-layout="2"] .tile-c{ width:58%; top:7%; left:8%; height:46%; aspect-ratio:auto; bottom:7%; transform:rotate(-3.6deg); z-index:3; }
+  .tile-collage[data-count="4"][data-layout="2"] .tile-d{ width:34%; aspect-ratio:4/5; bottom:7%; right:2%; transform:rotate(10.8deg); z-index:4; }
+  #project-6 .project-media{ flex-basis:44rem; }
+  #project-6 .tile-collage{ aspect-ratio:1/0.78; width:min(44rem, calc((var(--media-max-h) - 3rem) / 0.78)); }
+  .tile-collage[data-count="4"][data-layout="3"] .tile-a{ width:54%; aspect-ratio:16/9; top:6%; left:4%; transform:rotate(-3.6deg); z-index:1; }
+  .tile-collage[data-count="4"][data-layout="3"] .tile-b{ width:54%; aspect-ratio:16/9; top:2%; right:4%; transform:rotate(3.6deg); z-index:2; }
+  .tile-collage[data-count="4"][data-layout="3"] .tile-c{ width:54%; aspect-ratio:16/9; bottom:2%; left:4%; transform:rotate(3.6deg); z-index:3; }
+  .tile-collage[data-count="4"][data-layout="3"] .tile-d{ width:54%; aspect-ratio:16/9; bottom:6%; right:4%; transform:rotate(-3.6deg); z-index:4; }
+  .tile-collage[data-count="4"][data-layout="4"] .tile-a{ width:58%; aspect-ratio:4/5; top:7%; left:8%; transform:rotate(-3.6deg); z-index:4; }
+  .tile-collage[data-count="4"][data-layout="4"] .tile-b{ width:36%; aspect-ratio:4/5; top:7%; right:8%; transform:rotate(7.2deg); z-index:3; }
+  .tile-collage[data-count="4"][data-layout="4"] .tile-c{ width:36%; aspect-ratio:4/5; bottom:7%; right:8%; transform:rotate(-7.2deg); z-index:2; }
+  .tile-collage[data-count="4"][data-layout="4"] .tile-d{ width:36%; aspect-ratio:4/5; bottom:7%; left:2%; transform:rotate(9deg); z-index:1; }
+
+  .layout-picker{
+    position:absolute;
+    top:-2.25rem;
+    right:0;
+    display:flex;
+    gap:0.375rem;
+    z-index:6;
+  }
+  .layout-picker button{
+    width:1.75rem; height:1.75rem;
+    display:flex; align-items:center; justify-content:center;
+    border-radius:50%;
+    border:1px solid var(--line);
+    background:var(--bg-panel);
+    color:var(--text-dim);
+    font-family:'Space Grotesk', sans-serif;
+    font-size:0.6875rem;
+    cursor:pointer;
+    transition:background .2s ease, color .2s ease, border-color .2s ease;
+  }
+  .layout-picker button:hover{ color:var(--text); }
+  .layout-picker button.active{ background:var(--accent); color:#0E0F11; border-color:var(--accent); }
+  @media (max-width:860px){
+    .tile-collage{ max-width:340px; margin:2.5rem auto 0.5rem; }
+  }
+  .game-highlight-cap::before,
+  .game-highlight-cap::after{
+    content:"";
+    position:absolute;
+    left:50%;
+    transform:translateX(-50%);
+    width:0; height:0;
+    border-left:7px solid transparent;
+    border-right:7px solid transparent;
+  }
+  .game-highlight-cap::before{
+    top:-0.5625rem;
+    border-bottom:9px solid var(--line);
+  }
+  .game-highlight-cap::after{
+    top:-0.4375rem;
+    border-bottom:8px solid var(--bg-panel);
   }
   .project-slide.has-media .ghost-num{ display:none; }
 
   /* Multi-image galleries — varied tile positions instead of one big image */
   .gallery{
     display:grid;
-    gap:12px;
+    gap:0.75rem;
+    width:100%;
+    max-width:34rem;
+    max-height:var(--media-max-h);
   }
   .gallery img{
     width:100%;
@@ -749,17 +1143,23 @@
     object-fit:cover;
     aspect-ratio:4/3;
     display:block;
-    border-radius:6px;
-    border:1px solid var(--line);
+    border-radius:0.25rem;
+    border-style:solid;
+    border-color:#F2EEE6;
+    border-width:0.5rem 0.5rem 1.5rem 0.5rem;
     box-shadow:0 16px 40px -16px rgba(0,0,0,.6);
   }
   .gallery-2{ grid-template-columns:1fr 1fr; }
-  .gallery-2 img:nth-child(2){ margin-top:32px; }
+  .gallery-2 img:nth-child(2){ margin-top:2rem; }
   .gallery-3{ grid-template-columns:1.15fr 1fr; grid-template-rows:1fr 1fr; }
   .gallery-3 img:first-child{ grid-row:1 / 3; aspect-ratio:3/4; }
   .gallery-4{ grid-template-columns:1fr 1fr; }
-  .gallery-4 img:nth-child(2){ margin-top:22px; }
-  .gallery-4 img:nth-child(3){ margin-top:-10px; }
+  .gallery-4 img:nth-child(2){ margin-top:1.375rem; }
+  #about-recommend .project-media{ flex-basis:30rem; max-width:30rem; }
+  #about-recommend .tile-collage{ width:min(30rem, calc((var(--media-max-h) - 3rem) / 0.82)); max-width:30rem; }
+  #project-2 .project-media{ flex-basis:38rem; }
+  #project-2 .tile-collage{ width:min(38rem, calc((var(--media-max-h) - 3rem) / 0.82)); max-width:38rem; }
+  .gallery-4 img:nth-child(3){ margin-top:-0.625rem; }
   @media (max-width:860px){
     .gallery-2 img:nth-child(2), .gallery-4 img:nth-child(2), .gallery-4 img:nth-child(3){ margin-top:0; }
   }
@@ -770,46 +1170,46 @@
   .project-content .pindex{
     display:block;
     font-family:'Space Grotesk', sans-serif;
-    font-size:14px;
+    font-size:0.875rem;
     color:var(--accent);
-    margin-bottom:16px;
+    margin-bottom:1rem;
     letter-spacing:.02em;
   }
   .project-content h3{
-    font-size:clamp(30px, 4vw, 46px);
-    margin-bottom:18px;
+    font-size:2.875rem;
+    margin-bottom:1.125rem;
     line-height:1.08;
   }
   .project-content p{
     color:var(--text-dim);
-    font-size:17px;
+    font-size:1.0625rem;
     max-width:50ch;
-    margin-bottom:22px;
+    margin-bottom:1.375rem;
   }
   .project-content .tags{
     display:flex;
-    gap:8px;
+    gap:0.5rem;
     flex-wrap:wrap;
-    margin-bottom:28px;
+    margin-bottom:1.75rem;
   }
   .project-content .tags span{
-    font-size:12px;
+    font-size:0.75rem;
     color:var(--accent);
     border:1px solid var(--line);
-    padding:4px 10px;
-    border-radius:20px;
+    padding:0.25rem 0.625rem;
+    border-radius:1.25rem;
   }
   .project-content .links{
     display:flex;
-    gap:24px;
+    gap:1.5rem;
     flex-wrap:wrap;
   }
   .project-content .links a{
-    font-size:14px;
+    font-size:0.875rem;
     text-decoration:none;
     color:var(--text);
     border-bottom:1px solid var(--line);
-    padding-bottom:2px;
+    padding-bottom:0.125rem;
     white-space:nowrap;
     transition:color .2s ease, border-color .2s ease;
   }
@@ -824,128 +1224,190 @@
     justify-content:center;
     border-bottom:none;
   }
-  #contact .sec-title{margin-bottom:24px; max-width:26ch;}
+  #contact .sec-title{margin-bottom:1.5rem; max-width:26ch;}
   #career .sec-title{max-width:24ch;}
 
   /* --- Testimonial quote --- */
   .testimonial{
-    margin-top:36px;
-    padding:24px 28px;
+    margin-top:2.25rem;
+    padding:1.5rem 1.75rem;
     border-left:2px solid var(--accent);
     background:var(--bg-panel);
-    border-radius:0 10px 10px 0;
+    border-radius:0 0.625rem 0.625rem 0;
     max-width:64ch;
   }
   .testimonial p{
     font-family:'Space Grotesk', sans-serif;
-    font-size:16.5px;
+    font-size:1.0312rem;
     font-style:italic;
     color:var(--text);
-    margin-bottom:14px;
+    margin-bottom:0.875rem;
     max-width:none;
   }
   .testimonial cite{
     font-style:normal;
-    font-size:13px;
+    font-size:0.8125rem;
     color:var(--text-dim);
   }
 
-  /* --- Career timeline: continuous scrubber with one moving ball --- */
-  .timeline{
+  /* --- Career: immersive centerline. Years on the left (big glow on the active one, fixed
+       slot height so nothing ever reflows), detail card on the right. --- */
+  #career{}
+  .career-inner{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:4.375rem;
+    max-width:62.5rem !important;
+  }
+  .career-rail{
+    flex:0 0 auto;
+  }
+  .career-card{
+    flex:1 1 auto;
+    min-width:0;
+    max-width:30rem;
+  }
+  .timeline-v{
     position:relative;
-    padding-top:8px;
-    max-width:640px;
-  }
-  .timeline-track{
-    position:relative;
-    height:60px;
-    margin:0 6px;
-  }
-  .timeline-line{
-    position:absolute;
-    left:0; right:0; top:9px;
-    height:2px;
-    background:var(--line);
-  }
-  .timeline-ball{
-    position:absolute;
-    top:10px;
-    width:16px; height:16px;
-    border-radius:50%;
-    background:var(--accent);
-    box-shadow:0 0 8px var(--accent), 0 0 24px var(--accent);
-    transform:translate(-50%,-50%);
-    transition:left .4s cubic-bezier(.22,1,.36,1);
-    z-index:2;
-    pointer-events:none;
-  }
-  .timeline-tick{
-    position:absolute;
-    top:0;
-    transform:translateX(-50%);
-    z-index:1;
     display:flex;
     flex-direction:column;
+    padding-left:1.875rem;
+  }
+  .timeline-v-line{
+    position:absolute;
+    left:2.4375rem; top:0.375rem; bottom:0.375rem;
+    width:0.125rem;
+    background:var(--line);
+  }
+  .timeline-v-point{
+    position:relative;
+    z-index:1;
+    display:flex;
     align-items:center;
-    gap:12px;
+    gap:1.375rem;
+    height:5rem;
     background:none;
     border:none;
     cursor:pointer;
     padding:0;
     font-family:inherit;
+    text-align:left;
   }
-  .timeline-dot{
-    width:9px; height:9px;
+  .timeline-v-dot{
+    width:0.875rem; height:0.875rem;
+    flex:0 0 auto;
     border-radius:50%;
     background:var(--bg-panel);
     border:2px solid var(--line);
-    transition:border-color .3s ease;
+    transition:background .3s ease, border-color .3s ease, box-shadow .3s ease, transform .35s cubic-bezier(.22,1,.36,1);
   }
-  .timeline-tick:hover .timeline-dot{ border-color:var(--accent); }
-  .timeline-year{
+  .timeline-v-point:hover .timeline-v-dot{ border-color:var(--motif-color, var(--accent)); }
+  .timeline-v-point.active .timeline-v-dot{
+    background:var(--motif-color, var(--accent));
+    border-color:var(--motif-color, var(--accent));
+    box-shadow:0 0 0 7px color-mix(in srgb, var(--motif-color, var(--accent)) 18%, transparent), 0 0 20px var(--motif-color, var(--accent));
+    transform:scale(1.3);
+  }
+  .timeline-v-labels{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+  }
+  .timeline-v-year{
     font-family:'Space Grotesk', sans-serif;
-    font-size:13px;
+    font-weight:700;
+    font-size:1.375rem;
+    line-height:1;
     color:var(--text-dim);
     white-space:nowrap;
+    transition:font-size .4s cubic-bezier(.22,1,.36,1), color .4s ease, text-shadow .4s ease;
+  }
+  .timeline-v-role{
+    display:block;
+    font-family:'Inter', sans-serif;
+    font-size:0.75rem;
+    color:var(--text-dim);
+    opacity:.75;
+    margin-top:0.3125rem;
+    max-height:1.25rem;
+    overflow:hidden;
+    transition:opacity .3s ease, max-height .3s ease, margin-top .3s ease;
+  }
+  .timeline-v-point.active .timeline-v-year{
+    font-size:2.875rem;
+    color:var(--motif-color, var(--accent));
+    text-shadow:0 0 30px color-mix(in srgb, var(--motif-color, var(--accent)) 55%, transparent);
+  }
+  .timeline-v-point.active .timeline-v-role{
+    opacity:0;
+    max-height:0;
+    margin-top:0;
   }
   .timeline-panel{
-    margin-top:20px;
-    padding:26px 30px;
+    position:relative;
+    padding:1.75rem 1.875rem;
     background:var(--bg-panel);
     border:1px solid var(--line);
-    border-radius:14px;
+    border-radius:1rem;
+    min-height:20.9375rem;
+    max-height:calc(100vh - 170px - 8.75rem);
+    overflow-y:auto;
+    scrollbar-width:none;
+    transition:opacity .28s ease;
   }
+  .timeline-panel::-webkit-scrollbar{ display:none; }
   .tl-card + .tl-card{
-    margin-top:20px;
-    padding-top:20px;
+    margin-top:1.125rem;
+    padding-top:1.125rem;
     border-top:1px solid var(--line);
   }
   .tl-card .tl-date{
     display:block;
     font-family:'Space Grotesk', sans-serif;
-    font-size:13px;
-    color:var(--accent);
-    margin-bottom:9px;
+    font-size:0.8125rem;
+    color:var(--motif-color, var(--accent));
+    margin-bottom:0.5625rem;
   }
   .tl-card h4{
     font-family:'Space Grotesk', sans-serif;
-    font-size:21px;
-    margin-bottom:10px;
+    font-size:1.3125rem;
+    margin-bottom:0.625rem;
   }
   .tl-card p{
     color:var(--text-dim);
-    font-size:15.5px;
-    max-width:64ch;
+    font-size:0.9688rem;
+    max-width:56ch;
+  }
+  .tl-card .tags{
+    display:flex;
+    gap:0.5rem;
+    flex-wrap:wrap;
+    margin-top:0.875rem;
+  }
+  .tl-card .tags span{
+    font-size:0.75rem;
+    color:var(--motif-color, var(--accent));
+    border:1px solid var(--line);
+    padding:0.25rem 0.625rem;
+    border-radius:1.25rem;
   }
   @media (max-width:860px){
-    .timeline-year{ font-size:10.5px; }
-    .timeline-track{ margin:0 20px; }
+    .career-inner{ flex-direction:column-reverse; gap:32px; align-items:stretch; }
+    .career-card{ max-width:none; }
+    .timeline-v{ flex-direction:row; padding-left:0; overflow-x:auto; padding-bottom:6px; gap:26px; }
+    .timeline-v-line{ left:7px; right:7px; top:7px; bottom:auto; width:auto; height:2px; }
+    .timeline-v-point{ flex-direction:column; height:auto; gap:10px; flex:0 0 auto; }
+    .timeline-v-labels{ align-items:center; }
+    .timeline-v-year{ font-size:15px; }
+    .timeline-v-point.active .timeline-v-year{ font-size:22px; }
+    .timeline-v-role{ font-size:10px; text-align:center; }
   }
   #contact p{
     color:var(--text-dim);
-    font-size:18px;
+    font-size:1.125rem;
     max-width:50ch;
-    margin-bottom:40px;
+    margin-bottom:2.5rem;
   }
   .contact-links{
     display:flex;
@@ -956,36 +1418,27 @@
     display:flex;
     justify-content:space-between;
     align-items:center;
-    padding:20px 0;
+    padding:1.25rem 0;
     border-top:1px solid var(--line);
     text-decoration:none;
-    font-size:18px;
+    font-size:1.125rem;
     font-family:'Space Grotesk', sans-serif;
     transition:color .2s ease, padding-left .2s ease;
   }
   .contact-links a:last-child{border-bottom:1px solid var(--line);}
-  .contact-links a:hover{color:var(--accent); padding-left:8px;}
+  .contact-links a:hover{color:var(--accent); padding-left:0.5rem;}
   .contact-links a span.arrow{color:var(--text-dim); font-family:'Inter';}
   footer{
     text-align:center;
-    padding:32px;
+    padding:2rem;
     color:var(--text-dim);
-    font-size:13px;
+    font-size:0.8125rem;
   }
 </style>
 </head>
 <body>
 
 <div class="app" id="app">
-
-<div class="intensity-switcher" role="group" aria-label="Siła animacji wejścia">
-  <span>Siła</span>
-  <button type="button" data-level="1">1</button>
-  <button type="button" data-level="2">2</button>
-  <button type="button" data-level="3" class="active">3</button>
-  <button type="button" data-level="4">4</button>
-  <button type="button" data-level="5">5</button>
-</div>
 
 <nav class="sidenav" aria-label="Nawigacja sekcji">
   <div class="lang-toggle" role="group" aria-label="Język / Language">
@@ -994,14 +1447,13 @@
   </div>
   <ul>
     <li><a href="#hero" class="active" data-nav="hero" data-i18n="nav-start">Start</a></li>
-    <li><a href="#about" data-nav="about" data-i18n="nav-about">O mnie</a></li>
     <li><a href="#career" data-nav="career" data-i18n="nav-career">Kariera</a></li>
     <li><a href="#skills" data-nav="skills" data-i18n="nav-skills">Umiejętności</a></li>
     <li class="has-sub" data-group="produkcje">
       <a href="#project-1" data-nav="produkcje" data-i18n="nav-productions">Produkcje</a>
       <ul class="subnav">
-        <li><a href="#project-1" data-nav="project-1" class="subnav-link">Nerd Simulator</a></li>
-        <li><a href="#project-2" data-nav="project-2" class="subnav-link">Mr Toilet</a></li>
+        <li><a href="#project-1" data-nav="project-1" class="subnav-link">Mr Toilet</a></li>
+        <li><a href="#project-2" data-nav="project-2" class="subnav-link">Nerd Simulator</a></li>
         <li><a href="#project-3" data-nav="project-3" class="subnav-link">Wild Bar</a></li>
       </ul>
     </li>
@@ -1024,6 +1476,14 @@
       </ul>
     </li>
     <li><a href="#project-12" data-nav="project-12" data-i18n="nav-software">Oprogramowanie</a></li>
+    <li class="has-sub" data-group="omnie">
+      <a href="#about-technical" data-nav="omnie" data-i18n="nav-about">O mnie</a>
+      <ul class="subnav">
+        <li><a href="#about-technical" data-nav="about-technical" class="subnav-link" data-i18n="about-tab-0">To moja działka</a></li>
+        <li><a href="#about-life" data-nav="about-life" class="subnav-link" data-i18n="about-tab-1">Tak to ja</a></li>
+        <li><a href="#about-recommend" data-nav="about-recommend" class="subnav-link" data-i18n="about-tab-2">W co gram</a></li>
+      </ul>
+    </li>
     <li><a href="#contact" data-nav="contact" data-i18n="nav-contact">Kontakt</a></li>
   </ul>
   <div class="foot">
@@ -1039,7 +1499,7 @@
 <section id="hero" data-bg="#0E0F11" data-variant="1">
   <div class="bg-decor" aria-hidden="true">
     <div class="blob blob-hero"></div>
-    <div class="motif-wrap motif-hero motif-clickable" role="button" tabindex="0" aria-label="Zapal ikonę">
+    <div class="motif-wrap motif-hero motif-clickable lit" role="button" tabindex="0" aria-label="Zgaś ikonę">
       <svg class="motif" viewBox="0 0 120 80" fill="none" xmlns="http://www.w3.org/2000/svg">
       <rect x="12" y="26" width="96" height="34" rx="17" stroke="currentColor" stroke-width="3"/>
       <line x1="34" y1="35" x2="34" y2="51" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
@@ -1063,66 +1523,77 @@
       <a href="#project-1" class="btn btn-primary" data-jump="project-1" data-i18n="hero-btn-projects">Zobacz projekty</a>
       <a href="#contact" class="btn btn-ghost" data-jump="contact" data-i18n="hero-btn-contact">Kontakt</a>
     </div>
+    <div class="hero-stats reveal">
+      <span><strong>4+</strong> <span data-i18n="about-stat1">lata w Unity</span></span>
+      <span><strong>10</strong> <span data-i18n="about-stat2">ukończonych projektów</span></span>
+      <span><strong>2</strong> <span data-i18n="about-stat3">tytuły na Steam</span></span>
+    </div>
   </div>
-  <div class="scroll-cue"><span class="line"></span>scroll</div>
+  <div class="cue-row">
+    <div class="scroll-cue"><span class="line"></span>scroll</div>
+    <div class="click-cue">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="12" cy="12" r="2.6" fill="currentColor"/>
+        <circle cx="12" cy="12" r="7" stroke="currentColor" stroke-width="1.2" opacity="0.55"/>
+        <circle cx="12" cy="12" r="10.5" stroke="currentColor" stroke-width="1" opacity="0.28"/>
+      </svg>
+      <span data-i18n="hero-hint">kliknij ikonę</span>
+    </div>
+  </div>
 </section>
 
-<section id="about" data-bg="#10141A" data-variant="2">
+<section id="career" data-bg="#0D1512" data-variant="5" style="--motif-color:#7C9A92">
   <div class="bg-decor" aria-hidden="true">
-    <div class="blob blob-about"></div>
-    <div class="motif-wrap motif-about motif-clickable" role="button" tabindex="0" aria-label="Zapal ikonę">
-      <svg class="motif" viewBox="0 0 120 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M46 20 L24 40 L46 60" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M74 20 L96 40 L74 60" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
-      <line x1="66" y1="16" x2="54" y2="64" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+    <div class="blob blob-career"></div>
+    <div class="motif-wrap motif-flag motif-clickable" role="button" tabindex="0" aria-label="Zapal ikonę">
+      <svg class="motif" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <line x1="20" y1="90" x2="20" y2="10" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+      <path d="M20 12 L82 12 L62 28 L82 44 L20 44 Z" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round"/>
     </svg>
     </div>
   </div>
-  <div class="inner">
-    <div class="kicker reveal" data-i18n="about-kicker">O mnie</div>
-    <h2 class="sec-title reveal" data-i18n="about-h2">Od pierwszego Game Jamu po tytuły wydane na Steam</h2>
-    <p class="reveal" data-i18n="about-p1">Programuję w Unity od 2021 roku, zawodowo od 2022 — współpracowałem z <strong>Radikate</strong>, gdzie współtworzyłem m.in. <strong>Nerd Simulator</strong> i <strong>Mr Toilet</strong> wydane na Steam. Studiowałem informatykę (spec. Programowanie Gier) na Uniwersytecie Dolnośląskim DSW. Mam doświadczenie zarówno w pracy solo, jak i w zespołach 2–4-osobowych (gamejamy, projekty uczelniane), a także w zespole produkcyjnym liczącym 13 osób — równie dobrze radzę sobie z komunikacją i narzędziami jak Jira czy ClickUp, co z samym kodem.</p>
-    <p class="reveal" data-i18n="about-p2">Architekturę projektuję z myślą o reszcie zespołu, nie tylko o sobie: system oparty o ScriptableObjects oraz własny mechanizm wstrzykiwania referencji przez atrybuty i reflection sprawia, że projektant samodzielnie konfiguruje obiekty na scenie — bez czekania na moją interwencję w kodzie. Zero hardcode'u, zero ręcznie podpinanych referencji. Ostatnio rozwijam się w Source Generators i IL Weavingu (Mono.Cecil) — napisałem m.in. własny atrybut <code>[OnValueChange]</code>, który generuje backing field w czasie kompilacji.</p>
-    <div class="about-stats reveal">
-      <div class="stat"><div class="n">4+</div><div class="l" data-i18n="about-stat1">lata w Unity</div></div>
-      <div class="stat"><div class="n">6</div><div class="l" data-i18n="about-stat2">ukończonych projektów</div></div>
-      <div class="stat"><div class="n">2</div><div class="l" data-i18n="about-stat3">tytuły na Steam</div></div>
-    </div>
-    <div class="testimonial reveal">
-      <p data-i18n="about-quote">"Osoba zaangażowana i chętna do nauki, otwarta na feedback i konsekwentnie rozwijająca swoje umiejętności — od pisania czytelnego kodu, przez rozwiązywanie problemów, po pracę z repozytorium. Rzetelny, ambitny i godny zaufania współpracownik."</p>
-      <cite data-i18n="about-quote-cite">— opinia współpracownika z projektu, 2025</cite>
-    </div>
-  </div>
-</section>
-
-<section id="career" data-bg="#12151A" data-variant="5">
-  <div class="bg-decor" aria-hidden="true">
-    <div class="blob blob-career"></div>
-  </div>
-  <div class="inner">
-    <div class="kicker reveal" data-i18n="career-kicker">Kariera</div>
-    <h2 class="sec-title reveal" data-i18n="career-h2">Krok po kroku, od koła naukowego do Steam</h2>
-    <div class="timeline reveal">
-      <div class="timeline-track">
-        <div class="timeline-line"></div>
-        <div class="timeline-ball" id="timelineBall"></div>
-        <button type="button" class="timeline-tick" data-tl="0" style="left:0%">
-          <span class="timeline-dot"></span>
-          <span class="timeline-year">2021</span>
+  <div class="inner career-inner">
+    <div class="career-rail reveal">
+      <div class="timeline-v" id="timelineV">
+        <div class="timeline-v-line"></div>
+        <button type="button" class="timeline-v-point active" data-tl="0">
+          <span class="timeline-v-dot"></span>
+          <span class="timeline-v-labels">
+            <span class="timeline-v-year">2017–24</span>
+            <span class="timeline-v-role" data-i18n="career-role-0">Edukacja</span>
+          </span>
         </button>
-        <button type="button" class="timeline-tick" data-tl="1" style="left:33.333%">
-          <span class="timeline-dot"></span>
-          <span class="timeline-year">2022–23</span>
+        <button type="button" class="timeline-v-point" data-tl="1">
+          <span class="timeline-v-dot"></span>
+          <span class="timeline-v-labels">
+            <span class="timeline-v-year">2021–23</span>
+            <span class="timeline-v-role" data-i18n="career-role-1">Junior Unity Developer</span>
+          </span>
         </button>
-        <button type="button" class="timeline-tick" data-tl="2" style="left:66.666%">
-          <span class="timeline-dot"></span>
-          <span class="timeline-year">2024</span>
+        <button type="button" class="timeline-v-point" data-tl="2">
+          <span class="timeline-v-dot"></span>
+          <span class="timeline-v-labels">
+            <span class="timeline-v-year">2024</span>
+            <span class="timeline-v-role" data-i18n="career-role-2">Unity Developer Freelance</span>
+          </span>
         </button>
-        <button type="button" class="timeline-tick" data-tl="3" style="left:100%">
-          <span class="timeline-dot"></span>
-          <span class="timeline-year">2025</span>
+        <button type="button" class="timeline-v-point" data-tl="3">
+          <span class="timeline-v-dot"></span>
+          <span class="timeline-v-labels">
+            <span class="timeline-v-year">2025</span>
+            <span class="timeline-v-role" data-i18n="career-role-3">Unity Developer</span>
+          </span>
+        </button>
+        <button type="button" class="timeline-v-point" data-tl="4">
+          <span class="timeline-v-dot"></span>
+          <span class="timeline-v-labels">
+            <span class="timeline-v-year">2026</span>
+            <span class="timeline-v-role" data-i18n="career-role-4">Unity Developer Freelance</span>
+          </span>
         </button>
       </div>
+    </div>
+    <div class="career-card reveal">
       <div class="timeline-panel" id="timelinePanel"></div>
     </div>
   </div>
@@ -1170,7 +1641,41 @@
   </div>
 </section>
 
-<section id="project-1" class="project-slide has-media" data-dir="right" data-bg="#170F0B" data-variant="1" style="--motif-color:#C9642E">
+<section id="project-1" class="project-slide has-media" data-dir="left" data-bg="#0B1517" data-variant="3" style="--motif-color:#3FA7B0">
+  <div class="bg-decor" aria-hidden="true">
+    <div class="blob blob-toilet"></div>
+    <div class="motif-wrap motif-toilet motif-clickable" role="button" tabindex="0" aria-label="Zapal ikonę">
+      <svg class="motif" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="28" y="8" width="34" height="18" rx="3" stroke="currentColor" stroke-width="3.5"/>
+      <path d="M22 30 L68 30 L62 50 Q62 78 45 78 Q28 78 28 50 Z" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round"/>
+    </svg>
+    </div>
+  </div>
+  <span class="ghost-num">02</span>
+  <div class="project-row">
+    <div class="project-content">
+      <span class="pindex reveal">Projekt 01 / 12</span>
+      <h3 class="reveal">Mr Toilet — Steam</h3>
+      <p class="reveal" data-i18n="p2-p">Pierwszoosobowy symulator zarządzania publiczną toaletą — sprzątasz, pobierasz opłaty, wyrzucasz nieuczciwych klientów i rozbudowujesz swoje toaletowe imperium. Wydany przez Radikate / FreeMind S.A. / PlayWay S.A., współtworzony przeze mnie jako część zespołu Unity.</p>
+      <div class="tags reveal"><span>Unity</span><span>C#</span><span>Steam</span><span>First-person</span></div>
+      <div class="links reveal">
+        <a href="https://store.steampowered.com/app/3930150/Mr_Toilet/" target="_blank" rel="noopener">Steam ↗</a>
+      </div>
+    </div>
+    <div class="project-media">
+      <div class="tile-collage" data-count="2" data-layout="4">
+        <div class="tile tile-a">
+          <div class="about-photo" style="background-image:url('images/mrtoilet-1.jpg')" role="img" aria-label="Mr Toilet — grafika ze strony Steam"></div>
+        </div>
+        <div class="tile tile-b">
+          <div class="about-photo" style="background-image:url('images/mrtoilet-2.jpg')" role="img" aria-label="Mr Toilet — grafika z opisu gry"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="project-2" class="project-slide has-media" data-dir="right" data-bg="#170F0B" data-variant="1" style="--motif-color:#C9642E">
   <div class="bg-decor" aria-hidden="true">
     <div class="blob blob-nerd"></div>
     <div class="motif-wrap motif-glasses motif-clickable" role="button" tabindex="0" aria-label="Zapal ikonę">
@@ -1185,7 +1690,7 @@
   </div>
   <div class="project-row">
     <div class="project-content">
-      <span class="pindex reveal">Projekt 01 / 12</span>
+      <span class="pindex reveal">Projekt 02 / 12</span>
       <h3 class="reveal">Nerd Simulator — Steam</h3>
       <p class="reveal" data-i18n="p1-p">Krótka, humorystyczna przygodówka point-and-click wydana w Early Access przez Radikate / FreeMind S.A. / PlayWay S.A. Pomagasz czterdziestoletniemu Mervinowi wyprowadzić się od mamy — przez absurdalne prace dorywcze i jeszcze bardziej absurdalne kłopoty. Odpowiadałem za programowanie gameplayu w zespole Radikate.</p>
       <div class="tags reveal"><span>Unity</span><span>C#</span><span>Steam</span><span>Point & Click</span></div>
@@ -1194,39 +1699,13 @@
       </div>
     </div>
     <div class="project-media">
-      <div class="gallery gallery-2">
-        <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3128220/fe1408ee4706ae8419f57ba6ef56916cd3eba126/header_alt_assets_5.jpg?t=1787583687" alt="Nerd Simulator — grafika ze strony Steam" loading="lazy">
-        <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3128220/extras/4867fd7c3eeef04fb2775fb46a594569.avif?t=1787583687" alt="Nerd Simulator — grafika z opisu gry" loading="lazy">
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="project-2" class="project-slide has-media" data-dir="left" data-bg="#0B1517" data-variant="3" style="--motif-color:#3FA7B0">
-  <div class="bg-decor" aria-hidden="true">
-    <div class="blob blob-toilet"></div>
-    <div class="motif-wrap motif-toilet motif-clickable" role="button" tabindex="0" aria-label="Zapal ikonę">
-      <svg class="motif" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="28" y="8" width="34" height="18" rx="3" stroke="currentColor" stroke-width="3.5"/>
-      <path d="M22 30 L68 30 L62 50 Q62 78 45 78 Q28 78 28 50 Z" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round"/>
-    </svg>
-    </div>
-  </div>
-  <span class="ghost-num">02</span>
-  <div class="project-row">
-    <div class="project-content">
-      <span class="pindex reveal">Projekt 02 / 12</span>
-      <h3 class="reveal">Mr Toilet — Steam</h3>
-      <p class="reveal" data-i18n="p2-p">Pierwszoosobowy symulator zarządzania publiczną toaletą — sprzątasz, pobierasz opłaty, wyrzucasz nieuczciwych klientów i rozbudowujesz swoje toaletowe imperium. Wydany przez Radikate / FreeMind S.A. / PlayWay S.A., współtworzony przeze mnie jako część zespołu Unity.</p>
-      <div class="tags reveal"><span>Unity</span><span>C#</span><span>Steam</span><span>First-person</span></div>
-      <div class="links reveal">
-        <a href="https://store.steampowered.com/app/3930150/Mr_Toilet/" target="_blank" rel="noopener">Steam ↗</a>
-      </div>
-    </div>
-    <div class="project-media">
-      <div class="gallery gallery-2">
-        <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3930150/85074f78bfeefe980b461771801c2ecade6bb04c/header.jpg?t=1785694980" alt="Mr Toilet — grafika ze strony Steam" loading="lazy">
-        <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3930150/extras/997b9d22035fa7a8d2efc24abd2d378f.avif?t=1785694980" alt="Mr Toilet — grafika z opisu gry" loading="lazy">
+      <div class="tile-collage" data-count="2" data-layout="1">
+        <div class="tile tile-a">
+          <div class="about-photo" style="background-image:url('images/nerdsim-1.jpg')" role="img" aria-label="Nerd Simulator — grafika ze strony Steam"></div>
+        </div>
+        <div class="tile tile-b">
+          <div class="about-photo" style="background-image:url('images/nerdsim-2.jpg')" role="img" aria-label="Nerd Simulator — grafika z opisu gry"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -1248,11 +1727,11 @@
     <div class="project-content">
       <span class="pindex reveal">Projekt 03 / 12</span>
       <h3 class="reveal" data-i18n="p7-h3">Wild Bar — w produkcji</h3>
-      <p class="reveal" data-i18n="p7-p">Własna gra, którą tworzę solo — pozycjonowana jako <em>"Overcooked spotyka obronę bazy"</em>. Bronisz podwórka przed żywym, atakującym jedzeniem, przyrządzasz je na grillu i musisz zdążyć obsłużyć głodnych gości, zanim las przełamie płot. Co-op dla 1–4 graczy. Demo planuję wypuścić w styczniu 2027 — resztę zostawiam na niespodziankę.</p>
+      <p class="reveal" data-i18n="p7-p">Własna gra, którą tworzę solo — pozycjonowana jako <em>„Overcooked spotyka obronę bazy”</em>. Bronisz podwórka przed żywym, atakującym jedzeniem, przyrządzasz je na grillu i musisz zdążyć obsłużyć głodnych gości, zanim las przełamie płot. Co-op dla 1–4 graczy. Demo planuję wypuścić w styczniu 2027 — resztę zostawiam na niespodziankę.</p>
       <div class="tags reveal"><span>Unity</span><span>C#</span><span>Co-op</span><span>Solo Dev</span></div>
     </div>
     <div class="project-media">
-      <img src="images/wildbar-menu.jpg" alt="Wild Bar — ekran startowy lobby" loading="lazy">
+      <div class="solo-photo" style="background-image:url('images/wildbar-1.jpg')" role="img" aria-label="Wild Bar — ekran startowy lobby"></div>
     </div>
   </div>
 </section>
@@ -1277,10 +1756,16 @@
       <div class="tags reveal"><span>Unity</span><span>C#</span><span>Tower Defense</span><span>SCRUM</span></div>
     </div>
     <div class="project-media">
-      <div class="gallery gallery-3">
-        <img src="images/spacedefense-wide.jpg" alt="Space Defense — widok z góry na całą mapę" loading="lazy">
-        <img src="images/spacedefense.jpg" alt="Space Defense — bliższy widok na tor wroga" loading="lazy">
-        <img src="images/spacedefense-menu.jpg" alt="Space Defense — ekran menu głównego" loading="lazy">
+      <div class="tile-collage" data-count="3" data-layout="4">
+        <div class="tile tile-a">
+          <div class="about-photo" style="background-image:url('images/spacedefense-1.jpg')" role="img" aria-label="Space Defense — widok z góry na całą mapę"></div>
+        </div>
+        <div class="tile tile-b">
+          <div class="about-photo" style="background-image:url('images/spacedefense-2.jpg')" role="img" aria-label="Space Defense — bliższy widok na tor wroga"></div>
+        </div>
+        <div class="tile tile-c">
+          <div class="about-photo" style="background-image:url('images/spacedefense-3.jpg')" role="img" aria-label="Space Defense — ekran menu głównego"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -1304,7 +1789,14 @@
       <div class="tags reveal"><span>Unity</span><span>C#</span><span>Game Jam</span><span>Solo Dev</span></div>
     </div>
     <div class="project-media">
-      <img src="images/popiel.jpg" alt="Popiel — zrzut ekranu z rozgrywki" loading="lazy">
+      <div class="tile-collage" data-count="2" data-layout="1">
+        <div class="tile tile-a">
+          <div class="about-photo" style="background-image:url('images/popiel-1.jpg')" role="img" aria-label="Popiel — zrzut ekranu z rozgrywki"></div>
+        </div>
+        <div class="tile tile-b">
+          <div class="about-photo" style="background-image:url('images/popiel-2.jpg')" role="img" aria-label="Popiel — ekran menu"></div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -1327,11 +1819,19 @@
       <div class="tags reveal"><span>Unity</span><span>C#</span><span>Arcade</span><span>Solo Dev</span></div>
     </div>
     <div class="project-media">
-      <div class="gallery gallery-4">
-        <img src="images/lumberjack.jpg" alt="Indian Lumberjack — rozgrywka, wariant leśny" loading="lazy">
-        <img src="images/lumberjack-blue.jpg" alt="Indian Lumberjack — rozgrywka, wariant nocny" loading="lazy">
-        <img src="images/lumberjack-menu.jpg" alt="Indian Lumberjack — menu główne" loading="lazy">
-        <img src="images/lumberjack-map.jpg" alt="Indian Lumberjack — wybór mapy" loading="lazy">
+      <div class="tile-collage" data-count="4" data-layout="3">
+        <div class="tile tile-a">
+          <div class="about-photo" style="background-image:url('images/lumberjack-1.jpg')" role="img" aria-label="Indian Lumberjack — rozgrywka, wariant leśny"></div>
+        </div>
+        <div class="tile tile-b">
+          <div class="about-photo" style="background-image:url('images/lumberjack-2.jpg')" role="img" aria-label="Indian Lumberjack — rozgrywka, wariant nocny"></div>
+        </div>
+        <div class="tile tile-c">
+          <div class="about-photo" style="background-image:url('images/lumberjack-3.jpg')" role="img" aria-label="Indian Lumberjack — menu główne"></div>
+        </div>
+        <div class="tile tile-d">
+          <div class="about-photo" style="background-image:url('images/lumberjack-4.jpg')" role="img" aria-label="Indian Lumberjack — wybór mapy"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -1358,9 +1858,13 @@
       <div class="tags reveal"><span>Unity</span><span>C#</span><span>Game Jam</span><span>Arcade</span></div>
     </div>
     <div class="project-media">
-      <div class="gallery gallery-2">
-        <img src="images/fluffy-gameplay.jpg" alt="Fluffy Savior — rozgrywka, niszczenie komet" loading="lazy">
-        <img src="images/fluffy-menu.jpg" alt="Fluffy Savior — ekran tytułowy" loading="lazy">
+      <div class="tile-collage" data-count="2" data-layout="4">
+        <div class="tile tile-a">
+          <div class="about-photo" style="background-image:url('images/fluffy-1.jpg')" role="img" aria-label="Fluffy Savior — rozgrywka, niszczenie komet"></div>
+        </div>
+        <div class="tile tile-b">
+          <div class="about-photo" style="background-image:url('images/fluffy-2.jpg')" role="img" aria-label="Fluffy Savior — ekran tytułowy"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -1387,7 +1891,14 @@
       <div class="tags reveal"><span>Source Generators</span><span>IL Weaving</span><span>Cecil</span><span>Zero-Allocation</span></div>
     </div>
     <div class="project-media">
-      <img src="images/architecture-assets.png" alt="Struktura projektu Unity z folderem SimplySignals w Plugins" loading="lazy">
+      <div class="tile-collage" data-count="2" data-layout="3">
+        <div class="tile tile-a">
+          <div class="about-photo" style="background-image:url('images/simplysignals-1.png')" role="img" aria-label="Struktura projektu Unity z folderem SimplySignals w Plugins"></div>
+        </div>
+        <div class="tile tile-b">
+          <div class="about-photo" style="background-image:url('images/simplysignals-2.png')" role="img" aria-label="Simply Signals — widok w inspektorze Unity"></div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -1411,7 +1922,14 @@
       <div class="tags reveal"><span>Reflection</span><span>Editor Tools</span><span>Debug Console</span><span>IL2CPP</span></div>
     </div>
     <div class="project-media">
-      <img src="images/runtime-inspector.jpg" alt="Runtime Inspector — konsola deweloperska z listą komend" loading="lazy">
+      <div class="tile-collage" data-count="2" data-layout="2">
+        <div class="tile tile-a">
+          <div class="about-photo" style="background-image:url('images/runtimeinspector-1.jpg')" role="img" aria-label="Runtime Inspector — konsola deweloperska z listą komend"></div>
+        </div>
+        <div class="tile tile-b">
+          <div class="about-photo" style="background-image:url('images/runtimeinspector-2.jpg')" role="img" aria-label="Runtime Inspector — autouzupełnianie komend"></div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -1435,9 +1953,13 @@
       <div class="tags reveal"><span>Custom Editor</span><span>Property Drawer</span><span>C# Reflection</span><span>IL Weaving</span></div>
     </div>
     <div class="project-media">
-      <div class="gallery gallery-2">
-        <img src="images/architecture-assets.png" alt="Struktura projektu — foldery Plugins i Resources" loading="lazy">
-        <img src="images/architecture-onvaluechange.png" alt="Struktura atrybutu OnValueChange z IL Weaverem" loading="lazy">
+      <div class="tile-collage" data-count="2" data-layout="4">
+        <div class="tile tile-a">
+          <div class="about-photo" style="background-image:url('images/edytorskie-1.png')" role="img" aria-label="Struktura projektu — foldery Plugins i Resources"></div>
+        </div>
+        <div class="tile tile-b">
+          <div class="about-photo" style="background-image:url('images/edytorskie-2.png')" role="img" aria-label="Struktura atrybutu OnValueChange z IL Weaverem"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -1461,7 +1983,14 @@
       <div class="tags reveal"><span>Scene Loading</span><span>Save System</span><span>Dependency Injection</span><span>Work in Progress</span></div>
     </div>
     <div class="project-media">
-      <img src="images/architecture-wip.png" alt="Folder wip z systemami ConfigInjector, LScene i Storex" loading="lazy">
+      <div class="tile-collage" data-count="2" data-layout="4">
+        <div class="tile tile-a">
+          <div class="about-photo" style="background-image:url('images/wiprozwoju-1.png')" role="img" aria-label="Folder wip z systemami ConfigInjector, LScene i Storex"></div>
+        </div>
+        <div class="tile tile-b">
+          <div class="about-photo" style="background-image:url('images/wiprozwoju-2.png')" role="img" aria-label="Kolejny fragment systemu w budowie"></div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -1486,6 +2015,107 @@
   </div>
 </section>
 
+<section id="about-technical" class="project-slide has-media" data-dir="right" data-bg="#10141A" data-variant="2" style="--motif-color:#7C9A92">
+  <div class="bg-decor" aria-hidden="true">
+    <div class="blob blob-about"></div>
+    <div class="motif-wrap motif-about motif-clickable" role="button" tabindex="0" aria-label="Zapal ikonę">
+      <svg class="motif" viewBox="0 0 120 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M46 20 L24 40 L46 60" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M74 20 L96 40 L74 60" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <line x1="66" y1="16" x2="54" y2="64" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+    </svg>
+    </div>
+  </div>
+  <div class="project-row">
+    <div class="project-content">
+      <span class="pindex reveal" data-i18n="about-eyebrow-0">O mnie 01/03</span>
+      <h3 class="reveal" data-i18n="about-h-0">To moja działka</h3>
+      <p class="reveal" data-i18n="about-p-0">Lubię proste rozwiązania trudnych problemów. Nie lubię kodu, który rozumiem tylko ja.</p>
+      <p class="reveal" data-i18n="about-p-0b">Trzymam się sprawdzonych zasad architektury i wzorców projektowych — a jak trzeba, schodzę głębiej: Reflection, IL Weaving, Source Generators. Zbudowałem sporo systemów wstrzykiwania zależności, z których korzysta cały zespół, nie tylko ja.</p>
+      <p class="reveal" data-i18n="about-p-0c">Potrafię dogadać się w zespole — pracowałem sam, w małych kilkuosobowych ekipach (game jamy, projekty uczelniane), a także w zespole produkcyjnym liczącym 13 osób. Komunikacja nigdy nie była dla mnie problemem.</p>
+      <div class="testimonial reveal">
+        <p data-i18n="about-quote">„Osoba zaangażowana i chętna do nauki, otwarta na feedback i konsekwentnie rozwijająca swoje umiejętności — od pisania czytelnego kodu, przez rozwiązywanie problemów, po pracę z repozytorium. Rzetelny, ambitny i godny zaufania współpracownik.”</p>
+        <cite data-i18n="about-quote-cite">— referencja, 2025</cite>
+      </div>
+      <div class="tags reveal"><span>Reflection</span><span>IL Weaving</span><span>Source Generators</span></div>
+    </div>
+    <div class="project-media">
+      <div class="tile-collage" data-count="4" data-layout="4">
+        <div class="tile tile-a">
+          <div class="about-photo" style="background-image:url('images/dzialka-3.jpg')" role="img" aria-label="Zdjęcie: przy pracy"></div>
+        </div>
+        <div class="tile tile-b has-tape tape-left">
+          <div class="about-photo" style="background-image:url('images/dzialka-1.jpg')" role="img" aria-label="Zdjęcie: kod"></div>
+        </div>
+        <div class="tile tile-c">
+          <div class="about-photo" style="background-image:url('images/dzialka-2.jpg')" role="img" aria-label="Zdjęcie: przy monitorze"></div>
+        </div>
+        <div class="tile tile-d has-tape tape-right">
+          <div class="about-photo" style="background-image:url('images/dzialka-4.jpg')" role="img" aria-label="Zdjęcie: warsztat"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="about-life" class="project-slide has-media" data-dir="left" data-bg="#170D14" data-variant="1" style="--motif-color:#C9789F">
+  <div class="bg-decor" aria-hidden="true">
+    <div class="blob blob-about"></div>
+  </div>
+  <div class="project-row">
+    <div class="project-content">
+      <span class="pindex reveal" data-i18n="about-eyebrow-1">O mnie 02/03</span>
+      <h3 class="reveal" data-i18n="about-h-1">Tak to ja</h3>
+      <p class="reveal" data-i18n="about-p-1">Kalistenika i bieganie trzymają mnie w formie na tyle, żeby ekran nie zdążył mnie wchłonąć na stałe — na razie wygrywam. Dietę też pilnuję, choć nie zawsze wygrywam z pizzą o północy.</p>
+      <p class="reveal" data-i18n="about-p-1b">Granie w gry to moja pasja od zawsze — nie tylko odpoczynek, ale i inspiracja do własnych projektów. Czasem łapię rakietkę do squasha, a jak tylko jest okazja, pakuję plecak i znikam gdzieś dalej — najlepszy reset, jaki znam.</p>
+      <div class="tags reveal"><span>Kalistenika</span><span>Bieganie</span><span>Squash</span><span>Podróże</span></div>
+    </div>
+    <div class="project-media">
+      <div class="tile-collage" data-count="4" data-layout="2">
+        <div class="tile tile-a">
+          <div class="about-photo" style="background-image:url('images/takto-3.jpg')" role="img" aria-label="Zdjęcie: ja"></div>
+        </div>
+        <div class="tile tile-b has-tape tape-right">
+          <div class="about-photo" style="background-image:url('images/takto-2.jpg')" role="img" aria-label="Zdjęcie: squash"></div>
+        </div>
+        <div class="tile tile-c has-tape tape-left">
+          <div class="about-photo" style="background-image:url('images/takto-4.jpg')" role="img" aria-label="Zdjęcie: bieganie"></div>
+        </div>
+        <div class="tile tile-d">
+          <div class="about-photo" style="background-image:url('images/takto-1.jpg')" role="img" aria-label="Zdjęcie: widok z podróży"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="about-recommend" class="project-slide has-media" data-dir="right" data-bg="#14120E" data-variant="4" style="--motif-color:#C9A227">
+  <div class="bg-decor" aria-hidden="true">
+    <div class="blob blob-about"></div>
+  </div>
+  <div class="project-row">
+    <div class="project-content">
+      <span class="pindex reveal" data-i18n="about-eyebrow-2">O mnie 03/03</span>
+      <h3 class="reveal" data-i18n="about-h-2">W co gram</h3>
+      <p class="reveal" data-i18n="about-p-2">Kilka gier, przy których świetnie się bawiłem — różne gatunki, ale wszystkie mają jedno wspólne: dopracowany, satysfakcjonujący gameplay.</p>
+      <div class="tags reveal"><span>Cuphead</span><span>Age of Empires IV</span><span>Rust</span><span>Lies of P</span><span>Black Myth: Wukong</span></div>
+      <div class="links reveal">
+        <a href="https://steamcommunity.com/profiles/76561198025641193/" target="_blank" rel="noopener" data-i18n="about-steam-link">Mój profil Steam ↗</a>
+      </div>
+    </div>
+    <div class="project-media">
+      <div class="tile-collage" data-count="2" data-layout="1">
+        <div class="tile tile-a">
+          <div class="about-photo" style="background-image:url('images/wcogram-1.jpg')" role="img" aria-label="Zrzut ekranu: CS2"></div>
+        </div>
+        <div class="tile tile-b">
+          <div class="about-photo" style="background-image:url('images/wcogram-2.jpg')" role="img" aria-label="Zdjęcie: setup do gier"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section id="contact" data-bg="#0F1113" data-variant="4">
   <div class="bg-decor" aria-hidden="true">
     <div class="blob blob-contact"></div>
@@ -1506,8 +2136,9 @@
       <a href="https://github.com/veli-dev" target="_blank" rel="noopener">GitHub <span class="arrow">↗</span></a>
       <a href="https://sites.google.com/view/tobiasz-mazurek-v2/strona-g%C5%82%C3%B3wna" target="_blank" rel="noopener" data-i18n="contact-more">Więcej projektów <span class="arrow">↗</span></a>
       <a href="CV_Tobiasz_Mazurek.pdf" target="_blank" rel="noopener">CV (PDF) <span class="arrow">↓</span></a>
+      <a href="Referencje.pdf" target="_blank" rel="noopener" data-i18n="contact-reference">Referencja (PDF) <span class="arrow">↓</span></a>
     </div>
-    <p style="margin-top:40px; font-size:13px;" data-i18n="contact-copyright">© 2026 Tobiasz Mazurek</p>
+    <p style="margin-top:2.5rem; font-size:0.8125rem;" data-i18n="contact-copyright">© 2026 Tobiasz Mazurek</p>
   </div>
 </section>
 
@@ -1515,6 +2146,20 @@
 </main>
 </div>
 
+<script>
+(function(){
+  document.querySelectorAll('.layout-picker button').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      const collage = btn.closest('.tile-collage');
+      if(!collage) return;
+      collage.dataset.layout = btn.dataset.layout;
+      collage.querySelectorAll('.layout-picker button').forEach(function(b){
+        b.classList.toggle('active', b === btn);
+      });
+    });
+  });
+})();
+</script>
 <script>
 (function(){
   const scrollpane = document.querySelector('.scrollpane');
@@ -1532,15 +2177,17 @@
   let index = 0;
   let animating = false;
 
+  const ABOUT_IDS = ['about-technical','about-life','about-recommend'];
   const PRODUCTION_IDS = ['project-1','project-2','project-3'];
   const GAME_IDS = ['project-4','project-5','project-6','project-7'];
   const TOOL_IDS = ['project-8','project-9','project-10','project-11'];
 
   function idToNavKey(id){
+    if(ABOUT_IDS.includes(id)) return 'omnie';
     if(PRODUCTION_IDS.includes(id)) return 'produkcje';
     if(GAME_IDS.includes(id)) return 'gry';
     if(TOOL_IDS.includes(id)) return 'narzedzia';
-    return id; // hero, about, skills, project-12 (Oprogramowanie), contact
+    return id; // hero, skills, project-12 (Oprogramowanie), contact
   }
 
   function setActiveNav(id){
@@ -1552,9 +2199,11 @@
     const exact = navMap[id];
     if(exact && exact.classList.contains('subnav-link')) exact.classList.add('active');
     // Expand only the relevant group (Gry / Narzędzia), collapse the other
+    const omnieLi = document.querySelector('.sidenav li.has-sub[data-group="omnie"]');
     const prodLi = document.querySelector('.sidenav li.has-sub[data-group="produkcje"]');
     const gryLi = document.querySelector('.sidenav li.has-sub[data-group="gry"]');
     const narzLi = document.querySelector('.sidenav li.has-sub[data-group="narzedzia"]');
+    if(omnieLi) omnieLi.classList.toggle('expanded', ABOUT_IDS.includes(id));
     if(prodLi) prodLi.classList.toggle('expanded', PRODUCTION_IDS.includes(id));
     if(gryLi) gryLi.classList.toggle('expanded', GAME_IDS.includes(id));
     if(narzLi) narzLi.classList.toggle('expanded', TOOL_IDS.includes(id));
@@ -1566,9 +2215,17 @@
     sections.forEach(s => { s.style.width = w + 'px'; });
   }
 
+  function getScrollableContent(section){
+    // The element that might actually overflow and need internal scrolling —
+    // section itself no longer scrolls, so bg-decor never drifts out of place.
+    return section.querySelector('.inner, .project-row .project-content, :scope > .project-content');
+  }
+
   function render(){
     // Fade: only current section is fully visible
     sections.forEach((s, i) => s.classList.toggle('in-view', i === index));
+    const content = getScrollableContent(sections[index]);
+    if(content) content.scrollTop = 0; // always start at the top of the content
     setActiveNav(sections[index].id);
     // Smooth page-wide background color wash, D&D-style
     const bg = sections[index].dataset.bg;
@@ -1597,19 +2254,41 @@
   let wheelAccum = 0;
   window.addEventListener('wheel', (e) => {
     if(!isDesktop()) return; // let mobile scroll natively
-    e.preventDefault();
     if(animating) return;
+
+    const activeSection = sections[index];
+
+    // On slides with their own internal stepper (Career's timeline, About's panels),
+    // that stepper owns scroll first — only fall through to page nav at its edges.
+    const stepper = activeSection && activeSection.id === 'career' ? window.__timeline : null;
+    if(stepper){
+      e.preventDefault();
+      wheelAccum += e.deltaY;
+      if(Math.abs(wheelAccum) > 35){
+        const dir = wheelAccum > 0 ? 1 : -1;
+        wheelAccum = 0;
+        const moved = dir > 0 ? stepper.next() : stepper.prev();
+        if(!moved) goTo(index + dir);
+      }
+      return;
+    }
+
+    // If the active section's content is taller than the viewport, let it scroll
+    // internally first — never silently clip content that doesn't fit on a smaller screen.
+    const content = getScrollableContent(activeSection);
+    if(content && content.scrollHeight > content.clientHeight + 1){
+      const atBottom = content.scrollTop + content.clientHeight >= content.scrollHeight - 1;
+      const atTop = content.scrollTop <= 1;
+      if((e.deltaY > 0 && !atBottom) || (e.deltaY < 0 && !atTop)){
+        return; // let the browser scroll the content natively, don't hijack this tick
+      }
+    }
+
+    e.preventDefault();
     wheelAccum += e.deltaY;
     if(Math.abs(wheelAccum) > 35){
-      const dir = wheelAccum > 0 ? 1 : -1;
+      goTo(index + (wheelAccum > 0 ? 1 : -1));
       wheelAccum = 0;
-      // On the Career slide, step through the timeline first; only change page section
-      // once the timeline is already at that end.
-      if(sections[index].id === 'career' && window.__timeline){
-        const moved = dir > 0 ? window.__timeline.next() : window.__timeline.prev();
-        if(moved) return;
-      }
-      goTo(index + dir);
     }
   }, { passive:false });
 
@@ -1637,7 +2316,7 @@
   navLinks.forEach(a => {
     a.addEventListener('click', (e) => {
       e.preventDefault();
-      const targetId = a.dataset.nav === 'produkcje' ? 'project-1' : a.dataset.nav === 'gry' ? 'project-4' : a.dataset.nav === 'narzedzia' ? 'project-8' : a.dataset.nav;
+      const targetId = a.dataset.nav === 'omnie' ? 'about-technical' : a.dataset.nav === 'produkcje' ? 'project-1' : a.dataset.nav === 'gry' ? 'project-4' : a.dataset.nav === 'narzedzia' ? 'project-8' : a.dataset.nav;
       if(isDesktop()){
         const i = sections.findIndex(s => s.id === targetId);
         if(i !== -1) goTo(i);
@@ -1706,17 +2385,33 @@
       'hero-sub':"This is my little corner of game dev — gameplay, networking systems, and custom editor tools, from game jams to titles shipped on Steam.",
       'hero-btn-projects':'View projects',
       'hero-btn-contact':'Contact',
+      'hero-hint':'click the icon',
 
       'about-kicker':'About',
-      'about-h2':'From my first game jam to titles shipped on Steam',
-      'about-p1':'I\'ve been coding in Unity since 2021, professionally since 2022 — I worked with <strong>Radikate</strong>, where I co-created <strong>Nerd Simulator</strong> and <strong>Mr Toilet</strong>, both shipped on Steam. I studied Computer Science (Game Programming track) at the University of Lower Silesia. I\'ve worked solo, in small 2–4 person teams (game jams, university projects), and in a 13-person production team — I\'m just as comfortable with communication and tools like Jira or ClickUp as I am with code.',
-      'about-p2':'I design architecture with the rest of the team in mind, not just myself: a system built on ScriptableObjects plus my own attribute- and reflection-based dependency injection lets designers configure scene objects on their own — no waiting on me to touch the code. Zero hardcoding, zero manually wired references. Lately I\'ve been getting deeper into Source Generators and IL Weaving (Mono.Cecil) — I wrote a custom <code>[OnValueChange]</code> attribute that generates a backing field at compile time, among other things.',
+      'about-tab-0':'This is my turf', 'about-tab-1':'This is me', 'about-tab-2':'What I play',
+      'about-eyebrow-0':'About me 01/03', 'about-eyebrow-1':'About me 02/03', 'about-eyebrow-2':'About me 03/03',
+      'about-h-0':'This is my turf',
+      'about-h-1':'This is me',
+      'about-h-2':'What I play',
+      'about-p-0':'I like simple solutions to hard problems. I don\'t like code that only I understand.',
+      'about-p-0b':'I stick to proven architecture principles and design patterns — and when I need to, I go deeper: Reflection, IL Weaving, Source Generators. I\'ve built a fair number of dependency injection systems that the whole team uses, not just me.',
+      'about-p-0c':'I can hold my own in a team — I\'ve worked solo, in small crews (game jams, university projects), and in a 13-person production team. Communication has never been a problem for me.',
+      'about-p-1':'Calisthenics and running keep me in enough shape that the screen hasn\'t fully absorbed me yet — winning, for now. I watch my diet too, though I don\'t always beat the midnight pizza.',
+      'about-p-1b':'Gaming has always been a passion of mine — not just downtime, but inspiration for my own projects. I pick up a squash racket sometimes, and whenever I get the chance, I pack a bag and disappear somewhere new — the best reset I know.',
+      'about-p-2':'A few games I\'ve had a great time with — different genres, but they all share one thing: polished, satisfying gameplay.',
+      'about-steam-link':'My Steam profile ↗',
+      'about-cs2-caption':'“I can shoot a little bit”',
       'about-stat1':'years in Unity','about-stat2':'completed projects','about-stat3':'titles on Steam',
-      'about-quote':'"An engaged, eager learner — open to feedback and consistently leveling up, from writing clean code, to problem-solving, to working with a repo. A reliable, ambitious, trustworthy collaborator."',
-      'about-quote-cite':'— feedback from a project collaborator, 2025',
+      'about-quote':'“An engaged, eager learner — open to feedback and consistently leveling up, from writing clean code, to problem-solving, to working with a repo. A reliable, ambitious, trustworthy collaborator.”',
+      'about-quote-cite':'— reference, 2025',
 
       'career-kicker':'Career',
       'career-h2':'Step by step, from a student club to Steam',
+      'career-role-0':'Education',
+      'career-role-1':'Junior Unity Developer',
+      'career-role-2':'Unity Developer Freelance',
+      'career-role-3':'Unity Developer',
+      'career-role-4':'Unity Developer Freelance',
 
       'skills-kicker':'Skills',
       'skills-h2':'What I work with day to day',
@@ -1733,7 +2428,7 @@
       'p5-p':'An endless arcade game — a lumberjack has to gather enough wood to survive winter, chopping a tree into pieces with a single hit. I coded the whole thing solo, coordinating external artists, composers, and a sound designer.',
       'p6-p':"A multi-level arcade game made at Hello Game Jam — you play a galaxy defender saving a cat planet from destruction, destroying enemy comets and dodging attacks. Two planets are fully playable, more are still in progress. Art by Paulina Śliwka.",
       'p7-h3':'Wild Bar — in development',
-      'p7-p':'My own solo project — pitched as <em>"Overcooked meets base defense"</em>. You defend a backyard from living, attacking food, cook it up on the grill, and race to serve hungry guests before the forest breaks through the fence. Co-op for 1–4 players. I\'m aiming to release a demo in January 2027 — I\'ll leave the rest as a surprise.',
+      'p7-p':'My own solo project — pitched as <em>“Overcooked meets base defense”</em>. You defend a backyard from living, attacking food, cook it up on the grill, and race to serve hungry guests before the forest breaks through the fence. Co-op for 1–4 players. I\'m aiming to release a demo in January 2027 — I\'ll leave the rest as a surprise.',
       'p8-p':'A strongly-typed, zero-allocation communication channel between game systems. Signals are declared through an editor window instead of hand-written interfaces — a Source Generator (Roslyn) builds the public API and registration logic from that, while Cecil (IL Weaving) only handles injecting the registration calls into <code>Awake</code> and <code>OnDestroy</code>. Assembly structure modeled on the proven approach used by Zenject, DOTween, and Odin.',
       'p9-p':'A slide-out developer console that runs on the live scene — any method in the code becomes a callable command through a reflection-based resolver, made safe for IL2CPP release builds via a targeted <code>[Preserve]</code> attribute. Full autocomplete with signature hints, command nesting (using one command\'s result as another\'s argument), undo/redo, and support for async commands.',
       'p10-h3':'Editor Tools',
@@ -1748,6 +2443,7 @@
       'contact-p1':'Looking for a Unity Developer to work with — full-time, project-based, or a one-off job? Reach out, I usually reply within 24h.',
       'contact-p2':"If you'd like to talk shop or just chat about game dev in general — I'm always up for it, and if you're nearby, we might even grab a beer.",
       'contact-more':'More projects <span class="arrow">↗</span>',
+      'contact-reference':'Reference (PDF) <span class="arrow">↓</span>',
       'foot-more':'More projects ↗',
       'contact-copyright':'© 2026 Tobiasz Mazurek',
     };
@@ -1794,89 +2490,145 @@
   (function(){
     const TL = [
       {
-        date: { pl:'Maj 2021 – Marzec 2024', en:'May 2021 – March 2024' },
-        title: { pl:'Koło naukowe Hello IT', en:'Hello IT student club' },
-        desc: {
-          pl:'Dołączyłem do koła naukowego na uczelni — pierwsze realne projekty w Unity, gamejamy (Popiel, Fluffy Savior) i pierwszy kontakt z pracą w zespole nad wspólnym celem.',
-          en:"I joined a student tech club at university — my first real Unity projects, game jams (Popiel, Fluffy Savior), and my first taste of working in a team toward a shared goal."
-        }
+        items: [
+          {
+            date: { pl:'2017 – 2021', en:'2017 – 2021' },
+            title: { pl:'Technikum — Chłodnictwo i Klimatyzacja', en:'Technical school — Refrigeration & Air Conditioning' },
+            desc: {
+              pl:'Zespół Szkół Transportowo-Elektrycznych, Ostrów Wielkopolski. Zanim trafiłem do programowania, uczyłem się zupełnie innego fachu.',
+              en:'Transport-Electrical School Complex, Ostrów Wielkopolski. Before I found programming, I was training in a completely different trade.'
+            },
+            tags: ['Technikum']
+          },
+          {
+            date: { pl:'Marzec 2021 – Marzec 2024', en:'March 2021 – March 2024' },
+            title: { pl:'Uniwersytet Dolnośląski DSW', en:'University of Lower Silesia' },
+            desc: {
+              pl:'Informatyka, specjalizacja Programowanie Gier — tu zaczęła się cała reszta.',
+              en:'Computer Science, Game Programming track — where everything else started.'
+            },
+            tags: ['Informatyka', 'Programowanie Gier']
+          }
+        ]
       },
       {
-        date: { pl:'Listopad 2022 – Czerwiec 2023', en:'November 2022 – June 2023' },
-        title: { pl:'Dream Eater Interactive', en:'Dream Eater Interactive' },
-        desc: {
-          pl:'Pracowałem nad dwoma nieukończonymi prototypami: <strong>Projekt G</strong> — system multiplayer (zarządzanie sesjami, matchmaking, synchronizacja danych między klientami), oraz <strong>Projekt D</strong> — AI przeciwników sterująca ich zachowaniem względem gracza. Żaden z nich finalnie nie doczekał się premiery.',
-          en:'I worked on two unfinished prototypes: <strong>Project G</strong> — a multiplayer system (session management, matchmaking, cross-client data sync), and <strong>Project D</strong> — enemy AI driving their behavior toward the player. Neither one ultimately made it to release.'
-        }
+        items: [
+          {
+            date: { pl:'Maj 2021 – Marzec 2024', en:'May 2021 – March 2024' },
+            title: { pl:'Koło naukowe Hello IT', en:'Hello IT student club' },
+            desc: {
+              pl:'Dołączyłem do koła naukowego na uczelni — pierwsze realne projekty w Unity, game jamy (Popiel, Fluffy Savior) i pierwszy kontakt z pracą w zespole nad wspólnym celem.',
+              en:"I joined a student tech club at university — my first real Unity projects, game jams (Popiel, Fluffy Savior), and my first taste of working in a team toward a shared goal."
+            },
+            tags: ['Unity', 'C#', 'Game Jams']
+          },
+          {
+            date: { pl:'Listopad 2022 – Czerwiec 2023', en:'November 2022 – June 2023' },
+            title: { pl:'Dream Eater Interactive', en:'Dream Eater Interactive' },
+            desc: {
+              pl:'Równolegle do koła naukowego pracowałem nad dwoma nieukończonymi prototypami: <strong>Projekt G</strong> — system multiplayer (zarządzanie sesjami, matchmaking, synchronizacja danych między klientami), oraz <strong>Projekt D</strong> — AI przeciwników sterująca ich zachowaniem względem gracza. Żaden z nich finalnie nie doczekał się premiery.',
+              en:'Alongside the student club, I worked on two unfinished prototypes: <strong>Project G</strong> — a multiplayer system (session management, matchmaking, cross-client data sync), and <strong>Project D</strong> — enemy AI driving their behavior toward the player. Neither one ultimately made it to release.'
+            },
+            tags: ['Multiplayer', 'AI', 'C#']
+          }
+        ]
       },
       {
-        date: { pl:'Lipiec 2024 – 2025', en:'July 2024 – 2025' },
-        title: { pl:'Unity Developer Freelance', en:'Unity Developer, Freelance' },
-        desc: {
-          pl:'Dołączyłem do 13-osobowej grupy, gdzie rozbijałem funkcjonalności w ramach większego projektu na osobne, samodzielne moduły. Zajmowałem się architekturą ECS, stawianiem serwera dedykowanego oraz sieciówką w Unity — w tym Unity Game Services (matchmaking, relay, lobby). To właśnie tam nauczyłem się pracy przy większej, rozproszonej infrastrukturze sieciowej, nie tylko przy lokalnym multiplayerze.',
-          en:"I joined a 13-person group, where I broke functionality within a larger project down into separate, self-contained modules. I worked on ECS architecture, standing up a dedicated server, and Unity networking — including Unity Game Services (matchmaking, relay, lobby). That's where I really learned to work with larger, distributed network infrastructure, not just local multiplayer."
-        }
+        items: [
+          {
+            date: { pl:'Lipiec 2024 – 2025', en:'July 2024 – 2025' },
+            title: { pl:'Unity Developer Freelance', en:'Unity Developer, Freelance' },
+            desc: {
+              pl:'Dołączyłem do 13-osobowej grupy, gdzie rozbijałem funkcjonalności w ramach większego projektu na osobne, samodzielne moduły. Zajmowałem się architekturą ECS, stawianiem serwera dedykowanego oraz sieciówką w Unity — w tym Unity Game Services (matchmaking, relay, lobby). To właśnie tam nauczyłem się pracy przy większej, rozproszonej infrastrukturze sieciowej, nie tylko przy lokalnym multiplayerze.',
+              en:"I joined a 13-person group, where I broke functionality within a larger project down into separate, self-contained modules. I worked on ECS architecture, standing up a dedicated server, and Unity networking — including Unity Game Services (matchmaking, relay, lobby). That's where I really learned to work with larger, distributed network infrastructure, not just local multiplayer."
+            },
+            tags: ['ECS', 'Unity Game Services', 'Networking']
+          }
+        ]
       },
       {
-        date: { pl:'Kwiecień 2025', en:'April 2025' },
-        title: { pl:'Radikate', en:'Radikate' },
-        desc: {
-          pl:'Współtworzyłem <strong>Nerd Simulator</strong> i <strong>Mr Toilet</strong>, oba wydane na Steam. Programowanie gameplayu w czteroosobowym zespole.',
-          en:'I co-created <strong>Nerd Simulator</strong> and <strong>Mr Toilet</strong>, both shipped on Steam. Gameplay programming in a four-person team.'
-        }
+        items: [
+          {
+            date: { pl:'Kwiecień 2025', en:'April 2025' },
+            title: { pl:'Radikate', en:'Radikate' },
+            desc: {
+              pl:'Pracowałem jako programista przy <strong>Nerd Simulator</strong> i <strong>Mr Toilet</strong> — pisałem kod od prototypów po gotowe funkcjonalności, tworzyłem też własne inspektory ułatwiające pracę reszty zespołu.',
+              en:'I worked as a programmer on <strong>Nerd Simulator</strong> and <strong>Mr Toilet</strong> — writing code from early prototypes through to finished features, and building custom inspectors to make the rest of the team\'s work easier.'
+            },
+            tags: ['Steam', 'Unity', 'C#']
+          }
+        ]
+      },
+      {
+        items: [
+          {
+            date: { pl:'2026 – teraz', en:'2026 – present' },
+            title: { pl:'Własna produkcja', en:'Own production' },
+            desc: {
+              pl:'Kontynuuję pracę jako Unity Developer Freelance, a równolegle rozwijam własną, autorską produkcję — pracuję nad nią solo, demo planuję wypuścić w styczniu 2027. Więcej szczegółów zdradzę bliżej premiery.',
+              en:"I'm continuing to work as a Unity Developer Freelance, while also developing my own solo production on the side — aiming for a demo release in January 2027. More details closer to launch."
+            },
+            tags: ['Solo Dev', 'Unity', 'C#']
+          }
+        ]
       }
     ];
 
-    const ticks = document.querySelectorAll('.timeline-tick');
-    const ball = document.getElementById('timelineBall');
+    const points = document.querySelectorAll('.timeline-v-point');
     const panel = document.getElementById('timelinePanel');
-    const STEP = 0.16;          // how far one wheel "tick" moves the ball (0..last index)
-    const SNAP_EDGE = 0.14;     // how close to a milestone counts as "at" it, not "between"
-    let progress = 0;           // continuous position: 0 .. TL.length-1
-    const maxProgress = TL.length - 1;
+    let tlIndex = 0;
+    let tlAnimating = false;
 
     function cardHTML(entry, lang){
+      const tagsHTML = entry.tags
+        ? '<div class="tags">' + entry.tags.map(t => '<span>' + t + '</span>').join('') + '</div>'
+        : '';
       return '<div class="tl-card"><span class="tl-date">' + entry.date[lang] + '</span>'
-           + '<h4>' + entry.title[lang] + '</h4><p>' + entry.desc[lang] + '</p></div>';
+           + '<h4>' + entry.title[lang] + '</h4><p>' + entry.desc[lang] + '</p>' + tagsHTML + '</div>';
     }
 
-    function render(){
-      if(!panel || !ball) return;
+    function paint(){
+      if(!panel) return;
       const lang = document.documentElement.lang === 'en' ? 'en' : 'pl';
-      ball.style.left = (progress / maxProgress * 100) + '%';
+      panel.innerHTML = TL[tlIndex].items.map(item => cardHTML(item, lang)).join('');
+    }
 
-      const lo = Math.floor(progress);
-      const hi = Math.min(TL.length - 1, Math.ceil(progress));
-      const frac = progress - lo;
+    function selectTimeline(i){
+      if(tlAnimating) return; // one transition at a time — never let two overlap
+      i = Math.max(0, Math.min(TL.length - 1, i));
+      if(i === tlIndex) return;
+      tlIndex = i;
+      tlAnimating = true;
+      points.forEach((p, pi) => p.classList.toggle('active', pi === i));
 
-      let html;
-      if(hi === lo || frac <= SNAP_EDGE){
-        html = cardHTML(TL[lo], lang);
-      } else if(frac >= 1 - SNAP_EDGE){
-        html = cardHTML(TL[hi], lang);
-      } else {
-        // Resting between two milestones — show both, so nothing gets lost.
-        html = cardHTML(TL[lo], lang) + cardHTML(TL[hi], lang);
+      if(!panel) { tlAnimating = false; return; }
+
+      if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+        paint();
+        tlAnimating = false;
+        return;
       }
-      panel.innerHTML = html;
+
+      // Single element, opacity-only crossfade — nothing to overlap, nothing to race.
+      panel.style.opacity = '0';
+      window.setTimeout(() => {
+        paint();
+        panel.style.opacity = '1';
+        window.setTimeout(() => { tlAnimating = false; }, 300);
+      }, 200);
     }
 
-    function setProgress(p){
-      progress = Math.max(0, Math.min(maxProgress, p));
-      render();
-    }
-
-    ticks.forEach(btn => {
-      btn.addEventListener('click', () => setProgress(parseInt(btn.dataset.tl, 10)));
+    points.forEach((btn, i) => {
+      btn.addEventListener('click', () => selectTimeline(i));
     });
-    document.addEventListener('langchange', render);
-    render();
+    document.addEventListener('langchange', paint);
+    paint();
 
-    // Exposed so the page's global wheel handler can scrub the timeline continuously
+    // Exposed so the page's global wheel handler can step through the timeline
     // while the Career slide is active, before it hands scroll control back to page navigation.
     window.__timeline = {
-      next(){ if(progress < maxProgress){ setProgress(progress + STEP); return true; } return false; },
-      prev(){ if(progress > 0){ setProgress(progress - STEP); return true; } return false; }
+      next(){ if(tlAnimating) return true; if(tlIndex < TL.length - 1){ selectTimeline(tlIndex + 1); return true; } return false; },
+      prev(){ if(tlAnimating) return true; if(tlIndex > 0){ selectTimeline(tlIndex - 1); return true; } return false; }
     };
   })();
 
@@ -1888,9 +2640,13 @@
     });
   });
 
-  // --- Big background icon click-to-toggle glow (test variant) ---
+  // --- Big background icon click-to-toggle glow ---
   document.querySelectorAll('.motif-wrap.motif-clickable').forEach(wrap => {
-    const toggle = (e) => { e.stopPropagation(); wrap.classList.toggle('lit'); };
+    const toggle = (e) => {
+      e.stopPropagation();
+      wrap.classList.toggle('lit');
+      wrap.setAttribute('aria-label', wrap.classList.contains('lit') ? 'Zgaś ikonę' : 'Zapal ikonę');
+    };
     wrap.addEventListener('click', toggle);
     wrap.addEventListener('keydown', (e) => {
       if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); toggle(e); }
@@ -1914,19 +2670,6 @@
     ripple.addEventListener('animationend', () => ripple.remove());
   });
 
-  // --- Intensity switcher: adjusts --ent custom property (entrance animation strength) ---
-  (function(){
-    const root = document.documentElement;
-    const btns = document.querySelectorAll('.intensity-switcher button');
-    const LEVELS = { 1: 0.4, 2: 0.7, 3: 1, 4: 1.7, 5: 2.6 };
-    btns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        const lvl = btn.dataset.level;
-        root.style.setProperty('--ent', LEVELS[lvl]);
-        btns.forEach(b => b.classList.toggle('active', b === btn));
-      });
-    });
-  })();
 </script>
 
 </body>
