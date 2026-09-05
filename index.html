@@ -946,7 +946,9 @@
     transition:transform .35s cubic-bezier(.22,1,.36,1);
     cursor:default;
   }
-  .solo-photo:hover{ transform:rotate(0deg) scale(1.05); box-shadow:0 28px 55px -18px rgba(0,0,0,.85); }
+  body:not(.edit-mode) .solo-photo:hover{ transform:rotate(0deg) scale(1.05); box-shadow:0 28px 55px -18px rgba(0,0,0,.85); }
+  #project-3 .project-media{ flex-basis:40rem; }
+  #project-3 .solo-photo{ width:86%; max-width:40rem; }
 
   /* Washi-tape accent — a small strip that makes a photo look physically taped down. */
   .tile.has-tape::before{
@@ -978,7 +980,7 @@
   .tile-collage[data-count="3"]{ aspect-ratio:1/1.15; width:min(34rem, calc((var(--media-max-h) - 3rem) / 1.15)); }
   .tile-collage[data-count="4"]{ aspect-ratio:1/1.35; width:min(34rem, calc((var(--media-max-h) - 3rem) / 1.35)); }
   .tile{ position:absolute; transition:width .35s ease, height .35s ease, top .35s ease, left .35s ease, right .35s ease, bottom .35s ease, transform .35s cubic-bezier(.22,1,.36,1); cursor:default; }
-  .tile:hover{ transform:rotate(0deg) scale(1.06) !important; z-index:9 !important; }
+  body:not(.edit-mode) .tile:hover{ transform:rotate(0deg) scale(1.06) !important; z-index:9 !important; }
   .tile:hover .about-photo{ box-shadow:0 28px 55px -18px rgba(0,0,0,.85); }
   .tile .about-photo{
     width:100%; height:100%;
@@ -1014,40 +1016,40 @@
   #project-9 .tile-b{ width:58%; aspect-ratio:16/10; bottom:4%; right:4%; transform:rotate(-3deg); z-index:1; }
   /* "To moja działka" — wachlarz: jedno zdjęcie na środku (proste, na wierzchu, największe),
      reszta wygląda zza niego pod różnymi kątami, jak rozrzucone/przypięte zdjęcia na biurku. */
-  #about-technical .project-media{ flex-basis:38rem; }
+  #about-technical .project-media{ flex-basis:46rem; }
   #about-technical .tile-collage{
     position:relative;
-    width:min(38rem, calc((var(--media-max-h) - 3rem) / 1));
+    width:min(46rem, calc((var(--media-max-h) - 3rem) / 1.5));
     max-width:none;
-    aspect-ratio:1/1;
+    aspect-ratio:1/1.5;
     margin:2.5rem auto 0.5rem;
   }
   #about-technical .tile{ transition:transform .35s cubic-bezier(.22,1,.36,1), z-index 0s; cursor:default; }
-  #about-technical .tile:hover{ transform:rotate(0deg) scale(1.07) !important; z-index:9 !important; }
+  body:not(.edit-mode) #about-technical .tile:hover{ transform:rotate(0deg) scale(1.07) !important; z-index:9 !important; }
   #about-technical .tile:hover .about-photo{ box-shadow:0 28px 55px -18px rgba(0,0,0,.85); }
-  #about-technical .tile-b{ width:36%; aspect-ratio:4/5; top:2%; left:2%; transform:rotate(-13deg); z-index:1; }
-  #about-technical .tile-c{ width:36%; aspect-ratio:4/5; top:3%; right:2%; transform:rotate(11deg); z-index:2; }
-  #about-technical .tile-d{ width:36%; aspect-ratio:4/5; bottom:2%; left:32%; transform:rotate(9deg); z-index:3; }
-  #about-technical .tile-a{ width:48%; aspect-ratio:4/5; top:20%; left:26%; transform:rotate(-2deg); z-index:5; }
+  #about-technical .tile-a{ width:50%; aspect-ratio:4/5; top:9%; left:10%; transform:rotate(6deg); z-index:1; }
+  #about-technical .tile-b{ width:40%; aspect-ratio:4/5; top:15%; left:50%; transform:rotate(-8deg); z-index:2; }
+  #about-technical .tile-c{ width:51%; aspect-ratio:4/5; top:46%; left:6%; transform:rotate(-5deg); z-index:3; }
+  #about-technical .tile-d{ width:48%; aspect-ratio:4/5; top:54%; left:40%; transform:rotate(8deg); z-index:4; }
   #about-technical .tile .about-photo{ width:100%; height:100%; aspect-ratio:auto; }
 
   /* "Tak to ja" — ten sam wachlarz co w "To moja działka", ale lustrzane kąty obrotu,
      żeby obie sekcje O mnie nie wyglądały identycznie mimo wspólnego wzorca. */
-  #about-life .project-media{ flex-basis:40rem; }
+  #about-life .project-media{ flex-basis:46rem; }
   #about-life .tile-collage{
     position:relative;
-    width:min(40rem, calc((var(--media-max-h) - 3rem) / 1));
+    width:min(46rem, calc((var(--media-max-h) - 3rem) / 1.42));
     max-width:none;
-    aspect-ratio:1/1;
+    aspect-ratio:1/1.42;
     margin:2.5rem auto 0.5rem;
   }
   #about-life .tile{ transition:transform .35s cubic-bezier(.22,1,.36,1), z-index 0s; cursor:default; }
-  #about-life .tile:hover{ transform:rotate(0deg) scale(1.07) !important; z-index:9 !important; }
+  body:not(.edit-mode) #about-life .tile:hover{ transform:rotate(0deg) scale(1.07) !important; z-index:9 !important; }
   #about-life .tile:hover .about-photo{ box-shadow:0 28px 55px -18px rgba(0,0,0,.85); }
-  #about-life .tile-b{ width:36%; aspect-ratio:4/5; top:2%; right:2%; transform:rotate(14deg); z-index:1; }
-  #about-life .tile-d{ width:42%; aspect-ratio:4/3; top:4%; left:1%; transform:rotate(-10deg); z-index:2; }
-  #about-life .tile-c{ width:36%; aspect-ratio:4/5; bottom:2%; right:32%; transform:rotate(-9deg); z-index:3; }
-  #about-life .tile-a{ width:48%; aspect-ratio:4/5; top:20%; left:26%; transform:rotate(2deg); z-index:5; }
+  #about-life .tile-a{ width:46%; aspect-ratio:1/1; top:6%; left:40%; transform:rotate(10deg); z-index:3; }
+  #about-life .tile-b{ width:44%; aspect-ratio:1/1; top:25%; left:6%; transform:rotate(-8deg); z-index:1; }
+  #about-life .tile-c{ width:46%; aspect-ratio:1/1; top:43%; left:46%; transform:rotate(3deg); z-index:2; }
+  #about-life .tile-d{ width:46%; aspect-ratio:1/1; top:54%; left:8%; transform:rotate(-9deg); z-index:4; }
   #about-life .tile .about-photo{ width:100%; height:100%; aspect-ratio:auto; }
 
   /* ===== 3 photos ===== */
@@ -1062,8 +1064,8 @@
   .tile-collage[data-count="3"][data-layout="3"] .tile-b{ width:38%; aspect-ratio:4/5; top:20%; left:31%; transform:rotate(3.6deg); z-index:2; }
   .tile-collage[data-count="3"][data-layout="3"] .tile-c{ width:38%; aspect-ratio:4/5; bottom:7%; right:8%; transform:rotate(9deg); z-index:3; }
   .tile-collage[data-count="3"][data-layout="4"] .tile-a{ width:84%; aspect-ratio:16/9; top:7%; left:8%; transform:rotate(-1.8deg); z-index:1; }
-  .tile-collage[data-count="3"][data-layout="4"] .tile-b{ width:44%; aspect-ratio:4/3; bottom:7%; left:4%; transform:rotate(5.4deg); z-index:2; }
-  .tile-collage[data-count="3"][data-layout="4"] .tile-c{ width:48%; aspect-ratio:4/3; bottom:7%; right:2%; transform:rotate(-5.4deg); z-index:2; }
+  .tile-collage[data-count="3"][data-layout="4"] .tile-b{ width:56%; aspect-ratio:4/3; bottom:7%; left:4%; transform:rotate(5.4deg); z-index:2; }
+  .tile-collage[data-count="3"][data-layout="4"] .tile-c{ width:56%; aspect-ratio:4/3; bottom:7%; right:2%; transform:rotate(-5.4deg); z-index:2; }
 
   /* ===== 4 photos ===== */
   /* aspect-ratio + width formula for count=4 defined above, alongside base rule */
@@ -1257,8 +1259,8 @@
   .gallery-4 img:nth-child(2){ margin-top:1.375rem; }
   #about-recommend .project-media{ flex-basis:30rem; max-width:30rem; }
   #about-recommend .tile-collage{ width:min(30rem, calc((var(--media-max-h) - 3rem) / 0.82)); max-width:30rem; }
-  #project-2 .project-media{ flex-basis:38rem; }
-  #project-2 .tile-collage{ width:min(38rem, calc((var(--media-max-h) - 3rem) / 0.82)); max-width:38rem; }
+  #project-2 .project-media{ flex-basis:46rem; }
+  #project-2 .tile-collage{ width:min(46rem, calc((var(--media-max-h) - 3rem) / 0.82)); max-width:46rem; }
   .gallery-4 img:nth-child(3){ margin-top:-0.625rem; }
   @media (max-width:860px){
     .gallery-2 img:nth-child(2), .gallery-4 img:nth-child(2), .gallery-4 img:nth-child(3){ margin-top:0; }
@@ -1534,6 +1536,97 @@
     color:var(--text-dim);
     font-size:0.8125rem;
   }
+  /* ===== Tryb edycji layoutu (narzędzie deweloperskie, nie dla zwiedzających) ===== */
+  body.edit-mode .project-slide,
+  body.edit-mode .tile-collage,
+  body.edit-mode .project-media,
+  body.edit-mode .app,
+  body.edit-mode section{ overflow:visible !important; }
+  #edit-toggle{
+    position:fixed; bottom:24px; right:24px; z-index:9998;
+    width:52px; height:52px; border-radius:50%;
+    background:#7C9A92; color:#0E0F11; border:none;
+    font-size:22px; cursor:pointer;
+    box-shadow:0 8px 24px rgba(0,0,0,.5);
+  }
+  #edit-toggle.active{ background:#C9642E; }
+  body.edit-mode .tile, body.edit-mode .solo-photo{
+    outline:2px dashed rgba(255,255,255,.5);
+    outline-offset:2px;
+    cursor:move;
+    transition:none !important;
+  }
+  body.edit-mode .tile:hover, body.edit-mode .solo-photo:hover{
+    outline-color:#7C9A92;
+  }
+  body.edit-mode .tile.edit-active, body.edit-mode .solo-photo.edit-active{
+    outline:3px solid #C9642E;
+    outline-offset:2px;
+    z-index:999 !important;
+  }
+  body.edit-mode .project-content, body.edit-mode .inner, body.edit-mode .project-media{
+    outline:2px dashed rgba(255,255,255,.4);
+    outline-offset:6px;
+    cursor:move;
+    transition:none !important;
+  }
+  body.edit-mode [data-i18n]{
+    outline:1px dashed rgba(124,154,146,.5);
+    outline-offset:2px;
+    cursor:text;
+  }
+  body.edit-mode [data-i18n]:focus{
+    outline:2px solid #C9642E;
+    background:rgba(201,100,46,.08);
+  }
+  body.edit-mode .project-content:hover, body.edit-mode .inner:hover, body.edit-mode .project-media:hover{
+    outline-color:#7C9A92;
+  }
+  .edit-guide{
+    position:fixed; background:#C9642E; z-index:9600; display:none;
+    box-shadow:0 0 6px rgba(201,100,46,.8);
+  }
+  .edit-guide.v{ width:1px; }
+  .edit-guide.h{ height:1px; }
+  .edit-handle{
+    position:absolute; width:26px; height:26px; border-radius:50%;
+    background:#7C9A92; color:#0E0F11; display:none;
+    align-items:center; justify-content:center; font-size:14px;
+    cursor:pointer; z-index:9500; user-select:none; line-height:1;
+  }
+  #edit-panel{
+    position:fixed; top:0; right:0; width:340px; height:100vh; z-index:9997;
+    background:#14161A; border-left:1px solid #2A2D31; color:#EDEDE9;
+    font-family:'Space Grotesk', sans-serif; font-size:13px;
+    padding:20px; overflow-y:auto; display:none; box-sizing:border-box;
+  }
+  body.edit-mode #edit-panel{ display:block; }
+  #edit-panel h4{ font-size:15px; margin:0 0 12px; }
+  #edit-panel .ep-row{ margin-bottom:14px; }
+  #edit-panel label{ display:block; margin-bottom:4px; color:#9A9D9F; font-size:11px; text-transform:uppercase; letter-spacing:.05em; }
+  #edit-panel input[type="range"]{ width:100%; }
+  #edit-panel .ep-val{ float:right; color:#7C9A92; }
+  #edit-panel textarea{
+    width:100%; height:220px; background:#0E0F11; color:#7C9A92;
+    border:1px solid #2A2D31; border-radius:6px; padding:10px;
+    font-family:monospace; font-size:11px; box-sizing:border-box; resize:vertical;
+  }
+  #edit-panel button{
+    background:#7C9A92; color:#0E0F11; border:none; border-radius:6px;
+    padding:8px 12px; font-size:12px; cursor:pointer; margin-top:8px; margin-right:6px;
+  }
+  #edit-panel .ep-hint{ color:#9A9D9F; font-size:11px; line-height:1.5; margin-bottom:16px; }
+  #edit-panel .ep-legend{ list-style:none; padding:0; margin:0; }
+  #edit-panel .ep-legend li{
+    display:flex; justify-content:space-between; gap:10px;
+    padding:7px 0; border-top:1px solid #2A2D31; font-size:12px;
+  }
+  #edit-panel .ep-legend li:first-child{ border-top:none; }
+  #edit-panel .ep-legend kbd{
+    background:#2A2D31; color:#7C9A92; border-radius:4px;
+    padding:2px 7px; font-size:11px; font-family:monospace; white-space:nowrap;
+  }
+  #edit-panel .ep-legend span{ color:#9A9D9F; text-align:right; }
 </style>
 </head>
 <body>
@@ -2896,6 +2989,7 @@
 
   document.querySelectorAll('.about-photo, .solo-photo').forEach(function(el){
     el.addEventListener('click', function(e){
+      if(document.body.classList.contains('edit-mode')) return;
       e.stopPropagation();
       openLightbox(el);
     });
@@ -2916,5 +3010,627 @@
 })();
 </script>
 
+<button id="edit-toggle" type="button" title="Tryb edycji layoutu">✎</button>
+<div id="edit-panel">
+  <h4>Tryb edycji layoutu</h4>
+  <p class="ep-hint">
+    Klikaj i przeciągaj zdjęcia, tekst i kontener, żeby ustawić layout. Suwaki niżej
+    to alternatywa dla myszki. Na koniec kliknij "Wygeneruj CSS" i wklej kod do pliku
+    (albo wyślij go mi). Uwaga: poza trybem edycji przycinanie wraca do normy.
+  </p>
+  <div class="ep-row" id="ep-tile-controls" style="display:none;">
+    <div class="ep-row">
+      <label>Zaznaczone: <span id="ep-active-name">—</span></label>
+    </div>
+    <div class="ep-row">
+      <label>Obrót <span class="ep-val" id="ep-rot-val">0°</span></label>
+      <input type="range" id="ep-rotate" min="-45" max="45" step="1" value="0">
+    </div>
+    <div class="ep-row">
+      <label>Rozmiar (szerokość) <span class="ep-val" id="ep-size-val">100%</span></label>
+      <input type="range" id="ep-size" min="15" max="100" step="1" value="40">
+    </div>
+  </div>
+  <div class="ep-row">
+    <label>Rozmiar kontenera zdjęć (sekcja: <span id="ep-container-section">—</span>) <span class="ep-val" id="ep-container-val">—</span></label>
+    <input type="range" id="ep-container-size" min="20" max="70" step="1" value="38">
+    <p class="ep-hint" style="margin:6px 0 0;">To realnie powiększa "pudełko", w którym mieszczą się zdjęcia tej sekcji — nie tylko podgląd. Im większy kontener, tym więcej miejsca dla zdjęć bez ucinania.</p>
+  </div>
+  <div class="ep-row">
+    <label>Pozycja kontenera zdjęć — poziomo <span class="ep-val" id="ep-media-x-val">0px</span></label>
+    <input type="range" id="ep-media-x" min="-200" max="200" step="2" value="0">
+    <label style="margin-top:8px;">Pozycja kontenera zdjęć — pionowo <span class="ep-val" id="ep-media-y-val">0px</span></label>
+    <input type="range" id="ep-media-y" min="-200" max="200" step="2" value="0">
+  </div>
+  <div class="ep-row">
+    <label>Skala tekstu w tej sekcji <span class="ep-val" id="ep-txt-val">100%</span></label>
+    <input type="range" id="ep-txt-scale" min="0.7" max="1.6" step="0.02" value="1">
+    <label style="margin-top:6px; text-transform:none; font-size:12px; display:flex; align-items:center; gap:6px;">
+      <input type="checkbox" id="ep-txt-center" style="width:auto;"> Skaluj względem środka (nie lewego górnego rogu)
+    </label>
+  </div>
+  <div class="ep-row">
+    <label style="margin-bottom:0; text-transform:none; font-size:12px; display:flex; align-items:center; gap:6px;">
+      <input type="checkbox" id="ep-guides" checked style="width:auto;"> Pokazuj prowadnice środka podczas przeciągania
+    </label>
+  </div>
+  <div class="ep-row">
+    <label>Pozycja tekstu — poziomo <span class="ep-val" id="ep-text-x-val">0px</span></label>
+    <input type="range" id="ep-text-x" min="-200" max="200" step="2" value="0">
+    <label style="margin-top:8px;">Pozycja tekstu — pionowo <span class="ep-val" id="ep-text-y-val">0px</span></label>
+    <input type="range" id="ep-text-y" min="-200" max="200" step="2" value="0">
+  </div>
+  <div class="ep-row">
+    <label>Odstęp między tekstem a zdjęciami <span class="ep-val" id="ep-gap-val">—</span></label>
+    <input type="range" id="ep-gap" min="0" max="6" step="0.1" value="3">
+  </div>
+  <div class="ep-row">
+    <button type="button" id="ep-generate">Wygeneruj CSS</button>
+    <button type="button" id="ep-reset">Reset zmian</button>
+  </div>
+  <div class="ep-row">
+    <label>Gotowy kod (skopiuj i wklej)</label>
+    <textarea id="ep-output" readonly placeholder="Kliknij 'Wygeneruj CSS' po wprowadzeniu zmian..."></textarea>
+    <button type="button" id="ep-copy">Kopiuj do schowka</button>
+  </div>
+  <div class="ep-row">
+    <label>Skróty</label>
+    <ul class="ep-legend">
+      <li><kbd>LPM + przeciągnij</kbd><span>przesuń</span></li>
+      <li><kbd>Scroll</kbd><span>zmień rozmiar</span></li>
+      <li><kbd>Ctrl + Scroll</kbd><span>obróć (zdjęcia)</span></li>
+      <li><kbd>Klik na zdjęcie</kbd><span>zaznacz (suwaki)</span></li>
+      <li><kbd>Klik w tekst</kbd><span>edytuj treść</span></li>
+    </ul>
+  </div>
+</div>
+<script>
+(function(){
+  const toggleBtn = document.getElementById('edit-toggle');
+  const panel = document.getElementById('edit-panel');
+  const txtScaleInput = document.getElementById('ep-txt-scale');
+  const txtScaleVal = document.getElementById('ep-txt-val');
+  const outputBox = document.getElementById('ep-output');
+
+  const tileState = new Map();   // selector -> {left, top, width, rotate, unit}
+
+  // Przechwycenie prawdziwych, "spoczynkowych" wartości od razu przy starcie strony —
+  // zanim jakikolwiek hover zdąży je tymczasowo podmienić (efekt uniesienia).
+  document.querySelectorAll('.tile, .solo-photo').forEach(function(el){
+    const cs = getComputedStyle(el);
+    let baseRotate = 0;
+    const m = cs.transform.match(/^matrix\(([^)]+)\)$/);
+    if(m){
+      const v = m[1].split(',').map(parseFloat);
+      baseRotate = Math.atan2(v[1], v[0]) * (180/Math.PI);
+    }
+    el.dataset.baseRotate = baseRotate;
+    el.dataset.baseZ = cs.zIndex;
+    el.dataset.baseWidth = cs.width;
+    el.dataset.baseAspect = cs.aspectRatio;
+  });
+
+
+  // ===== Prowadnice środka (jak w narzędziach graficznych) =====
+  const guideV = document.createElement('div'); guideV.className = 'edit-guide v'; document.body.appendChild(guideV);
+  const guideH = document.createElement('div'); guideH.className = 'edit-guide h'; document.body.appendChild(guideH);
+  const guidesToggle = document.getElementById('ep-guides');
+  const SNAP = 8; // px
+
+  function hideGuides(){ guideV.style.display = 'none'; guideH.style.display = 'none'; }
+
+  // Sprawdza wyśrodkowanie elementu (dany prostokąt w px, viewport) względem containerRect.
+  // Zwraca skorygowane {left, top} (w px, viewport) po ew. przyciągnięciu do środka.
+  function snapToCenter(rect, containerRect){
+    if(!guidesToggle.checked) return { left: rect.left, top: rect.top, snappedX:false, snappedY:false };
+    const cx = containerRect.left + containerRect.width/2;
+    const cy = containerRect.top + containerRect.height/2;
+    const elCx = rect.left + rect.width/2;
+    const elCy = rect.top + rect.height/2;
+    let left = rect.left, top = rect.top, snappedX = false, snappedY = false;
+    if(Math.abs(elCx - cx) < SNAP){ left = cx - rect.width/2; snappedX = true; }
+    if(Math.abs(elCy - cy) < SNAP){ top = cy - rect.height/2; snappedY = true; }
+    if(snappedX){
+      guideV.style.left = cx + 'px'; guideV.style.top = containerRect.top + 'px';
+      guideV.style.height = containerRect.height + 'px'; guideV.style.display = 'block';
+    } else guideV.style.display = 'none';
+    if(snappedY){
+      guideH.style.top = cy + 'px'; guideH.style.left = containerRect.left + 'px';
+      guideH.style.width = containerRect.width + 'px'; guideH.style.display = 'block';
+    } else guideH.style.display = 'none';
+    return { left, top, snappedX, snappedY };
+  }
+
+
+  function selectorFor(el){
+    const section = el.closest('section[id]');
+    const sectionId = section ? section.id : 'unknown';
+    let tag = 'tile-?';
+    if(el.classList.contains('solo-photo')) tag = 'solo-photo';
+    else {
+      const m = Array.from(el.classList).find(c => /^tile-[a-d]$/.test(c));
+      if(m) tag = m;
+    }
+    return { sectionId, tag, key: sectionId + ' :: ' + tag };
+  }
+
+  function currentRotation(el){
+    // Czytaj z inline style (to, co realnie ustawiliśmy) — nigdy z computed style,
+    // bo computed style podczas hovera pokazuje tymczasowy efekt "uniesienia" (rotate(0)).
+    if(el.style.transform){
+      const m = el.style.transform.match(/rotate\(([-\d.]+)deg\)/);
+      if(m) return parseFloat(m[1]);
+    }
+    return parseFloat(el.dataset.baseRotate || '0');
+  }
+
+  function recordState(el){
+    const { key, sectionId, tag } = selectorFor(el);
+    const cs = getComputedStyle(el);
+    tileState.set(key, {
+      sectionId, tag,
+      left: el.style.left || null,
+      top: el.style.top || null,
+      width: currentWidthPct(el).toFixed(2) + '%',
+      rotate: Math.round(currentRotation(el) * 10) / 10,
+      aspect: el.dataset.baseAspect || cs.aspectRatio,
+      zIndex: el.dataset.baseZ || cs.zIndex
+    });
+  }
+
+  // Wspólne uchwyty, "nad wszystkim" (nie uwięzione wewnątrz konkretnego zdjęcia) —
+  // dzięki temu obrót/resize działa zawsze na tym zdjęciu, na które właśnie patrzysz,
+  // nawet jeśli leży pod innym w stosie.
+  const tileControls = document.getElementById('ep-tile-controls');
+  const activeNameEl = document.getElementById('ep-active-name');
+  const rotateSlider = document.getElementById('ep-rotate');
+  const rotateVal = document.getElementById('ep-rot-val');
+  const sizeSlider = document.getElementById('ep-size');
+  const sizeVal = document.getElementById('ep-size-val');
+
+  let activeEl = null;
+  let mode = null, startX = 0, startY = 0, startLeft = 0, startTop = 0, parentRect = null, dragElW = 0, dragElH = 0;
+
+  function currentWidthPct(el){
+    if(el.style.width && el.style.width.indexOf('%') !== -1) return parseFloat(el.style.width);
+    const parent = el.offsetParent || el.parentElement;
+    const parentWidth = parent.getBoundingClientRect().width;
+    const elWidth = parseFloat(getComputedStyle(el).width); // świeży pomiar, nigdy z cache'u
+    return (elWidth / parentWidth) * 100;
+  }
+
+  function setActive(el){
+    if(activeEl && activeEl !== el) activeEl.classList.remove('edit-active');
+    activeEl = el;
+    activeEl.classList.add('edit-active');
+    tileControls.style.display = 'block';
+    const { sectionId, tag } = selectorFor(el);
+    activeNameEl.textContent = sectionId + ' — ' + tag;
+    rotateSlider.value = Math.round(currentRotation(el));
+    rotateVal.textContent = Math.round(currentRotation(el)) + '°';
+    const w = Math.round(currentWidthPct(el));
+    sizeSlider.value = w;
+    sizeVal.textContent = w + '%';
+  }
+
+  document.querySelectorAll('.tile, .solo-photo').forEach(function(el){
+    el.addEventListener('mousedown', function(e){
+      if(!document.body.classList.contains('edit-mode')) return;
+      e.preventDefault();
+      e.stopPropagation();
+      setActive(el);
+      startDrag(e);
+    });
+  });
+
+  document.addEventListener('wheel', function(e){
+    if(!document.body.classList.contains('edit-mode')) return;
+
+    // Zdjęcie: Ctrl+scroll = obrót, sam scroll = zmiana rozmiaru.
+    const tile = e.target.closest('.tile, .solo-photo');
+    if(tile){
+      e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation();
+      if(activeEl !== tile) setActive(tile);
+      if(e.ctrlKey){
+        const cur = currentRotation(tile);
+        const dir = e.deltaY > 0 ? 1 : -1;
+        const next = Math.round(cur + dir);
+        tile.style.setProperty('transform', 'rotate(' + next + 'deg)', 'important');
+        rotateSlider.value = Math.max(-45, Math.min(45, next));
+        rotateVal.textContent = next + '°';
+      } else {
+        const curW = currentWidthPct(tile);
+        const dir = e.deltaY > 0 ? -1 : 1;
+        const next = Math.max(15, Math.min(100, Math.round(curW) + dir));
+        tile.style.width = next + '%';
+        sizeSlider.value = next;
+        sizeVal.textContent = next + '%';
+      }
+      recordState(tile);
+      return;
+    }
+
+    // Tekst: sam scroll = skala tekstu (z zachowaniem wybranego punktu odniesienia).
+    const textBlock = e.target.closest('.project-content, .inner');
+    if(textBlock && !e.ctrlKey){
+      e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation();
+      const sid = currentSectionId();
+      if(!sid) return;
+      const st = getTextState(sid);
+      st.scale = Math.max(0.7, Math.min(1.6, +(st.scale - e.deltaY * 0.001).toFixed(3)));
+      applyTextTransform(sid, textBlock);
+      txtScaleInput.value = st.scale;
+      txtScaleVal.textContent = Math.round(st.scale*100) + '%';
+      return;
+    }
+
+    // Puste miejsce w kontenerze zdjęć (nie samo zdjęcie): sam scroll = rozmiar kontenera.
+    const media = e.target.closest('.project-media');
+    if(media && !e.ctrlKey){
+      e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation();
+      const sid = currentSectionId();
+      if(!sid) return;
+      const cur = containerState.has(sid) ? containerState.get(sid) : Math.round(pxToRem(media.getBoundingClientRect().width));
+      const next = Math.max(20, Math.min(70, cur - Math.round(e.deltaY * 0.03)));
+      containerState.set(sid, next);
+      media.style.flexBasis = next + 'rem';
+      media.style.maxWidth = next + 'rem';
+      const collage = media.querySelector('.tile-collage');
+      if(collage){ collage.style.width = next + 'rem'; collage.style.maxWidth = 'none'; }
+      const solo = media.querySelector('.solo-photo');
+      if(solo){ solo.style.maxWidth = next + 'rem'; }
+      containerSlider.value = next;
+      containerVal.textContent = next + 'rem';
+      return;
+    }
+  }, { passive: false, capture: true });
+
+  rotateSlider.addEventListener('input', function(){
+    if(!activeEl) return;
+    const deg = parseInt(rotateSlider.value, 10);
+    rotateVal.textContent = deg + '°';
+    activeEl.style.setProperty('transform', 'rotate(' + deg + 'deg)', 'important');
+    recordState(activeEl);
+  });
+  sizeSlider.addEventListener('input', function(){
+    if(!activeEl) return;
+    const pct = parseInt(sizeSlider.value, 10);
+    sizeVal.textContent = pct + '%';
+    activeEl.style.width = pct + '%';
+    recordState(activeEl);
+  });
+
+  function startDrag(e){
+    if(!activeEl || activeEl.classList.contains('solo-photo')) return;
+    mode = 'move';
+    startX = e.clientX; startY = e.clientY;
+    const cs = getComputedStyle(activeEl);
+    parentRect = (activeEl.offsetParent || activeEl.parentElement).getBoundingClientRect();
+    // getComputedStyle().left/top/width/height odzwierciedlają prawdziwą pozycję i rozmiar
+    // SPRZED obrotu — w przeciwieństwie do getBoundingClientRect(), które dla obróconego
+    // elementu zwraca większy, przesunięty "bounding box". Dzięki temu przy starcie
+    // przeciągania nie ma skoku zależnego od kąta obrotu zdjęcia.
+    startLeft = parseFloat(cs.left) || 0;
+    startTop = parseFloat(cs.top) || 0;
+    dragElW = parseFloat(cs.width);
+    dragElH = parseFloat(cs.height);
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup', onUp);
+  }
+
+  function onMove(e){
+    if(!mode || !activeEl) return;
+    const dx = e.clientX - startX, dy = e.clientY - startY;
+    let leftPx = startLeft + dx, topPx = startTop + dy;
+    const viewportRect = { left: leftPx + parentRect.left, top: topPx + parentRect.top, width: dragElW, height: dragElH };
+    const snapped = snapToCenter(viewportRect, parentRect);
+    leftPx = snapped.left - parentRect.left;
+    topPx = snapped.top - parentRect.top;
+    const leftPct = (leftPx / parentRect.width) * 100;
+    const topPct = (topPx / parentRect.height) * 100;
+    activeEl.style.left = leftPct.toFixed(2) + '%';
+    activeEl.style.top = topPct.toFixed(2) + '%';
+    activeEl.style.right = 'auto'; activeEl.style.bottom = 'auto';
+    recordState(activeEl);
+  }
+
+  function onUp(){
+    mode = null;
+    document.removeEventListener('mousemove', onMove);
+    document.removeEventListener('mouseup', onUp);
+    hideGuides();
+  }
+
+
+  const textEditState = new Map(); // data-i18n key -> nowy tekst
+  document.querySelectorAll('[data-i18n]').forEach(function(el){
+    el.dataset.origText = el.textContent;
+    el.addEventListener('input', function(){
+      const key = el.getAttribute('data-i18n');
+      if(el.textContent.trim() === el.dataset.origText.trim()) textEditState.delete(key);
+      else textEditState.set(key, el.textContent);
+    });
+    el.addEventListener('keydown', function(e){
+      if(e.key === 'Enter' && el.tagName !== 'P') e.preventDefault(); // nagłówki/etykiety bez Entera
+    });
+  });
+
+  toggleBtn.addEventListener('click', function(){
+    const on = document.body.classList.toggle('edit-mode');
+    toggleBtn.classList.toggle('active');
+    document.querySelectorAll('[data-i18n]').forEach(function(el){
+      el.contentEditable = on;
+    });
+  });
+
+  function currentSectionId(){
+    const active = document.querySelector('.project-slide.in-view, section.in-view');
+    return active ? active.id : (document.querySelector('section[id]') || {}).id;
+  }
+
+  const containerState = new Map(); // sectionId -> rem value
+  const containerSlider = document.getElementById('ep-container-size');
+  const containerVal = document.getElementById('ep-container-val');
+  const containerSectionLabel = document.getElementById('ep-container-section');
+  let containerSyncedFor = null;
+
+  function getMediaEl(sid){
+    return document.querySelector('#' + sid + ' .project-media');
+  }
+  function pxToRem(px){ return px / parseFloat(getComputedStyle(document.documentElement).fontSize); }
+
+  function syncContainerSlider(){
+    const sid = currentSectionId();
+    if(!sid) return;
+    containerSectionLabel.textContent = sid;
+    if(containerState.has(sid)){
+      containerSlider.value = containerState.get(sid);
+    } else {
+      const media = getMediaEl(sid);
+      if(media){
+        const remWidth = Math.round(pxToRem(media.getBoundingClientRect().width));
+        containerSlider.value = Math.min(70, Math.max(20, remWidth));
+      }
+    }
+    containerVal.textContent = containerSlider.value + 'rem';
+    containerSyncedFor = sid;
+  }
+  setInterval(function(){
+    if(!document.body.classList.contains('edit-mode')) return;
+    if(currentSectionId() !== containerSyncedFor) syncContainerSlider();
+  }, 400);
+
+  containerSlider.addEventListener('input', function(){
+    const sid = currentSectionId();
+    if(!sid) return;
+    const rem = parseInt(containerSlider.value, 10);
+    containerVal.textContent = rem + 'rem';
+    containerState.set(sid, rem);
+    const media = getMediaEl(sid);
+    if(media){
+      media.style.flexBasis = rem + 'rem';
+      media.style.maxWidth = rem + 'rem';
+    }
+    const collage = document.querySelector('#' + sid + ' .tile-collage');
+    if(collage){ collage.style.width = rem + 'rem'; collage.style.maxWidth = 'none'; }
+    const solo = document.querySelector('#' + sid + ' .solo-photo');
+    if(solo){ solo.style.maxWidth = rem + 'rem'; }
+  });
+
+  const textState = new Map(); // sectionId -> {scale,x,y}
+  function getTextState(sid){
+    if(!textState.has(sid)) textState.set(sid, { scale:1, x:0, y:0 });
+    return textState.get(sid);
+  }
+  function applyTextTransform(sid, elDirect){
+    const st = getTextState(sid);
+    const content = elDirect || document.querySelector('#' + sid + ' .project-content, #' + sid + ' .inner');
+    if(content){
+      const origin = document.getElementById('ep-txt-center').checked ? 'center' : 'top left';
+      content.style.transformOrigin = origin;
+      content.style.transform = 'translate(' + st.x + 'px,' + st.y + 'px) scale(' + st.scale + ')';
+    }
+  }
+
+  const mediaPosState = new Map(); // sectionId -> {x,y}
+  function getMediaPos(sid){
+    if(!mediaPosState.has(sid)) mediaPosState.set(sid, { x:0, y:0 });
+    return mediaPosState.get(sid);
+  }
+  function applyMediaTransform(sid, elDirect){
+    const st = getMediaPos(sid);
+    const media = elDirect || document.querySelector('#' + sid + ' .project-media');
+    if(media) media.style.transform = 'translate(' + st.x + 'px,' + st.y + 'px)';
+  }
+
+  // Przeciąganie myszką całych bloków (tekst / kontener zdjęć), z synchronizacją suwaków.
+  // Zoptymalizowane: żadnych zapytań do DOM ani odczytów layoutu w trakcie ruchu myszy —
+  // wszystko co potrzebne mierzymy raz, na starcie przeciągania.
+  function setupBlockDrag(el, getState, applyFn, xSlider, ySlider, xVal, yVal){
+    let dragging = false, sx = 0, sy = 0, ox = 0, oy = 0, rowRect = null, elW = 0, elH = 0, elLeft0 = 0, elTop0 = 0;
+    let pendingX = 0, pendingY = 0, rafScheduled = false;
+
+    function frame(){
+      rafScheduled = false;
+      if(!dragging) return;
+      let x = pendingX, y = pendingY;
+      // Pozycja elementu (bez ponownego mierzenia DOM) na bazie startowej + przesunięcia.
+      const curLeft = elLeft0 + (x - ox), curTop = elTop0 + (y - oy);
+      const rect = { left: curLeft, top: curTop, width: elW, height: elH };
+      const snapped = snapToCenter(rect, rowRect);
+      if(snapped.snappedX) x += Math.round(snapped.left - curLeft);
+      if(snapped.snappedY) y += Math.round(snapped.top - curTop);
+      const st = getState(el.dataset.editSid);
+      st.x = x; st.y = y;
+      applyFn(el.dataset.editSid, el);
+      if(xSlider){ xSlider.value = Math.max(-200, Math.min(200, x)); xVal.textContent = xSlider.value + 'px'; }
+      if(ySlider){ ySlider.value = Math.max(-200, Math.min(200, y)); yVal.textContent = ySlider.value + 'px'; }
+    }
+
+    el.addEventListener('mousedown', function(e){
+      if(!document.body.classList.contains('edit-mode')) return;
+      if(e.target.tagName === 'A' || e.target.tagName === 'BUTTON' || e.target.closest('[data-i18n]')) return;
+      e.preventDefault();
+      const sid = currentSectionId();
+      if(!sid || el.closest('section[id]').id !== sid) return;
+      el.dataset.editSid = sid;
+      dragging = true;
+      sx = e.clientX; sy = e.clientY;
+      const st = getState(sid);
+      ox = st.x; oy = st.y;
+      const row = el.closest('.project-row') || el.closest('section');
+      rowRect = row.getBoundingClientRect();
+      const r = el.getBoundingClientRect(); // jeden pomiar na start, nie w trakcie ruchu
+      elW = r.width; elH = r.height;
+      elLeft0 = r.left; elTop0 = r.top;
+      function onMove(ev){
+        if(!dragging) return;
+        pendingX = Math.round(ox + (ev.clientX - sx));
+        pendingY = Math.round(oy + (ev.clientY - sy));
+        if(!rafScheduled){ rafScheduled = true; requestAnimationFrame(frame); }
+      }
+      function onUp(){
+        dragging = false;
+        document.removeEventListener('mousemove', onMove);
+        document.removeEventListener('mouseup', onUp);
+        hideGuides();
+      }
+      document.addEventListener('mousemove', onMove);
+      document.addEventListener('mouseup', onUp);
+    });
+  }
+
+  const gapState = new Map(); // sectionId -> rem
+  const mediaXInput = document.getElementById('ep-media-x');
+  const mediaYInput = document.getElementById('ep-media-y');
+  const mediaXVal = document.getElementById('ep-media-x-val');
+  const mediaYVal = document.getElementById('ep-media-y-val');
+  const textXInput = document.getElementById('ep-text-x');
+  const textYInput = document.getElementById('ep-text-y');
+  const textXVal = document.getElementById('ep-text-x-val');
+  const textYVal = document.getElementById('ep-text-y-val');
+  const gapInput = document.getElementById('ep-gap');
+  const gapVal = document.getElementById('ep-gap-val');
+
+  document.querySelectorAll('.project-content, .inner').forEach(function(el){
+    setupBlockDrag(el, getTextState, applyTextTransform, textXInput, textYInput, textXVal, textYVal);
+  });
+  document.querySelectorAll('.project-media').forEach(function(el){
+    setupBlockDrag(el, getMediaPos, applyMediaTransform, mediaXInput, mediaYInput, mediaXVal, mediaYVal);
+  });
+
+  mediaXInput.addEventListener('input', function(){
+    const sid = currentSectionId(); if(!sid) return;
+    getMediaPos(sid).x = parseInt(mediaXInput.value, 10);
+    mediaXVal.textContent = mediaXInput.value + 'px';
+    applyMediaTransform(sid);
+  });
+  mediaYInput.addEventListener('input', function(){
+    const sid = currentSectionId(); if(!sid) return;
+    getMediaPos(sid).y = parseInt(mediaYInput.value, 10);
+    mediaYVal.textContent = mediaYInput.value + 'px';
+    applyMediaTransform(sid);
+  });
+  textXInput.addEventListener('input', function(){
+    const sid = currentSectionId(); if(!sid) return;
+    getTextState(sid).x = parseInt(textXInput.value, 10);
+    textXVal.textContent = textXInput.value + 'px';
+    applyTextTransform(sid);
+  });
+  textYInput.addEventListener('input', function(){
+    const sid = currentSectionId(); if(!sid) return;
+    getTextState(sid).y = parseInt(textYInput.value, 10);
+    textYVal.textContent = textYInput.value + 'px';
+    applyTextTransform(sid);
+  });
+  gapInput.addEventListener('input', function(){
+    const sid = currentSectionId(); if(!sid) return;
+    const rem = parseFloat(gapInput.value);
+    gapVal.textContent = rem + 'rem';
+    gapState.set(sid, rem);
+    const row = document.querySelector('#' + sid + ' .project-row');
+    if(row) row.style.gap = rem + 'rem';
+  });
+
+  document.getElementById('ep-txt-center').addEventListener('change', function(){
+    const sid = currentSectionId();
+    if(sid) applyTextTransform(sid);
+  });
+
+  txtScaleInput.addEventListener('input', function(){
+    const val = parseFloat(txtScaleInput.value);
+    txtScaleVal.textContent = Math.round(val*100) + '%';
+    const sid = currentSectionId();
+    if(!sid) return;
+    getTextState(sid).scale = val;
+    applyTextTransform(sid);
+  });
+
+  document.getElementById('ep-generate').addEventListener('click', function(){
+    let css = '';
+    containerState.forEach(function(rem, sid){
+      css += '#' + sid + ' .project-media{ flex-basis:' + rem + 'rem; max-width:' + rem + 'rem; }\n';
+      css += '#' + sid + ' .tile-collage{ width:' + rem + 'rem; max-width:none; }\n';
+    });
+    tileState.forEach(function(v){
+      const posProps = [];
+      if(v.top) posProps.push('top:' + v.top + ';');
+      if(v.left) posProps.push('left:' + v.left + ';');
+      css += '#' + v.sectionId + ' .' + v.tag + '{ width:' + v.width + '; aspect-ratio:' + v.aspect + '; ' +
+             posProps.join(' ') + ' transform:rotate(' + v.rotate + 'deg); z-index:' + v.zIndex + '; }\n';
+    });
+    const txtOrigin = document.getElementById('ep-txt-center').checked ? 'center' : 'top left';
+    textState.forEach(function(st, sid){
+      css += '#' + sid + ' .project-content{ transform:translate(' + st.x + 'px,' + st.y + 'px) scale(' + st.scale + '); transform-origin:' + txtOrigin + '; }\n';
+    });
+    mediaPosState.forEach(function(st, sid){
+      if(st.x !== 0 || st.y !== 0){
+        css += '#' + sid + ' .project-media{ transform:translate(' + st.x + 'px,' + st.y + 'px); }\n';
+      }
+    });
+    gapState.forEach(function(rem, sid){
+      css += '#' + sid + ' .project-row{ gap:' + rem + 'rem; }\n';
+    });
+    if(textEditState.size){
+      css += '\n/* Zmieniony tekst (podmień ręcznie w HTML przy tym data-i18n="..."): */\n';
+      textEditState.forEach(function(newText, key){
+        css += '  ' + key + ': "' + newText.replace(/"/g,'\\"') + '"\n';
+      });
+    }
+    outputBox.value = css || '/* Nie wprowadzono jeszcze żadnych zmian. */';
+  });
+
+  document.getElementById('ep-copy').addEventListener('click', function(){
+    outputBox.select();
+    document.execCommand('copy');
+  });
+
+  document.getElementById('ep-reset').addEventListener('click', function(){
+    document.querySelectorAll('.tile, .solo-photo').forEach(function(el){
+      el.style.left = ''; el.style.top = ''; el.style.right = ''; el.style.bottom = '';
+      el.style.width = ''; el.style.transform = '';
+      el.classList.remove('edit-active');
+    });
+    document.querySelectorAll('.project-content, .inner').forEach(function(el){
+      el.style.transform = ''; el.style.transformOrigin = '';
+    });
+    document.querySelectorAll('.project-media').forEach(function(el){
+      el.style.transform = ''; el.style.flexBasis = ''; el.style.maxWidth = '';
+    });
+    document.querySelectorAll('.tile-collage').forEach(function(el){
+      el.style.width = ''; el.style.maxWidth = '';
+    });
+    document.querySelectorAll('.project-row').forEach(function(el){ el.style.gap = ''; });
+    document.querySelectorAll('[data-i18n]').forEach(function(el){
+      if(el.dataset.origText !== undefined) el.textContent = el.dataset.origText;
+    });
+    textEditState.clear();
+    tileState.clear(); textState.clear(); containerState.clear(); mediaPosState.clear(); gapState.clear();
+    activeEl = null;
+    tileControls.style.display = 'none';
+    outputBox.value = '';
+  });
+})();
+</script>
 </body>
 </html>
