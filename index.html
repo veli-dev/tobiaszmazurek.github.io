@@ -947,8 +947,8 @@
     cursor:default;
   }
   body:not(.edit-mode) .solo-photo:hover{ transform:rotate(0deg) scale(1.05); box-shadow:0 28px 55px -18px rgba(0,0,0,.85); }
-  #project-3 .project-media{ flex-basis:40rem; }
-  #project-3 .solo-photo{ width:86%; max-width:40rem; }
+  #project-3 .project-media{ flex-basis:46rem; }
+  #project-3 .solo-photo{ width:86%; max-width:46rem; }
 
   /* Washi-tape accent — a small strip that makes a photo look physically taped down. */
   .tile.has-tape::before{
@@ -1002,24 +1002,37 @@
   .tile-collage[data-count="2"][data-layout="3"] .tile-b{ width:64%; aspect-ratio:16/10; bottom:7%; right:8%; transform:rotate(-5.4deg); z-index:1; }
   .tile-collage[data-count="2"][data-layout="4"] .tile-a{ width:46%; aspect-ratio:4/5; top:7%; left:8%; transform:rotate(-7.2deg); z-index:1; }
   .tile-collage[data-count="2"][data-layout="4"] .tile-b{ width:46%; aspect-ratio:4/5; bottom:7%; right:8%; transform:rotate(7.2deg); z-index:2; }
-  #project-1 .project-media{ flex-basis:39rem; }
+  #project-1 .project-media{ flex-basis:39rem; transform:translate(-35px,0px); }
   #project-1 .tile-collage{ aspect-ratio:1/0.95; width:min(39rem, calc((var(--media-max-h) - 3rem) / 0.95)); max-width:39rem; }
   #project-1 .tile-a{ width:70%; aspect-ratio:16/10; top:4%; left:4%; transform:rotate(-5deg); z-index:1; }
   #project-1 .tile-b{ width:60%; aspect-ratio:16/10; bottom:3%; right:3%; transform:rotate(4deg); z-index:2; }
-  #project-8 .project-media{ flex-basis:36rem; }
-  #project-8 .tile-collage{ aspect-ratio:1/0.95; width:min(36rem, calc((var(--media-max-h) - 3rem) / 0.95)); max-width:36rem; }
-  #project-8 .tile-a{ width:68%; aspect-ratio:16/10; top:4%; left:4%; transform:rotate(-4deg); z-index:1; }
-  #project-8 .tile-b{ width:58%; aspect-ratio:16/10; bottom:3%; right:3%; transform:rotate(3deg); z-index:2; }
-  #project-9 .project-media{ flex-basis:36rem; }
-  #project-9 .tile-collage{ aspect-ratio:1/0.95; width:min(36rem, calc((var(--media-max-h) - 3rem) / 0.95)); max-width:36rem; }
+  #project-8 .project-media{ flex-basis:42rem; transform:translate(-41px,0px); }
+  #project-8 .tile-collage{ aspect-ratio:1/0.95; width:min(42rem, calc((var(--media-max-h) - 3rem) / 0.95)); max-width:42rem; }
+  #project-8 .tile-a{ width:69%; height:46%; aspect-ratio:auto; top:3.81%; left:3.3%; transform:rotate(-4deg); z-index:1; }
+  #project-8 .tile-b{ width:60%; height:40%; aspect-ratio:auto; top:55.2%; left:35.89%; transform:rotate(3deg); z-index:2; }
+  #project-9 .project-media{ flex-basis:42rem; transform:translate(24px,0px); }
+  #project-9 .tile-collage{ aspect-ratio:1/0.95; width:min(42rem, calc((var(--media-max-h) - 3rem) / 0.95)); max-width:42rem; }
+  #project-4 .project-media{ flex-basis:37rem; transform:translate(-4px,0px); }
+  #project-4 .tile-collage{ width:min(37rem, calc((var(--media-max-h) - 3rem) / 1.15)); max-width:37rem; }
+  #project-4 .tile-a{ width:85%; height:44%; aspect-ratio:auto; top:4.22%; left:7.5%; transform:rotate(-2deg); z-index:3; }
+  #project-4 .tile-b{ width:56%; aspect-ratio:4/3; top:48.71%; left:4.17%; transform:rotate(5.4deg); z-index:1; }
+  #project-4 .tile-c{ width:56%; aspect-ratio:4/3; top:47.25%; left:42.17%; transform:rotate(-5.4deg); z-index:2; }
+  #project-5 .project-media{ flex-basis:40rem; max-width:40rem; transform:translate(-32px,0px); }
+  #project-5 .tile-collage{ width:40rem; max-width:none; }
+  #project-7 .project-media{ flex-basis:40rem; transform:translate(-22px,0px); }
+  #project-7 .tile-collage{ width:min(40rem, calc((var(--media-max-h) - 3rem) / 0.82)); max-width:40rem; }
+  #project-10 .project-media{ flex-basis:43rem; transform:translate(-57px,0px); }
+  #project-10 .tile-collage{ width:min(43rem, calc((var(--media-max-h) - 3rem) / 0.82)); max-width:43rem; }
+  #project-11 .project-media{ flex-basis:43rem; transform:translate(-1px,0px); }
+  #project-11 .tile-collage{ width:min(43rem, calc((var(--media-max-h) - 3rem) / 0.82)); max-width:43rem; }
   #project-9 .tile-a{ width:68%; aspect-ratio:16/10; top:3%; left:3%; transform:rotate(4deg); z-index:2; }
   #project-9 .tile-b{ width:58%; aspect-ratio:16/10; bottom:4%; right:4%; transform:rotate(-3deg); z-index:1; }
   /* "To moja działka" — wachlarz: jedno zdjęcie na środku (proste, na wierzchu, największe),
      reszta wygląda zza niego pod różnymi kątami, jak rozrzucone/przypięte zdjęcia na biurku. */
-  #about-technical .project-media{ flex-basis:46rem; }
+  #about-technical .project-media{ flex-basis:49rem; transform:translate(45px,0px); }
   #about-technical .tile-collage{
     position:relative;
-    width:min(46rem, calc((var(--media-max-h) - 3rem) / 1.5));
+    width:min(49rem, calc((var(--media-max-h) - 3rem) / 1.5));
     max-width:none;
     aspect-ratio:1/1.5;
     margin:2.5rem auto 0.5rem;
@@ -1027,18 +1040,18 @@
   #about-technical .tile{ transition:transform .35s cubic-bezier(.22,1,.36,1), z-index 0s; cursor:default; }
   body:not(.edit-mode) #about-technical .tile:hover{ transform:rotate(0deg) scale(1.07) !important; z-index:9 !important; }
   #about-technical .tile:hover .about-photo{ box-shadow:0 28px 55px -18px rgba(0,0,0,.85); }
-  #about-technical .tile-a{ width:50%; aspect-ratio:4/5; top:9%; left:10%; transform:rotate(6deg); z-index:1; }
-  #about-technical .tile-b{ width:40%; aspect-ratio:4/5; top:15%; left:50%; transform:rotate(-8deg); z-index:2; }
-  #about-technical .tile-c{ width:51%; aspect-ratio:4/5; top:46%; left:6%; transform:rotate(-5deg); z-index:3; }
-  #about-technical .tile-d{ width:48%; aspect-ratio:4/5; top:54%; left:40%; transform:rotate(8deg); z-index:4; }
+  #about-technical .tile-a{ width:50%; aspect-ratio:4/5; top:0.68%; left:8.08%; transform:rotate(6deg); z-index:3; }
+  #about-technical .tile-b{ width:40%; height:37%; aspect-ratio:auto; top:7.36%; left:57.4%; transform:rotate(-2deg); z-index:2; }
+  #about-technical .tile-c{ width:50%; height:45%; aspect-ratio:auto; top:41.98%; left:5.75%; transform:rotate(-3deg); z-index:4; }
+  #about-technical .tile-d{ width:48%; aspect-ratio:4/5; top:45.61%; left:52.52%; transform:rotate(8deg); z-index:1; }
   #about-technical .tile .about-photo{ width:100%; height:100%; aspect-ratio:auto; }
 
   /* "Tak to ja" — ten sam wachlarz co w "To moja działka", ale lustrzane kąty obrotu,
      żeby obie sekcje O mnie nie wyglądały identycznie mimo wspólnego wzorca. */
-  #about-life .project-media{ flex-basis:46rem; }
+  #about-life .project-media{ flex-basis:49rem; transform:translate(-45px,0px); }
   #about-life .tile-collage{
     position:relative;
-    width:min(46rem, calc((var(--media-max-h) - 3rem) / 1.42));
+    width:min(49rem, calc((var(--media-max-h) - 3rem) / 1.42));
     max-width:none;
     aspect-ratio:1/1.42;
     margin:2.5rem auto 0.5rem;
@@ -1046,10 +1059,10 @@
   #about-life .tile{ transition:transform .35s cubic-bezier(.22,1,.36,1), z-index 0s; cursor:default; }
   body:not(.edit-mode) #about-life .tile:hover{ transform:rotate(0deg) scale(1.07) !important; z-index:9 !important; }
   #about-life .tile:hover .about-photo{ box-shadow:0 28px 55px -18px rgba(0,0,0,.85); }
-  #about-life .tile-a{ width:46%; aspect-ratio:1/1; top:6%; left:40%; transform:rotate(10deg); z-index:3; }
-  #about-life .tile-b{ width:44%; aspect-ratio:1/1; top:25%; left:6%; transform:rotate(-8deg); z-index:1; }
-  #about-life .tile-c{ width:46%; aspect-ratio:1/1; top:43%; left:46%; transform:rotate(3deg); z-index:2; }
-  #about-life .tile-d{ width:46%; aspect-ratio:1/1; top:54%; left:8%; transform:rotate(-9deg); z-index:4; }
+  #about-life .tile-a{ width:45%; height:32%; aspect-ratio:auto; top:5.08%; left:47.92%; transform:rotate(-15deg); z-index:1; }
+  #about-life .tile-b{ width:45%; height:34%; aspect-ratio:auto; top:15.51%; left:7.11%; transform:rotate(11deg); z-index:2; }
+  #about-life .tile-c{ width:45%; height:32%; aspect-ratio:auto; top:41.29%; left:51.72%; transform:rotate(3deg); z-index:3; }
+  #about-life .tile-d{ width:45%; height:34%; aspect-ratio:auto; top:48.95%; left:9.18%; transform:rotate(4deg); z-index:4; }
   #about-life .tile .about-photo{ width:100%; height:100%; aspect-ratio:auto; }
 
   /* ===== 3 photos ===== */
@@ -1077,13 +1090,13 @@
   .tile-collage[data-count="4"][data-layout="2"] .tile-b{ width:44%; aspect-ratio:4/5; top:7%; right:8%; transform:rotate(-7.2deg); z-index:1; }
   .tile-collage[data-count="4"][data-layout="2"] .tile-c{ width:58%; top:7%; left:8%; height:46%; aspect-ratio:auto; bottom:7%; transform:rotate(-3.6deg); z-index:3; }
   .tile-collage[data-count="4"][data-layout="2"] .tile-d{ width:34%; aspect-ratio:4/5; bottom:7%; right:2%; transform:rotate(10.8deg); z-index:4; }
-  #project-6 .project-media{ flex:0 1 34vw; max-width:34vw; }
+  #project-6 .project-media{ flex-basis:57rem; max-width:57rem; transform:translate(38px,0px); }
   #project-6 .project-row{ gap:0.5rem; max-width:none; }
-  #project-6 .tile-collage{ width:100%; max-width:none; aspect-ratio:1/0.55; }
-  #project-6 .tile-a{ width:42%; aspect-ratio:16/9; top:2%; left:4%; transform:rotate(-3.6deg); z-index:1; }
-  #project-6 .tile-b{ width:42%; aspect-ratio:16/9; top:0%; left:54%; transform:rotate(3.6deg); z-index:2; }
-  #project-6 .tile-c{ width:42%; aspect-ratio:16/9; bottom:0%; left:4%; transform:rotate(3.6deg); z-index:3; }
-  #project-6 .tile-d{ width:42%; aspect-ratio:16/9; bottom:2%; left:54%; transform:rotate(-3.6deg); z-index:4; }
+  #project-6 .tile-collage{ width:57rem; max-width:none; aspect-ratio:1/0.55; }
+  #project-6 .tile-a{ width:47%; height:48%; aspect-ratio:auto; top:-0.3%; left:4.46%; transform:rotate(-3.6deg); z-index:1; }
+  #project-6 .tile-b{ width:47%; height:48%; aspect-ratio:auto; top:-1.67%; left:50.21%; transform:rotate(3.6deg); z-index:4; }
+  #project-6 .tile-c{ width:46%; height:47%; aspect-ratio:auto; top:47.02%; left:4.12%; transform:rotate(1deg); z-index:2; }
+  #project-6 .tile-d{ width:47%; height:48%; aspect-ratio:auto; top:45.83%; left:50.67%; transform:rotate(-4deg); z-index:3; }
   .tile-collage[data-count="4"][data-layout="4"] .tile-a{ width:58%; aspect-ratio:4/5; top:7%; left:8%; transform:rotate(-3.6deg); z-index:4; }
   .tile-collage[data-count="4"][data-layout="4"] .tile-b{ width:36%; aspect-ratio:4/5; top:7%; right:8%; transform:rotate(7.2deg); z-index:3; }
   .tile-collage[data-count="4"][data-layout="4"] .tile-c{ width:36%; aspect-ratio:4/5; bottom:7%; right:8%; transform:rotate(-7.2deg); z-index:2; }
@@ -1257,8 +1270,8 @@
   .gallery-3 img:first-child{ grid-row:1 / 3; aspect-ratio:3/4; }
   .gallery-4{ grid-template-columns:1fr 1fr; }
   .gallery-4 img:nth-child(2){ margin-top:1.375rem; }
-  #about-recommend .project-media{ flex-basis:30rem; max-width:30rem; }
-  #about-recommend .tile-collage{ width:min(30rem, calc((var(--media-max-h) - 3rem) / 0.82)); max-width:30rem; }
+  #about-recommend .project-media{ flex-basis:48rem; max-width:48rem; transform:translate(29px,0px); }
+  #about-recommend .tile-collage{ width:48rem; max-width:none; }
   #project-2 .project-media{ flex-basis:46rem; }
   #project-2 .tile-collage{ width:min(46rem, calc((var(--media-max-h) - 3rem) / 0.82)); max-width:46rem; }
   .gallery-4 img:nth-child(3){ margin-top:-0.625rem; }
@@ -1562,8 +1575,13 @@
   body.edit-mode .tile.edit-active, body.edit-mode .solo-photo.edit-active{
     outline:3px solid #C9642E;
     outline-offset:2px;
-    z-index:999 !important;
   }
+  .edit-zdebug{
+    position:absolute; top:2px; left:2px; z-index:9999;
+    background:#000; color:#0f0; font:11px monospace; padding:1px 4px;
+    border-radius:3px; pointer-events:none; display:none;
+  }
+  body.edit-mode .edit-zdebug{ display:block; }
   body.edit-mode .project-content, body.edit-mode .inner, body.edit-mode .project-media{
     outline:2px dashed rgba(255,255,255,.4);
     outline-offset:6px;
@@ -1627,6 +1645,26 @@
     padding:2px 7px; font-size:11px; font-family:monospace; white-space:nowrap;
   }
   #edit-panel .ep-legend span{ color:#9A9D9F; text-align:right; }
+  /* Jednolita skala tekstu 1.2x we wszystkich sekcjach + drobne poziome dosunięcia */
+  #hero .inner{ transform:translate(0px,-23px) scale(1.2); transform-origin:center; }
+  #career .inner{ transform:translate(0px,0px) scale(1.3); transform-origin:center; }
+  #skills .inner{ transform:translate(0px,0px) scale(1.2); transform-origin:center; }
+  #contact .inner{ transform:translate(0px,0px) scale(1.2); transform-origin:center; }
+  #project-12 .project-content{ transform:translate(0px,0px) scale(1.2); transform-origin:center; }
+  #about-recommend .project-content{ transform:translate(-24px,0px) scale(1.2); transform-origin:center; }
+  #project-1 .project-content{ transform:translate(0px,0px) scale(1.2); transform-origin:center; }
+  #project-2 .project-content{ transform:translate(-39px,0px) scale(1.2); transform-origin:center; }
+  #project-3 .project-content{ transform:translate(-45px,0px) scale(1.2); transform-origin:center; }
+  #project-4 .project-content{ transform:translate(-58px,0px) scale(1.2); transform-origin:center; }
+  #project-5 .project-content{ transform:translate(16px,0px) scale(1.2); transform-origin:center; }
+  #project-6 .project-content{ transform:translate(-41px,0px) scale(1.2); transform-origin:center; }
+  #project-7 .project-content{ transform:translate(23px,0px) scale(1.2); transform-origin:center; }
+  #project-8 .project-content{ transform:translate(14px,0px) scale(1.2); transform-origin:center; }
+  #project-9 .project-content{ transform:translate(-37px,0px) scale(1.2); transform-origin:center; }
+  #project-10 .project-content{ transform:translate(-11px,0px) scale(1.2); transform-origin:center; }
+  #project-11 .project-content{ transform:translate(-51px,0px) scale(1.2); transform-origin:center; }
+  #about-technical .project-content{ transform:translate(-14px,0px) scale(1.2); transform-origin:center; }
+  #about-life .project-content{ transform:translate(11px,0px) scale(1.2); transform-origin:center; }
 </style>
 </head>
 <body>
@@ -3030,6 +3068,20 @@
       <label>Rozmiar (szerokość) <span class="ep-val" id="ep-size-val">100%</span></label>
       <input type="range" id="ep-size" min="15" max="100" step="1" value="40">
     </div>
+    <div class="ep-row">
+      <label>Wysokość — niezależnie od szerokości <span class="ep-val" id="ep-height-val">auto</span></label>
+      <input type="range" id="ep-height" min="10" max="100" step="1" value="40">
+      <p class="ep-hint" style="margin:6px 0 0;">Rozciąga/spłaszcza kadr zdjęcia niezależnie od szerokości (samo zdjęcie się nie deformuje — obcina nadmiar, jak w Instagramie).</p>
+    </div>
+    <div class="ep-row">
+      <button type="button" id="ep-delete-tile" style="background:#B8452E;">Usuń to zdjęcie</button>
+    </div>
+  </div>
+  <div class="ep-row">
+    <label>Dodaj nowe zdjęcie do kolażu (sekcja: <span id="ep-add-section">—</span>)</label>
+    <button type="button" id="ep-add-h">+ Pozioma (16:10)</button>
+    <button type="button" id="ep-add-v">+ Pionowa (4:5)</button>
+    <p class="ep-hint" style="margin:6px 0 0;">Nowe zdjęcie pojawi się na środku z szarym placeholderem — przeciągnij/obróć/zmień rozmiar jak każde inne, a w wygenerowanym kodzie dostaniesz też gotowy fragment HTML do wklejenia.</p>
   </div>
   <div class="ep-row">
     <label>Rozmiar kontenera zdjęć (sekcja: <span id="ep-container-section">—</span>) <span class="ep-val" id="ep-container-val">—</span></label>
@@ -3066,7 +3118,11 @@
   </div>
   <div class="ep-row">
     <button type="button" id="ep-generate">Wygeneruj CSS</button>
-    <button type="button" id="ep-reset">Reset zmian</button>
+    <button type="button" id="ep-undo">Cofnij (Ctrl+Z)</button>
+  </div>
+  <div class="ep-row">
+    <button type="button" id="ep-reset-section">Reset tej sekcji</button>
+    <button type="button" id="ep-reset" style="background:#B8452E;">Reset WSZYSTKIEGO</button>
   </div>
   <div class="ep-row">
     <label>Gotowy kod (skopiuj i wklej)</label>
@@ -3077,10 +3133,13 @@
     <label>Skróty</label>
     <ul class="ep-legend">
       <li><kbd>LPM + przeciągnij</kbd><span>przesuń</span></li>
-      <li><kbd>Scroll</kbd><span>zmień rozmiar</span></li>
-      <li><kbd>Ctrl + Scroll</kbd><span>obróć (zdjęcia)</span></li>
+      <li><kbd>Scroll</kbd><span>obróć (zdjęcia)</span></li>
+      <li><kbd>Ctrl + Scroll</kbd><span>szerokość (zdjęcia)</span></li>
+      <li><kbd>Alt + Scroll</kbd><span>wysokość (zdjęcia)</span></li>
+      <li><kbd>Ctrl + Alt + Scroll</kbd><span>szerokość i wysokość naraz</span></li>
       <li><kbd>Klik na zdjęcie</kbd><span>zaznacz (suwaki)</span></li>
       <li><kbd>Klik w tekst</kbd><span>edytuj treść</span></li>
+      <li><kbd>Ctrl + Z</kbd><span>cofnij ostatnią zmianę</span></li>
     </ul>
   </div>
 </div>
@@ -3094,9 +3153,44 @@
 
   const tileState = new Map();   // selector -> {left, top, width, rotate, unit}
 
-  // Przechwycenie prawdziwych, "spoczynkowych" wartości od razu przy starcie strony —
-  // zanim jakikolwiek hover zdąży je tymczasowo podmienić (efekt uniesienia).
-  document.querySelectorAll('.tile, .solo-photo').forEach(function(el){
+  // ===== Cofnij (Ctrl+Z) =====
+  const undoStack = [];
+  function snapshot(el, extraRestore){
+    const s = {
+      left: el.style.left, top: el.style.top, right: el.style.right, bottom: el.style.bottom,
+      width: el.style.width, height: el.style.height,
+      transform: el.style.transform, aspectRatio: el.style.aspectRatio
+    };
+    undoStack.push(function(){
+      el.style.left = s.left; el.style.top = s.top; el.style.right = s.right; el.style.bottom = s.bottom;
+      el.style.width = s.width; el.style.height = s.height;
+      el.style.transform = s.transform; el.style.aspectRatio = s.aspectRatio;
+      if(extraRestore) extraRestore();
+      if(el.classList && el.classList.contains('tile')) recordState(el);
+    });
+    if(undoStack.length > 60) undoStack.shift();
+  }
+  function doUndo(){
+    const fn = undoStack.pop();
+    if(fn) fn();
+  }
+  document.addEventListener('keydown', function(e){
+    if(!document.body.classList.contains('edit-mode')) return;
+    if((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z'){
+      e.preventDefault();
+      doUndo();
+    }
+  });
+
+  const deletedTiles = new Set(); // "sectionId :: tag" usuniętych zdjęć
+  const addedTiles = new Map();   // tag -> {sectionId, orientation} nowo dodanych zdjęć
+  let addedTileCounter = 0;
+
+  function initTile(el){
+    const badge = document.createElement('div');
+    badge.className = 'edit-zdebug';
+    el.appendChild(badge);
+
     const cs = getComputedStyle(el);
     let baseRotate = 0;
     const m = cs.transform.match(/^matrix\(([^)]+)\)$/);
@@ -3108,7 +3202,24 @@
     el.dataset.baseZ = cs.zIndex;
     el.dataset.baseWidth = cs.width;
     el.dataset.baseAspect = cs.aspectRatio;
-  });
+
+    el.addEventListener('mousedown', function(e){
+      if(!document.body.classList.contains('edit-mode')) return;
+      e.preventDefault();
+      e.stopPropagation();
+      setActive(el);
+      startDrag(e);
+    });
+  }
+  document.querySelectorAll('.tile, .solo-photo').forEach(initTile);
+
+  setInterval(function(){
+    if(!document.body.classList.contains('edit-mode')) return;
+    document.querySelectorAll('.tile, .solo-photo').forEach(function(el){
+      const badge = el.querySelector('.edit-zdebug');
+      if(badge) badge.textContent = 'z:' + getComputedStyle(el).zIndex;
+    });
+  }, 300);
 
 
   // ===== Prowadnice środka (jak w narzędziach graficznych) =====
@@ -3172,9 +3283,10 @@
       left: el.style.left || null,
       top: el.style.top || null,
       width: currentWidthPct(el).toFixed(2) + '%',
+      height: (el.style.height && el.style.height.indexOf('%') !== -1) ? el.style.height : null,
       rotate: Math.round(currentRotation(el) * 10) / 10,
-      aspect: el.dataset.baseAspect || cs.aspectRatio,
-      zIndex: el.dataset.baseZ || cs.zIndex
+      aspect: (el.style.aspectRatio === 'auto') ? 'auto' : (el.dataset.baseAspect || cs.aspectRatio),
+      zIndex: el.style.zIndex || el.dataset.baseZ || cs.zIndex
     });
   }
 
@@ -3198,11 +3310,21 @@
     const elWidth = parseFloat(getComputedStyle(el).width); // świeży pomiar, nigdy z cache'u
     return (elWidth / parentWidth) * 100;
   }
+  function currentHeightPct(el){
+    if(el.style.height && el.style.height.indexOf('%') !== -1) return parseFloat(el.style.height);
+    const parent = el.offsetParent || el.parentElement;
+    const parentHeight = parent.getBoundingClientRect().height;
+    const elHeight = parseFloat(getComputedStyle(el).height);
+    return (elHeight / parentHeight) * 100;
+  }
 
+  let zCounter = 10;
   function setActive(el){
     if(activeEl && activeEl !== el) activeEl.classList.remove('edit-active');
     activeEl = el;
     activeEl.classList.add('edit-active');
+    zCounter += 1;
+    el.style.setProperty('z-index', zCounter, 'important');
     tileControls.style.display = 'block';
     const { sectionId, tag } = selectorFor(el);
     activeNameEl.textContent = sectionId + ' — ' + tag;
@@ -3211,6 +3333,9 @@
     const w = Math.round(currentWidthPct(el));
     sizeSlider.value = w;
     sizeVal.textContent = w + '%';
+    const h = Math.round(currentHeightPct(el));
+    heightSlider.value = h;
+    heightVal.textContent = el.style.height ? h + '%' : 'auto (' + h + '%)';
   }
 
   document.querySelectorAll('.tile, .solo-photo').forEach(function(el){
@@ -3226,25 +3351,45 @@
   document.addEventListener('wheel', function(e){
     if(!document.body.classList.contains('edit-mode')) return;
 
-    // Zdjęcie: Ctrl+scroll = obrót, sam scroll = zmiana rozmiaru.
+    // Zdjęcie: scroll = obrót, Ctrl+scroll = szerokość, Alt+scroll = wysokość, Ctrl+Alt = oba naraz.
     const tile = e.target.closest('.tile, .solo-photo');
     if(tile){
       e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation();
       if(activeEl !== tile) setActive(tile);
-      if(e.ctrlKey){
-        const cur = currentRotation(tile);
-        const dir = e.deltaY > 0 ? 1 : -1;
-        const next = Math.round(cur + dir);
-        tile.style.setProperty('transform', 'rotate(' + next + 'deg)', 'important');
-        rotateSlider.value = Math.max(-45, Math.min(45, next));
-        rotateVal.textContent = next + '°';
-      } else {
+      snapshot(tile);
+      if(e.ctrlKey && e.altKey){
+        const dir = e.deltaY > 0 ? -1 : 1;
+        const curW = currentWidthPct(tile);
+        const curH = currentHeightPct(tile);
+        const nextW = Math.max(15, Math.min(100, Math.round(curW) + dir));
+        const nextH = Math.max(10, Math.min(100, Math.round(curH) + dir));
+        tile.style.aspectRatio = 'auto';
+        tile.style.width = nextW + '%';
+        tile.style.height = nextH + '%';
+        sizeSlider.value = nextW; sizeVal.textContent = nextW + '%';
+        heightSlider.value = nextH; heightVal.textContent = nextH + '%';
+      } else if(e.ctrlKey){
         const curW = currentWidthPct(tile);
         const dir = e.deltaY > 0 ? -1 : 1;
         const next = Math.max(15, Math.min(100, Math.round(curW) + dir));
         tile.style.width = next + '%';
         sizeSlider.value = next;
         sizeVal.textContent = next + '%';
+      } else if(e.altKey){
+        const curH = currentHeightPct(tile);
+        const dir = e.deltaY > 0 ? -1 : 1;
+        const next = Math.max(10, Math.min(100, Math.round(curH) + dir));
+        tile.style.aspectRatio = 'auto';
+        tile.style.height = next + '%';
+        heightSlider.value = next;
+        heightVal.textContent = next + '%';
+      } else {
+        const cur = currentRotation(tile);
+        const dir = e.deltaY > 0 ? 1 : -1;
+        const next = Math.round(cur + dir);
+        tile.style.setProperty('transform', 'rotate(' + next + 'deg)', 'important');
+        rotateSlider.value = Math.max(-45, Math.min(45, next));
+        rotateVal.textContent = next + '°';
       }
       recordState(tile);
       return;
@@ -3285,6 +3430,7 @@
     }
   }, { passive: false, capture: true });
 
+  rotateSlider.addEventListener('mousedown', function(){ if(activeEl) snapshot(activeEl); });
   rotateSlider.addEventListener('input', function(){
     if(!activeEl) return;
     const deg = parseInt(rotateSlider.value, 10);
@@ -3292,6 +3438,7 @@
     activeEl.style.setProperty('transform', 'rotate(' + deg + 'deg)', 'important');
     recordState(activeEl);
   });
+  sizeSlider.addEventListener('mousedown', function(){ if(activeEl) snapshot(activeEl); });
   sizeSlider.addEventListener('input', function(){
     if(!activeEl) return;
     const pct = parseInt(sizeSlider.value, 10);
@@ -3300,8 +3447,31 @@
     recordState(activeEl);
   });
 
+  const heightSlider = document.getElementById('ep-height');
+  const heightVal = document.getElementById('ep-height-val');
+  heightSlider.addEventListener('mousedown', function(){ if(activeEl) snapshot(activeEl); });
+  heightSlider.addEventListener('input', function(){
+    if(!activeEl) return;
+    const pct = parseInt(heightSlider.value, 10);
+    heightVal.textContent = pct + '%';
+    activeEl.style.aspectRatio = 'auto'; // rozprzęga wysokość od szerokości
+    activeEl.style.height = pct + '%';
+    recordState(activeEl);
+  });
+
+  document.getElementById('ep-delete-tile').addEventListener('click', function(){
+    if(!activeEl) return;
+    const { sectionId, tag } = selectorFor(activeEl);
+    deletedTiles.add(sectionId + ' :: ' + tag);
+    activeEl.style.setProperty('display', 'none', 'important');
+    activeEl.classList.remove('edit-active');
+    activeEl = null;
+    tileControls.style.display = 'none';
+  });
+
   function startDrag(e){
     if(!activeEl || activeEl.classList.contains('solo-photo')) return;
+    snapshot(activeEl);
     mode = 'move';
     startX = e.clientX; startY = e.clientY;
     const cs = getComputedStyle(activeEl);
@@ -3368,6 +3538,36 @@
     return active ? active.id : (document.querySelector('section[id]') || {}).id;
   }
 
+  function addNewTile(orientation){
+    const sid = currentSectionId();
+    if(!sid) return;
+    const collage = document.querySelector('#' + sid + ' .tile-collage');
+    if(!collage){
+      alert('Ta sekcja nie ma kolażu wielu zdjęć (może mieć tylko jedno zdjęcie) — dodawanie nie jest tu wspierane.');
+      return;
+    }
+    addedTileCounter++;
+    const tag = 'tile-new' + addedTileCounter;
+    const el = document.createElement('div');
+    el.className = 'tile ' + tag;
+    el.style.position = 'absolute';
+    el.style.width = '30%';
+    el.style.aspectRatio = orientation === 'h' ? '16/10' : '4/5';
+    el.style.top = '35%';
+    el.style.left = '35%';
+    el.style.transform = 'rotate(0deg)';
+    el.style.background = 'repeating-linear-gradient(45deg,#555,#555 10px,#777 10px,#777 20px)';
+    el.style.border = '0.5rem solid #F2EEE6';
+    el.style.borderWidth = '0.5rem 0.5rem 1.75rem 0.5rem';
+    el.style.boxSizing = 'border-box';
+    collage.appendChild(el);
+    initTile(el);
+    addedTiles.set(tag, { sectionId: sid, orientation: orientation === 'h' ? '16/10' : '4/5' });
+    setActive(el);
+  }
+  document.getElementById('ep-add-h').addEventListener('click', function(){ addNewTile('h'); });
+  document.getElementById('ep-add-v').addEventListener('click', function(){ addNewTile('v'); });
+
   const containerState = new Map(); // sectionId -> rem value
   const containerSlider = document.getElementById('ep-container-size');
   const containerVal = document.getElementById('ep-container-val');
@@ -3383,6 +3583,7 @@
     const sid = currentSectionId();
     if(!sid) return;
     containerSectionLabel.textContent = sid;
+    document.getElementById('ep-add-section').textContent = sid;
     if(containerState.has(sid)){
       containerSlider.value = containerState.get(sid);
     } else {
@@ -3393,6 +3594,9 @@
       }
     }
     containerVal.textContent = containerSlider.value + 'rem';
+    const st = getTextState(sid);
+    txtScaleInput.value = st.scale;
+    txtScaleVal.textContent = Math.round(st.scale * 100) + '%';
     containerSyncedFor = sid;
   }
   setInterval(function(){
@@ -3418,8 +3622,25 @@
   });
 
   const textState = new Map(); // sectionId -> {scale,x,y}
+  function parseTransformState(el){
+    const t = getComputedStyle(el).transform;
+    let x = 0, y = 0, scale = 1;
+    if(t && t !== 'none'){
+      const m = t.match(/^matrix\(([^)]+)\)$/);
+      if(m){
+        const v = m[1].split(',').map(parseFloat);
+        scale = Math.sqrt(v[0]*v[0] + v[1]*v[1]) || 1; // wielkość skali (bez rotacji na tych blokach)
+        x = v[4] || 0; y = v[5] || 0;
+      }
+    }
+    return { x, y, scale };
+  }
+
   function getTextState(sid){
-    if(!textState.has(sid)) textState.set(sid, { scale:1, x:0, y:0 });
+    if(!textState.has(sid)){
+      const content = document.querySelector('#' + sid + ' .project-content, #' + sid + ' .inner');
+      textState.set(sid, content ? parseTransformState(content) : { scale:1, x:0, y:0 });
+    }
     return textState.get(sid);
   }
   function applyTextTransform(sid, elDirect){
@@ -3434,7 +3655,11 @@
 
   const mediaPosState = new Map(); // sectionId -> {x,y}
   function getMediaPos(sid){
-    if(!mediaPosState.has(sid)) mediaPosState.set(sid, { x:0, y:0 });
+    if(!mediaPosState.has(sid)){
+      const media = document.querySelector('#' + sid + ' .project-media');
+      const parsed = media ? parseTransformState(media) : { x:0, y:0 };
+      mediaPosState.set(sid, { x: parsed.x, y: parsed.y });
+    }
     return mediaPosState.get(sid);
   }
   function applyMediaTransform(sid, elDirect){
@@ -3573,15 +3798,28 @@
       css += '#' + sid + ' .tile-collage{ width:' + rem + 'rem; max-width:none; }\n';
     });
     tileState.forEach(function(v){
+      if(deletedTiles.has(v.sectionId + ' :: ' + v.tag)) return; // usunięte - nie eksportuj pozycji
       const posProps = [];
       if(v.top) posProps.push('top:' + v.top + ';');
       if(v.left) posProps.push('left:' + v.left + ';');
-      css += '#' + v.sectionId + ' .' + v.tag + '{ width:' + v.width + '; aspect-ratio:' + v.aspect + '; ' +
+      const heightProp = v.height ? ' height:' + v.height + ';' : '';
+      css += '#' + v.sectionId + ' .' + v.tag + '{ width:' + v.width + ';' + heightProp + ' aspect-ratio:' + v.aspect + '; ' +
              posProps.join(' ') + ' transform:rotate(' + v.rotate + 'deg); z-index:' + v.zIndex + '; }\n';
     });
+    if(deletedTiles.size){
+      css += '\n/* Usunięte zdjęcia — skasuj ręcznie odpowiedni blok <div class="tile ..."> w HTML: */\n';
+      deletedTiles.forEach(function(k){ css += '  ' + k + '\n'; });
+    }
+    if(addedTiles.size){
+      css += '\n/* Nowe zdjęcia — dodaj ten fragment HTML do .tile-collage w danej sekcji (podmień obrazek na właściwy plik): */\n';
+      addedTiles.forEach(function(info, tag){
+        css += '  <div class="tile ' + tag + '"><div class="about-photo" style="background-image:url(\'images/TWOJ-PLIK.jpg?v=1\')"></div></div>  /* sekcja: ' + info.sectionId + ', proporcje: ' + info.orientation + ' */\n';
+      });
+    }
     const txtOrigin = document.getElementById('ep-txt-center').checked ? 'center' : 'top left';
     textState.forEach(function(st, sid){
-      css += '#' + sid + ' .project-content{ transform:translate(' + st.x + 'px,' + st.y + 'px) scale(' + st.scale + '); transform-origin:' + txtOrigin + '; }\n';
+      const sel = document.querySelector('#' + sid + ' .project-content') ? '.project-content' : '.inner';
+      css += '#' + sid + ' ' + sel + '{ transform:translate(' + st.x + 'px,' + st.y + 'px) scale(' + st.scale + '); transform-origin:' + txtOrigin + '; }\n';
     });
     mediaPosState.forEach(function(st, sid){
       if(st.x !== 0 || st.y !== 0){
@@ -3605,12 +3843,55 @@
     document.execCommand('copy');
   });
 
+  document.getElementById('ep-undo').addEventListener('click', doUndo);
+
+  document.getElementById('ep-reset-section').addEventListener('click', function(){
+    const sid = currentSectionId();
+    if(!sid) return;
+    const scope = document.getElementById(sid);
+    scope.querySelectorAll('[class*="tile-new"]').forEach(function(el){ el.remove(); });
+    scope.querySelectorAll('.tile, .solo-photo').forEach(function(el){
+      el.style.left = ''; el.style.top = ''; el.style.right = ''; el.style.bottom = '';
+      el.style.width = ''; el.style.height = ''; el.style.aspectRatio = '';
+      el.style.transform = ''; el.style.zIndex = '';
+      el.classList.remove('edit-active');
+      el.style.display = '';
+    });
+    activeEl = null;
+    tileControls.style.display = 'none';
+    const content = scope.querySelector('.project-content, .inner');
+    if(content){ content.style.transform = ''; content.style.transformOrigin = ''; }
+    const media = scope.querySelector('.project-media');
+    if(media){ media.style.transform = ''; media.style.flexBasis = ''; media.style.maxWidth = ''; }
+    const collage = scope.querySelector('.tile-collage');
+    if(collage){ collage.style.width = ''; collage.style.maxWidth = ''; }
+    const row = scope.querySelector('.project-row');
+    if(row) row.style.gap = '';
+    scope.querySelectorAll('[data-i18n]').forEach(function(el){
+      if(el.dataset.origText !== undefined) el.textContent = el.dataset.origText;
+      textEditState.delete(el.getAttribute('data-i18n'));
+    });
+    Array.from(tileState.keys()).forEach(function(k){
+      if(k.indexOf(sid + ' ::') === 0) tileState.delete(k);
+    });
+    textState.delete(sid); containerState.delete(sid); mediaPosState.delete(sid); gapState.delete(sid);
+    Array.from(deletedTiles).forEach(function(k){ if(k.indexOf(sid + ' ::') === 0) deletedTiles.delete(k); });
+    Array.from(addedTiles.keys()).forEach(function(tag){ if(addedTiles.get(tag).sectionId === sid) addedTiles.delete(tag); });
+    outputBox.value = '';
+  });
+
   document.getElementById('ep-reset').addEventListener('click', function(){
+    document.querySelectorAll('[class*="tile-new"]').forEach(function(el){ el.remove(); }); // usuń dodane w tej sesji
     document.querySelectorAll('.tile, .solo-photo').forEach(function(el){
       el.style.left = ''; el.style.top = ''; el.style.right = ''; el.style.bottom = '';
-      el.style.width = ''; el.style.transform = '';
+      el.style.width = ''; el.style.height = ''; el.style.aspectRatio = '';
+      el.style.transform = ''; el.style.zIndex = '';
       el.classList.remove('edit-active');
+      el.style.display = ''; // przywróć ewentualnie "usunięte" (ukryte) zdjęcia
     });
+    zCounter = 10;
+    addedTileCounter = 0;
+    activeEl = null;
     document.querySelectorAll('.project-content, .inner').forEach(function(el){
       el.style.transform = ''; el.style.transformOrigin = '';
     });
@@ -3626,6 +3907,7 @@
     });
     textEditState.clear();
     tileState.clear(); textState.clear(); containerState.clear(); mediaPosState.clear(); gapState.clear();
+    deletedTiles.clear(); addedTiles.clear();
     activeEl = null;
     tileControls.style.display = 'none';
     outputBox.value = '';
