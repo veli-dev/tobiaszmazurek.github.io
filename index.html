@@ -32,13 +32,54 @@
   }
   @media (min-width:861px){
     html{
-      /* Sekcje są height:100vh, więc skalowanie MUSI reagować też na wysokość okna, nie tylko
-         szerokość — inaczej przy niskim/krótkim oknie treść nie mieści się w pionie i się tnie.
-         Bierzemy mniejszą z dwóch wartości (węższy wymiar rządzi skalą), z tą samą podłogą/sufitem
-         czytelności co wcześniej: 14px na dole, 16px na górze (referencja: 1920px szer. / 1000px wys.). */
-      font-size:clamp(8px, 0.62696vw, 22px);
+      /* Sekcje są height:100vh, więc skalowanie reaguje na węższy Z DWÓCH wymiarów (min(vw, vh)) —
+         przy niskim/krótkim oknie (mało wysokości: pasek zadań, pasek zakładek przeglądarki,
+         okno niepełnoekranowe) to wysokość ogranicza skalę, żeby treść nie ucinała się w pionie;
+         przy typowym szerokim-a-płytkim oknie (16:9 w pełnym oknie) to szerokość ogranicza skalę
+         jak wcześniej. Oba człony skalibrowane na wspólnym punkcie odniesienia 1920×1000, więc na
+         referencyjnych rozdzielczościach 1920x1080 i 2560x1440 w pełnym oknie wynik jest identyczny
+         jak w poprzedniej, samej-vw wersji (0.815vw) — to tylko dokłada siatkę bezpieczeństwa,
+         nie zmienia dotychczas dopracowanego rozmiaru na tych ekranach. */
+      font-size:clamp(9px, min(0.815vw, 1.565vh), 24px);
     }
   }
+
+  /* =========================================================================
+     KOTWICE ROZDZIELCZOŚCI — dopieszczone ręcznie punkty odniesienia.
+     Powyższy clamp(min(vw,vh)) daje płynne, "wystarczająco dobre" skalowanie
+     WSZĘDZIE. Poniższe bloki NIE zmieniają tej zasady — tylko na trzech
+     konkretnych, realnie testowanych oknach:
+       1) blokują dokładny font-size (uniknięcie ułamków px między przeglądarkami)
+       2) dają miejsce na drobne poprawki wygenerowane w trybie edycji (?edit)
+          dla tego konkretnego okna (przesunięcia kafelków, gap, itd.)
+     Każde okno POZA tymi trzema zakresami nadal korzysta wyłącznie z płynnej
+     formuły powyżej — nic tu nie ogranicza pośrednich rozmiarów.
+     Kolejność ważna: te bloki muszą być NIŻEJ niż ogólna reguła @media(min-width:861px),
+     żeby wygrywały w kaskadzie na dokładnie tych oknach. ========================= */
+
+  /* --- Kotwica 1: monitor 1920×1080 (pełne okno) --- */
+  @media (min-width:1900px) and (max-width:1959px) and (min-height:960px) and (max-height:1100px){
+    html{ font-size:15.65px; }
+    /* Miejsce na CSS wygenerowany z panelu edycji (?edit) na tym oknie: */
+  }
+
+  /* --- Kotwica 2: monitor 2560×1440 (pełne okno, główny) --- */
+  @media (min-width:2540px) and (max-width:2600px) and (min-height:1300px) and (max-height:1460px){
+    html{ font-size:20.86px; }
+    /* Miejsce na CSS wygenerowany z panelu edycji (?edit) na tym oknie: */
+  }
+
+  /* --- Kotwica 3: MacBook Air 15" — domyślne skalowanie macOS,
+     przeglądarka widzi ~1710×1107 (nie 2880×1864 — patrz wyjaśnienie w rozmowie).
+     Inna proporcja (16:10.4 zamiast 16:9), więc warto sprawdzić realny
+     window.innerWidth/innerHeight na urządzeniu przed dostrajaniem —
+     jeśli macOS ma zmienione skalowanie na "More Space"/"Larger Text",
+     te liczby będą inne i zakres trzeba będzie poszerzyć/przesunąć. --- */
+  @media (min-width:1690px) and (max-width:1730px) and (min-height:1080px) and (max-height:1130px){
+    html{ font-size:13.94px; }
+    /* Miejsce na CSS wygenerowany z panelu edycji (?edit) na tym oknie: */
+  }
+
   @media (prefers-reduced-motion: reduce){
     html{scroll-behavior:auto;}
     *{animation-duration:0.01ms !important; transition-duration:0.01ms !important;}
@@ -297,7 +338,7 @@
     }
     section.in-view .motif-wrap{
       opacity:1;
-      transform:none !important;
+      transform:var(--motif-transform, none) !important;
     }
 
     /* Eight entrance "personalities" — cycled across sections so no two neighbours match */
@@ -437,7 +478,7 @@
     display:block;
     width:100%;
     height:auto;
-    color:var(--motif-color, var(--accent));
+    color:var(--motif-icon-color, var(--motif-color, var(--accent)));
     opacity:.16;
     transition:opacity .5s ease, filter .5s ease;
     animation:floatY 8s ease-in-out infinite alternate;
@@ -510,6 +551,18 @@
   .motif-paw{ top:12%; right:8%; width:11.875rem; }
   .motif-flag{ top:10%; right:8%; width:11.25rem; }
   .motif-grill{ bottom:10%; right:8%; width:13.125rem; }
+  /* Pozycje motywów dopieszczone ręcznie w trybie edycji na 2560x1440 (nadpisują domyślne powyżej dla tych sekcji) */
+  #project-2 .motif-glasses{ top:12.54%; left:80.44%; right:auto; }
+  #project-4 .motif-turret{ top:10.56%; left:85.36%; right:auto; }
+  #project-6 .motif-axe{ top:52.55%; left:31.23%; right:auto; bottom:auto; --motif-transform:rotate(24deg) scale(1); }
+  #project-9 .motif-console{ top:55.4%; left:43.36%; right:auto; bottom:auto; --motif-transform:rotate(-2deg) scale(1); }
+  #project-8 .motif-signal{ top:62.43%; left:14.48%; right:auto; bottom:auto; }
+  #about-technical .motif-about{ top:63.28%; left:7.25%; right:auto; bottom:auto; --motif-transform:rotate(153deg) scale(0.88); }
+  #contact .motif-contact{ top:19.19%; left:58.75%; right:auto; bottom:auto; }
+  #project-7 .motif-paw{ top:35.87%; left:50.19%; right:auto; bottom:auto; }
+  #career .motif-flag{ top:10.53%; left:81.66%; right:auto; bottom:auto; }
+  #skills{ --motif-color:#a35724 !important; }
+  #skills{ --motif-icon-color:#a35724 !important; }
   @media (max-width:860px){
     .motif-wrap{ width:180px !important; }
   }
@@ -947,8 +1000,9 @@
     cursor:default;
   }
   body:not(.edit-mode) .solo-photo:hover{ transform:rotate(0deg) scale(1.05); box-shadow:0 28px 55px -18px rgba(0,0,0,.85); }
-  #project-3 .project-media{ flex-basis:46rem; }
-  #project-3 .solo-photo{ width:86%; max-width:46rem; }
+  #project-3 .project-media{ flex-basis:40rem; max-width:40rem; transform:translate(1.965rem,-1.103rem);}
+  #project-3 .tile-collage{ width:40rem; max-width:40rem; }
+  #project-3 .solo-photo{ width:86.00%; max-width:46rem; aspect-ratio:16/10; transform:rotate(-3deg); z-index:63; }
 
   /* Washi-tape accent — a small strip that makes a photo look physically taped down. */
   .tile.has-tape::before{
@@ -1002,34 +1056,40 @@
   .tile-collage[data-count="2"][data-layout="3"] .tile-b{ width:64%; aspect-ratio:16/10; bottom:7%; right:8%; transform:rotate(-5.4deg); z-index:1; }
   .tile-collage[data-count="2"][data-layout="4"] .tile-a{ width:46%; aspect-ratio:4/5; top:7%; left:8%; transform:rotate(-7.2deg); z-index:1; }
   .tile-collage[data-count="2"][data-layout="4"] .tile-b{ width:46%; aspect-ratio:4/5; bottom:7%; right:8%; transform:rotate(7.2deg); z-index:2; }
-  #project-1 .project-media{ flex-basis:39rem; transform:translate(-35px,0px); }
+  #project-1 .project-media{ flex-basis:39rem; transform:translate(-1.103rem,0.000rem); }
   #project-1 .tile-collage{ aspect-ratio:1/0.95; width:min(39rem, calc((var(--media-max-h) - 3rem) / 0.95)); max-width:39rem; }
   #project-1 .tile-a{ width:70%; aspect-ratio:16/10; top:4%; left:4%; transform:rotate(-5deg); z-index:1; }
-  #project-1 .tile-b{ width:60%; aspect-ratio:16/10; bottom:3%; right:3%; transform:rotate(4deg); z-index:2; }
-  #project-8 .project-media{ flex-basis:42rem; transform:translate(-41px,0px); }
-  #project-8 .tile-collage{ aspect-ratio:1/0.95; width:min(42rem, calc((var(--media-max-h) - 3rem) / 0.95)); max-width:42rem; }
-  #project-8 .tile-a{ width:69%; height:46%; aspect-ratio:auto; top:3.81%; left:3.3%; transform:rotate(-4deg); z-index:1; }
+  #project-1 .tile-b{ width:60.00%; aspect-ratio:16/10; bottom:3%; right:3%; transform:rotate(3deg); z-index:11; }
+  #project-8 .project-media{ flex-basis:36rem; max-width:36rem; transform:translate(0.192rem,0.000rem); }
+  #project-8 .tile-collage{ aspect-ratio:1/0.95; width:36rem; max-width:36rem; }
+  #project-8 .tile-a{ width:67.00%; height:44%; aspect-ratio:auto; top:5.75%; left:4.53%; transform:rotate(-4deg); z-index:66; }
   #project-8 .tile-b{ width:60%; height:40%; aspect-ratio:auto; top:55.2%; left:35.89%; transform:rotate(3deg); z-index:2; }
-  #project-9 .project-media{ flex-basis:42rem; transform:translate(24px,0px); }
-  #project-9 .tile-collage{ aspect-ratio:1/0.95; width:min(42rem, calc((var(--media-max-h) - 3rem) / 0.95)); max-width:42rem; }
-  #project-4 .project-media{ flex-basis:37rem; transform:translate(-4px,0px); }
-  #project-4 .tile-collage{ width:min(37rem, calc((var(--media-max-h) - 3rem) / 1.15)); max-width:37rem; }
-  #project-4 .tile-a{ width:85%; height:44%; aspect-ratio:auto; top:4.22%; left:7.5%; transform:rotate(-2deg); z-index:3; }
-  #project-4 .tile-b{ width:56%; aspect-ratio:4/3; top:48.71%; left:4.17%; transform:rotate(5.4deg); z-index:1; }
-  #project-4 .tile-c{ width:56%; aspect-ratio:4/3; top:47.25%; left:42.17%; transform:rotate(-5.4deg); z-index:2; }
-  #project-5 .project-media{ flex-basis:40rem; max-width:40rem; transform:translate(-32px,0px); }
+  #project-9 .project-media{ flex-basis:36rem; max-width:36rem; transform:translate(1.007rem,-2.109rem); }
+  #project-9 .tile-collage{ aspect-ratio:1/0.95; width:36rem; max-width:36rem; }
+  #project-4 .project-media{ flex-basis:41rem; max-width:41rem; transform:translate(2.397rem,0.000rem); }
+  #project-4 .tile-collage{ width:41rem; max-width:41rem; }
+  #project-4 .tile-a{ width:80%; height:39%; aspect-ratio:auto; top:10.56%; left:10%; transform:rotate(-2deg); z-index:1; }
+  #project-4 .tile-b{ width:47%; height:28%; aspect-ratio:auto; top:51.13%; left:2.57%; transform:rotate(5.4deg); z-index:3; }
+  #project-4 .tile-c{ width:49%; height:30%; aspect-ratio:auto; top:48.99%; left:48.26%; transform:rotate(-7deg); z-index:2; }
+  #project-5 .project-media{ flex-basis:40rem; max-width:40rem; transform:translate(-1.007rem,0.000rem); }
   #project-5 .tile-collage{ width:40rem; max-width:none; }
-  #project-7 .project-media{ flex-basis:40rem; transform:translate(-22px,0px); }
+  #project-7 .project-media{ flex-basis:40rem; transform:translate(36.721rem,1.151rem); }
+  #project-7 .tile-new1{ width:53.00%; height:31%; aspect-ratio:auto; top:41.1%; left:37.85%; transform:rotate(13deg); z-index:50; }
+  #project-7 .tile-a{ width:38.00%; height:40%; aspect-ratio:auto; top:11.05%; left:52.92%; transform:rotate(-25deg); z-index:54; }
+  #project-7 .tile-b{ width:64.00%; height:35%; aspect-ratio:auto; top:57.14%; left:8.4%; transform:rotate(-7deg); z-index:48; }
   #project-7 .tile-collage{ width:min(40rem, calc((var(--media-max-h) - 3rem) / 0.82)); max-width:40rem; }
-  #project-10 .project-media{ flex-basis:43rem; transform:translate(-57px,0px); }
-  #project-10 .tile-collage{ width:min(43rem, calc((var(--media-max-h) - 3rem) / 0.82)); max-width:43rem; }
-  #project-11 .project-media{ flex-basis:43rem; transform:translate(-1px,0px); }
-  #project-11 .tile-collage{ width:min(43rem, calc((var(--media-max-h) - 3rem) / 0.82)); max-width:43rem; }
-  #project-9 .tile-a{ width:68%; aspect-ratio:16/10; top:3%; left:3%; transform:rotate(4deg); z-index:2; }
-  #project-9 .tile-b{ width:58%; aspect-ratio:16/10; bottom:4%; right:4%; transform:rotate(-3deg); z-index:1; }
+  #project-10 .project-media{ flex-basis:34rem; max-width:34rem; transform:translate(0.431rem,0.000rem); }
+  #project-10 .tile-collage{ width:34rem; max-width:34rem; }
+  #project-10 .tile-b{ width:46.00%; aspect-ratio:4/5; transform:rotate(7deg); z-index:52; }
+  #project-11 .project-media{ flex-basis:34rem; max-width:34rem; transform:translate(-1.870rem,-0.767rem); }
+  #project-11 .tile-collage{ width:34rem; max-width:34rem; }
+  #project-11 .tile-a{ width:46.00%; aspect-ratio:4/5; transform:rotate(-7deg); z-index:53; }
+  #project-11 .tile-b{ width:46.00%; aspect-ratio:4/5; transform:rotate(7deg); z-index:73; }
+  #project-9 .tile-a{ width:66.00%; height:43%; aspect-ratio:auto; top:8.18%; left:3.61%; transform:rotate(4deg); z-index:72; }
+  #project-9 .tile-b{ width:58.00%; aspect-ratio:16/10; top:57.72%; left:34.46%; transform:rotate(-4deg); z-index:76; }
   /* "To moja działka" — wachlarz: jedno zdjęcie na środku (proste, na wierzchu, największe),
      reszta wygląda zza niego pod różnymi kątami, jak rozrzucone/przypięte zdjęcia na biurku. */
-  #about-technical .project-media{ flex-basis:49rem; transform:translate(45px,0px); }
+  #about-technical .project-media{ flex-basis:49rem; transform:translate(-2.445rem,1.151rem); }
   #about-technical .tile-collage{
     position:relative;
     width:min(49rem, calc((var(--media-max-h) - 3rem) / 1.5));
@@ -1042,13 +1102,13 @@
   #about-technical .tile:hover .about-photo{ box-shadow:0 28px 55px -18px rgba(0,0,0,.85); }
   #about-technical .tile-a{ width:50%; aspect-ratio:4/5; top:0.68%; left:8.08%; transform:rotate(6deg); z-index:3; }
   #about-technical .tile-b{ width:40%; height:37%; aspect-ratio:auto; top:7.36%; left:57.4%; transform:rotate(-2deg); z-index:2; }
-  #about-technical .tile-c{ width:50%; height:45%; aspect-ratio:auto; top:41.98%; left:5.75%; transform:rotate(-3deg); z-index:4; }
+  #about-technical .tile-c{ width:50.00%; height:45%; aspect-ratio:auto; top:39.55%; left:19.99%; transform:rotate(-3deg); z-index:50; }
   #about-technical .tile-d{ width:48%; aspect-ratio:4/5; top:45.61%; left:52.52%; transform:rotate(8deg); z-index:1; }
   #about-technical .tile .about-photo{ width:100%; height:100%; aspect-ratio:auto; }
 
   /* "Tak to ja" — ten sam wachlarz co w "To moja działka", ale lustrzane kąty obrotu,
      żeby obie sekcje O mnie nie wyglądały identycznie mimo wspólnego wzorca. */
-  #about-life .project-media{ flex-basis:49rem; transform:translate(-45px,0px); }
+  #about-life .project-media{ flex-basis:49rem; transform:translate(-1.198rem,0.000rem); }
   #about-life .tile-collage{
     position:relative;
     width:min(49rem, calc((var(--media-max-h) - 3rem) / 1.42));
@@ -1090,13 +1150,13 @@
   .tile-collage[data-count="4"][data-layout="2"] .tile-b{ width:44%; aspect-ratio:4/5; top:7%; right:8%; transform:rotate(-7.2deg); z-index:1; }
   .tile-collage[data-count="4"][data-layout="2"] .tile-c{ width:58%; top:7%; left:8%; height:46%; aspect-ratio:auto; bottom:7%; transform:rotate(-3.6deg); z-index:3; }
   .tile-collage[data-count="4"][data-layout="2"] .tile-d{ width:34%; aspect-ratio:4/5; bottom:7%; right:2%; transform:rotate(10.8deg); z-index:4; }
-  #project-6 .project-media{ flex-basis:57rem; max-width:57rem; transform:translate(38px,0px); }
+  #project-6 .project-media{ flex-basis:58rem; max-width:58rem; transform:translate(2.109rem,0.815rem); }
   #project-6 .project-row{ gap:0.5rem; max-width:none; }
-  #project-6 .tile-collage{ width:57rem; max-width:none; aspect-ratio:1/0.55; }
-  #project-6 .tile-a{ width:47%; height:48%; aspect-ratio:auto; top:-0.3%; left:4.46%; transform:rotate(-3.6deg); z-index:1; }
-  #project-6 .tile-b{ width:47%; height:48%; aspect-ratio:auto; top:-1.67%; left:50.21%; transform:rotate(3.6deg); z-index:4; }
-  #project-6 .tile-c{ width:46%; height:47%; aspect-ratio:auto; top:47.02%; left:4.12%; transform:rotate(1deg); z-index:2; }
-  #project-6 .tile-d{ width:47%; height:48%; aspect-ratio:auto; top:45.83%; left:50.67%; transform:rotate(-4deg); z-index:3; }
+  #project-6 .tile-collage{ width:58rem; max-width:none; aspect-ratio:1/0.55; }
+  #project-6 .tile-a{ width:47.00%; height:47%; aspect-ratio:auto; top:-2.51%; left:7.14%; transform:rotate(-4deg); z-index:23; }
+  #project-6 .tile-b{ width:47%; height:48%; aspect-ratio:auto; top:-2.7%; left:50.78%; transform:rotate(3deg); z-index:1; }
+  #project-6 .tile-c{ width:46%; height:47%; aspect-ratio:auto; top:44.51%; left:7.13%; transform:rotate(1deg); z-index:3; }
+  #project-6 .tile-d{ width:47%; height:48%; aspect-ratio:auto; top:44.35%; left:51.48%; transform:rotate(-4deg); z-index:4; }
   .tile-collage[data-count="4"][data-layout="4"] .tile-a{ width:58%; aspect-ratio:4/5; top:7%; left:8%; transform:rotate(-3.6deg); z-index:4; }
   .tile-collage[data-count="4"][data-layout="4"] .tile-b{ width:36%; aspect-ratio:4/5; top:7%; right:8%; transform:rotate(7.2deg); z-index:3; }
   .tile-collage[data-count="4"][data-layout="4"] .tile-c{ width:36%; aspect-ratio:4/5; bottom:7%; right:8%; transform:rotate(-7.2deg); z-index:2; }
@@ -1270,9 +1330,9 @@
   .gallery-3 img:first-child{ grid-row:1 / 3; aspect-ratio:3/4; }
   .gallery-4{ grid-template-columns:1fr 1fr; }
   .gallery-4 img:nth-child(2){ margin-top:1.375rem; }
-  #about-recommend .project-media{ flex-basis:48rem; max-width:48rem; transform:translate(29px,0px); }
-  #about-recommend .tile-collage{ width:48rem; max-width:none; }
-  #project-2 .project-media{ flex-basis:46rem; }
+  #about-recommend .project-media{ flex-basis:36rem; max-width:36rem; transform:translate(0.623rem,0.000rem); }
+  #about-recommend .tile-collage{ width:36rem; max-width:36rem; }
+  #project-2 .project-media{ flex-basis:46rem; transform:translate(3.931rem,0.000rem);}
   #project-2 .tile-collage{ width:min(46rem, calc((var(--media-max-h) - 3rem) / 0.82)); max-width:46rem; }
   .gallery-4 img:nth-child(3){ margin-top:-0.625rem; }
   @media (max-width:860px){
@@ -1300,6 +1360,32 @@
     font-size:1.0625rem;
     max-width:50ch;
     margin-bottom:1.375rem;
+  }
+  .project-content .wip-list{
+    list-style:none;
+    margin:-0.5rem 0 1.375rem;
+    padding:0;
+    max-width:50ch;
+    display:flex;
+    flex-direction:column;
+    gap:0.625rem;
+  }
+  .project-content .wip-list li{
+    color:var(--text-dim);
+    font-size:1.0625rem;
+    padding-left:1.125rem;
+    position:relative;
+  }
+  .project-content .wip-list li::before{
+    content:"";
+    position:absolute;
+    left:0; top:0.65em;
+    width:0.5rem; height:0.0625rem;
+    background:var(--accent, #7C9A92);
+  }
+  .project-content .wip-list strong{
+    color:var(--text);
+    font-weight:600;
   }
   .project-content .tags{
     display:flex;
@@ -1339,31 +1425,77 @@
     justify-content:center;
     border-bottom:none;
   }
-  #contact .sec-title{margin-bottom:1.5rem; max-width:26ch;}
+  #contact .sec-title{margin-bottom:1rem; max-width:26ch;}
   #career .sec-title{max-width:24ch;}
+  /* Sekcja kontakt miała za dużo treści na wysokość 100vh — ściśnięte odstępy, żeby zmieściło się bez wewnętrznego scrolla */
+  #contact p.reveal{ margin-bottom:0.875rem; }
+  #contact .contact-links a{ padding:0.5rem 0; }
 
   /* --- Testimonial quote --- */
+  .testimonial-wrap{
+    display:flex;
+    align-items:center;
+    gap:0.5rem;
+    margin-top:1.5rem;
+    max-width:56ch;
+  }
+  .testimonial-track{
+    display:flex;
+    overflow-x:auto;
+    scroll-snap-type:x mandatory;
+    scrollbar-width:none;
+    flex:1;
+    min-width:0;
+    border-radius:0 0.5rem 0.5rem 0;
+  }
+  .testimonial-track::-webkit-scrollbar{ display:none; }
   .testimonial{
-    margin-top:2.25rem;
-    padding:1.5rem 1.75rem;
+    flex:0 0 100%;
+    scroll-snap-align:start;
+    box-sizing:border-box;
+    padding:1rem 1.25rem;
     border-left:2px solid var(--accent);
     background:var(--bg-panel);
-    border-radius:0 0.625rem 0.625rem 0;
-    max-width:64ch;
   }
   .testimonial p{
     font-family:'Space Grotesk', sans-serif;
-    font-size:1.0312rem;
+    font-size:0.9375rem;
     font-style:italic;
     color:var(--text);
-    margin-bottom:0.875rem;
+    margin-bottom:0.625rem;
     max-width:none;
   }
   .testimonial cite{
     font-style:normal;
-    font-size:0.8125rem;
+    font-size:0.75rem;
     color:var(--text-dim);
   }
+  .test-nav{
+    flex:0 0 auto;
+    width:1.875rem; height:1.875rem;
+    border-radius:50%;
+    background:var(--bg-panel);
+    border:1px solid var(--line);
+    color:var(--text);
+    font-size:1rem;
+    line-height:1;
+    cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    transition:background .2s ease, color .2s ease, opacity .2s ease;
+    padding:0;
+  }
+  .test-nav:hover{ background:var(--accent); color:#0E0F11; border-color:var(--accent); }
+  .test-nav:disabled{ opacity:0.35; cursor:default; }
+  .test-nav:disabled:hover{ background:var(--bg-panel); color:var(--text); border-color:var(--line); }
+  .testimonial-dots{
+    display:flex; gap:0.375rem; justify-content:center; margin-top:0.625rem;
+  }
+  .testimonial-dots span{
+    width:0.375rem; height:0.375rem; border-radius:50%;
+    background:var(--line);
+    transition:background .2s ease;
+  }
+  .testimonial-dots span.active{ background:var(--accent); }
 
   /* --- Career: immersive centerline. Years on the left (big glow on the active one, fixed
        slot height so nothing ever reflows), detail card on the right. --- */
@@ -1561,7 +1693,9 @@
     background:#7C9A92; color:#0E0F11; border:none;
     font-size:22px; cursor:pointer;
     box-shadow:0 8px 24px rgba(0,0,0,.5);
+    display:none;
   }
+  #edit-toggle.visible{ display:flex; align-items:center; justify-content:center; }
   #edit-toggle.active{ background:#C9642E; }
   body.edit-mode .tile, body.edit-mode .solo-photo{
     outline:2px dashed rgba(255,255,255,.5);
@@ -1582,6 +1716,17 @@
     border-radius:3px; pointer-events:none; display:none;
   }
   body.edit-mode .edit-zdebug{ display:block; }
+  body.edit-mode .bg-decor{
+    z-index:5000 !important;
+  }
+  body.edit-mode .motif-wrap{
+    pointer-events:auto !important;
+    outline:2px dashed rgba(255,255,255,.4);
+    outline-offset:8px;
+    cursor:move;
+    z-index:5000 !important;
+  }
+  body.edit-mode .motif-wrap:hover{ outline-color:#7C9A92; }
   body.edit-mode .project-content, body.edit-mode .inner, body.edit-mode .project-media{
     outline:2px dashed rgba(255,255,255,.4);
     outline-offset:6px;
@@ -1617,8 +1762,26 @@
     background:#14161A; border-left:1px solid #2A2D31; color:#EDEDE9;
     font-family:'Space Grotesk', sans-serif; font-size:13px;
     padding:20px; overflow-y:auto; display:none; box-sizing:border-box;
+    transform:translateX(0); transition:transform .2s ease;
   }
   body.edit-mode #edit-panel{ display:block; }
+  body.ep-panel-hidden #edit-panel{ transform:translateX(100%); pointer-events:none; }
+  #edit-panel .ep-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
+  #edit-panel .ep-head h4{ margin:0; }
+  #edit-panel #ep-hide{
+    background:transparent; color:#9A9D9F; border:1px solid #2A2D31;
+    margin:0; padding:4px 10px; font-size:11px;
+  }
+  #edit-panel #ep-hide:hover{ color:#EDEDE9; border-color:#7C9A92; }
+  #ep-reopen{
+    position:fixed; top:20px; right:0; z-index:9996;
+    background:#7C9A92; color:#0E0F11; border:none;
+    border-radius:8px 0 0 8px; padding:10px 8px; font-size:12px;
+    font-family:'Space Grotesk', sans-serif; cursor:pointer;
+    box-shadow:0 4px 16px rgba(0,0,0,.4);
+    display:none; writing-mode:vertical-rl;
+  }
+  body.ep-panel-hidden #ep-reopen{ display:block; }
   #edit-panel h4{ font-size:15px; margin:0 0 12px; }
   #edit-panel .ep-row{ margin-bottom:14px; }
   #edit-panel label{ display:block; margin-bottom:4px; color:#9A9D9F; font-size:11px; text-transform:uppercase; letter-spacing:.05em; }
@@ -1645,26 +1808,84 @@
     padding:2px 7px; font-size:11px; font-family:monospace; white-space:nowrap;
   }
   #edit-panel .ep-legend span{ color:#9A9D9F; text-align:right; }
-  /* Jednolita skala tekstu 1.2x we wszystkich sekcjach + drobne poziome dosunięcia */
-  #hero .inner{ transform:translate(0px,-23px) scale(1.2); transform-origin:center; }
-  #career .inner{ transform:translate(0px,0px) scale(1.3); transform-origin:center; }
-  #skills .inner{ transform:translate(0px,0px) scale(1.2); transform-origin:center; }
-  #contact .inner{ transform:translate(0px,0px) scale(1.2); transform-origin:center; }
-  #project-12 .project-content{ transform:translate(0px,0px) scale(1.2); transform-origin:center; }
-  #about-recommend .project-content{ transform:translate(-24px,0px) scale(1.2); transform-origin:center; }
-  #project-1 .project-content{ transform:translate(0px,0px) scale(1.2); transform-origin:center; }
-  #project-2 .project-content{ transform:translate(-39px,0px) scale(1.2); transform-origin:center; }
-  #project-3 .project-content{ transform:translate(-45px,0px) scale(1.2); transform-origin:center; }
-  #project-4 .project-content{ transform:translate(-58px,0px) scale(1.2); transform-origin:center; }
-  #project-5 .project-content{ transform:translate(16px,0px) scale(1.2); transform-origin:center; }
-  #project-6 .project-content{ transform:translate(-41px,0px) scale(1.2); transform-origin:center; }
-  #project-7 .project-content{ transform:translate(23px,0px) scale(1.2); transform-origin:center; }
-  #project-8 .project-content{ transform:translate(14px,0px) scale(1.2); transform-origin:center; }
-  #project-9 .project-content{ transform:translate(-37px,0px) scale(1.2); transform-origin:center; }
-  #project-10 .project-content{ transform:translate(-11px,0px) scale(1.2); transform-origin:center; }
-  #project-11 .project-content{ transform:translate(-51px,0px) scale(1.2); transform-origin:center; }
-  #about-technical .project-content{ transform:translate(-14px,0px) scale(1.2); transform-origin:center; }
-  #about-life .project-content{ transform:translate(11px,0px) scale(1.2); transform-origin:center; }
+  /* Skala/pozycja tekstu per sekcja — wygenerowane z panelu edycji (?edit) na 2560x1440, w rem (skaluje się z resztą strony) */
+  #hero .inner{ transform:translate(0.000rem,-0.192rem) scale(0.8); transform-origin:center; }
+  #career .inner{ transform:translate(0.000rem,0.000rem) scale(1); transform-origin:center; }
+  #skills .inner{ transform:translate(0.000rem,0.000rem) scale(0.9); transform-origin:center; }
+  #contact .inner{ transform:translate(0.000rem,-0.959rem) scale(0.9); transform-origin:center; }
+  #project-12 .project-content{ transform:translate(0.000rem,-0.911rem) scale(0.9); transform-origin:center; }
+  #about-recommend .project-content{ transform:translate(6.951rem,0.000rem) scale(0.9); transform-origin:center; }
+  #project-1 .project-content{ transform:translate(-4.219rem,0.000rem) scale(0.9); transform-origin:center; }
+  #project-2 .project-content{ transform:translate(8.198rem,0.000rem) scale(0.9); transform-origin:center; }
+  #project-3 .project-content{ transform:translate(7.239rem,0.000rem) scale(0.9); transform-origin:center; }
+  #project-4 .project-content{ transform:translate(6.520rem,0.000rem) scale(0.9); transform-origin:center; }
+  #project-5 .project-content{ transform:translate(-4.794rem,0.000rem) scale(0.9); transform-origin:center; }
+  #project-6 .project-content{ transform:translate(6.855rem,-3.547rem) scale(0.9); transform-origin:center; }
+  #project-7 .project-content{ transform:translate(-39.693rem,0.000rem) scale(0.9); transform-origin:center; }
+  #project-8 .project-content{ transform:translate(-4.506rem,-1.055rem) scale(0.9); transform-origin:center; }
+  #project-9 .project-content{ transform:translate(5.129rem,-4.410rem) scale(0.9); transform-origin:center; }
+  #project-10 .project-content{ transform:translate(-3.452rem,0.000rem) scale(0.9); transform-origin:center; }
+  #project-11 .project-content{ transform:translate(4.314rem,0.000rem) scale(0.9); transform-origin:center; }
+  #about-technical .project-content{ transform:translate(12.320rem,2.301rem) scale(0.9); transform-origin:center; }
+  #about-life .project-content{ transform:translate(-11.649rem,0.000rem) scale(0.9); transform-origin:center; }
+  /* ===== Szybkie podsumowanie (modal dla rekruterów bez czasu na scrollowanie) ===== */
+  #summary-modal{
+    position:fixed; inset:0; z-index:2000;
+    display:flex; align-items:center; justify-content:center;
+    background:rgba(6,6,8,.88); backdrop-filter:blur(4px);
+    opacity:0; pointer-events:none; transition:opacity .25s ease;
+    padding:2rem;
+  }
+  #summary-modal.active{ opacity:1; pointer-events:auto; }
+  #summary-card{
+    background:var(--bg-panel, #14161A);
+    border:1px solid rgba(255,255,255,.1);
+    border-radius:16px;
+    max-width:760px; width:100%;
+    max-height:88vh; overflow-y:auto;
+    padding:40px;
+    transform:scale(.95); transition:transform .25s cubic-bezier(.22,1,.36,1);
+    box-shadow:0 40px 90px -20px rgba(0,0,0,.8);
+  }
+  #summary-modal.active #summary-card{ transform:scale(1); }
+  #summary-card h2{ font-size:34px; margin:0 0 6px; }
+  #summary-card .sum-role{ color:var(--accent); font-size:17px; margin-bottom:20px; }
+  #summary-card .sum-lead{ color:var(--text-dim, #9A9D9F); font-size:16.5px; line-height:1.6; margin-bottom:24px; }
+  #summary-card h4{ font-size:14px; text-transform:uppercase; letter-spacing:.06em; color:var(--text-dim, #9A9D9F); margin:22px 0 10px; }
+  #summary-card .sum-skills{ display:flex; flex-wrap:wrap; gap:8px; }
+  #summary-card .sum-skills span{
+    font-size:14px; padding:6px 12px; border-radius:999px;
+    border:1px solid rgba(255,255,255,.15); color:var(--text-dim, #9A9D9F);
+  }
+  #summary-card .sum-projects{ display:flex; flex-direction:column; gap:10px; }
+  #summary-card .sum-project{
+    display:flex; justify-content:space-between; align-items:baseline; gap:16px;
+    padding:12px 16px; border-radius:8px; background:rgba(255,255,255,.03);
+    text-decoration:none; color:inherit;
+  }
+  #summary-card .sum-project:hover{ background:rgba(255,255,255,.07); }
+  #summary-card .sum-project strong{ font-size:16px; }
+  #summary-card .sum-project span{ font-size:14px; color:var(--text-dim, #9A9D9F); white-space:nowrap; }
+  #summary-card .sum-actions{ display:flex; gap:12px; flex-wrap:wrap; margin-top:28px; }
+  #summary-fab{
+    position:fixed; bottom:24px; left:24px; z-index:998;
+    height:48px; padding:0 20px; border-radius:999px;
+    background:var(--accent, #7C6A4A); color:#0E0F11; border:none;
+    font-size:14px; font-weight:600; font-family:'Space Grotesk', sans-serif;
+    cursor:pointer; white-space:nowrap;
+    box-shadow:0 8px 24px rgba(0,0,0,.5);
+    display:flex; align-items:center; gap:8px; justify-content:center;
+    transition:transform .2s ease;
+  }
+  #summary-fab:hover{ transform:scale(1.05); }
+  #summary-close{
+    position:absolute; top:1rem; right:1rem;
+    width:2.25rem; height:2.25rem; border-radius:50%;
+    background:rgba(255,255,255,.08); border:none; color:#EDEDE9;
+    font-size:1.1rem; cursor:pointer; display:flex; align-items:center; justify-content:center;
+  }
+  #summary-close:hover{ background:rgba(255,255,255,.16); }
+  #summary-modal-inner{ position:relative; }
 </style>
 </head>
 <body>
@@ -1703,7 +1924,7 @@
         <li><a href="#project-8" data-nav="project-8" class="subnav-link">Simply Signals</a></li>
         <li><a href="#project-9" data-nav="project-9" class="subnav-link">Runtime Inspector</a></li>
         <li><a href="#project-10" data-nav="project-10" class="subnav-link" data-i18n="nav-editor">Edytorskie</a></li>
-        <li><a href="#project-11" data-nav="project-11" class="subnav-link" data-i18n="nav-wip">W rozwoju</a></li>
+        <li><a href="#project-11" data-nav="project-11" class="subnav-link" data-i18n="nav-wip">Więcej</a></li>
       </ul>
     </li>
     <li><a href="#project-12" data-nav="project-12" data-i18n="nav-software">Oprogramowanie</a></li>
@@ -1890,8 +2111,8 @@
   <div class="project-row">
     <div class="project-content">
       <span class="pindex reveal">Projekt 01 / 12</span>
-      <h3 class="reveal">Mr Toilet — Steam</h3>
-      <p class="reveal" data-i18n="p2-p">Pierwszoosobowy symulator zarządzania publiczną toaletą — sprzątasz, pobierasz opłaty, wyrzucasz nieuczciwych klientów i rozbudowujesz swoje toaletowe imperium. Wydany przez Radikate / FreeMind S.A. / PlayWay S.A., współtworzony przeze mnie jako część zespołu Unity.</p>
+      <h3 class="reveal">Mr Toilet</h3>
+      <p class="reveal" data-i18n="p2-p">Tak, to dosłownie symulator sprzątania publicznej toalety — czasem najlepszy gameplay siedzi w najmniej oczywistym temacie. Sprzątasz, pobierasz opłaty, wyrzucasz nieuczciwych klientów i rozbudowujesz swoje toaletowe imperium. Odpowiadałem za szeroki zakres systemów gameplayowych — od pierwszych prototypów po gotowe, dopracowane mechaniki, w tym UI i customizację obiektów. To właśnie przy tym projekcie nauczyłem się realnego procesu wydawania gry na Steam — wymogów platformy, konfiguracji builda i tego, jak ten proces wygląda na innych kanałach dystrybucji.</p>
       <div class="tags reveal"><span>Unity</span><span>C#</span><span>Steam</span><span>First-person</span></div>
       <div class="links reveal">
         <a href="https://store.steampowered.com/app/3930150/Mr_Toilet/" target="_blank" rel="noopener">Steam ↗</a>
@@ -1927,8 +2148,8 @@
   <div class="project-row">
     <div class="project-content">
       <span class="pindex reveal">Projekt 02 / 12</span>
-      <h3 class="reveal">Nerd Simulator — Steam</h3>
-      <p class="reveal" data-i18n="p1-p">Krótka, humorystyczna przygodówka point-and-click wydana w Early Access przez Radikate / FreeMind S.A. / PlayWay S.A. Pomagasz czterdziestoletniemu Mervinowi wyprowadzić się od mamy — przez absurdalne prace dorywcze i jeszcze bardziej absurdalne kłopoty. Odpowiadałem za programowanie gameplayu w zespole Radikate.</p>
+      <h3 class="reveal">Nerd Simulator</h3>
+      <p class="reveal" data-i18n="p1-p">A skoro przed chwilą czytałeś o sprzątaniu kibla — tak, zrobiłem też grę dosłownie o byciu nerdem. Niezłe zestawienie, co? Krótka, humorystyczna przygodówka point-and-click, w której pomagasz czterdziestoletniemu Mervinowi wyprowadzić się od mamy — przez absurdalne prace dorywcze i jeszcze bardziej absurdalne kłopoty. Odpowiadałem za szeroki zakres gameplayu, między innymi zbudowałem samodzielną mini-grę w stylu pseudo-klikera, wplecioną w jedną z tych absurdalnych prac dorywczych.</p>
       <div class="tags reveal"><span>Unity</span><span>C#</span><span>Steam</span><span>Point & Click</span></div>
       <div class="links reveal">
         <a href="https://store.steampowered.com/app/3128220/Nerd_Simulator/?l=polish" target="_blank" rel="noopener">Steam ↗</a>
@@ -1964,7 +2185,7 @@
     <div class="project-content">
       <span class="pindex reveal">Projekt 03 / 12</span>
       <h3 class="reveal" data-i18n="p7-h3">Wild Bar — w produkcji</h3>
-      <p class="reveal" data-i18n="p7-p">Własna gra, którą tworzę solo — pozycjonowana jako <em>„Overcooked spotyka obronę bazy”</em>. Bronisz podwórka przed żywym, atakującym jedzeniem, przyrządzasz je na grillu i musisz zdążyć obsłużyć głodnych gości, zanim las przełamie płot. Co-op dla 1–4 graczy. Demo planuję wypuścić w styczniu 2027 — resztę zostawiam na niespodziankę.</p>
+      <p class="reveal" data-i18n="p7-p">Własna gra, którą tworzę samodzielnie — pozycjonowana jako <em>„Overcooked spotyka obronę bazy”</em>. Bronisz podwórka przed żywym, atakującym jedzeniem, przyrządzasz je na grillu i musisz zdążyć obsłużyć głodnych gości, zanim las przełamie płot. Co-op dla 1–4 graczy. Demo planuję wypuścić w styczniu 2027 — resztę zostawiam na niespodziankę.</p>
       <div class="tags reveal"><span>Unity</span><span>C#</span><span>Co-op</span><span>Solo Dev</span></div>
     </div>
     <div class="project-media">
@@ -1989,8 +2210,8 @@
   <div class="project-row">
     <div class="project-content">
       <span class="pindex reveal">Projekt 04 / 12</span>
-      <h3 class="reveal" data-i18n="p3-h3">Space Defense — projekt uczelniany</h3>
-      <p class="reveal" data-i18n="p3-p">Tower Defense w cyberpunkowej stylistyce, zrealizowany w czteroosobowym zespole w ramach projektu uczelnianego, w pełni według metodyki SCRUM — krótkie sprinty, stand-upy, retrospektywy, planowanie. Odpowiadałem za programowanie gameplayu, razem z Michałem Rudeliczem. Design: Paulina Śliwka, Michał Tofel.</p>
+      <h3 class="reveal" data-i18n="p3-h3">Space Defense</h3>
+      <p class="reveal" data-i18n="p3-p">Tower Defense w cyberpunkowej stylistyce — bronisz trasy przed falami wrogów, rozstawiając i rozwijając wieżyczki obronne. Zrealizowany w ramach projektu uczelnianego, w czteroosobowym zespole, w pełni według metodyki SCRUM — krótkie sprinty, stand-upy, retrospektywy, planowanie. Byłem programistą gameplayu.</p>
       <div class="tags reveal"><span>Unity</span><span>C#</span><span>Tower Defense</span><span>SCRUM</span></div>
     </div>
     <div class="project-media">
@@ -2023,9 +2244,9 @@
   <div class="project-row">
     <div class="project-content">
       <span class="pindex reveal">Projekt 05 / 12</span>
-      <h3 class="reveal">Popiel — Game Jam</h3>
-      <p class="reveal" data-i18n="p4-p">Pierwsza gra, jaką stworzyłem — solo, na Game Jamie PolskiGamedev.pl. Celem jest pokonanie Popiela poprzez zbieranie myszy na trzech różniących się mapach, które zmieniają się po skompletowaniu wszystkiego, co potrzebne w danej rundzie.</p>
-      <div class="tags reveal"><span>Unity</span><span>C#</span><span>Game Jam</span><span>Solo Dev</span></div>
+      <h3 class="reveal">Popiel</h3>
+      <p class="reveal" data-i18n="p4-p">Pierwsza gra, jaką stworzyłem — w trzyosobowym zespole na Game Jamie PolskiGamedev.pl. Sama gra jest krótka i niezbyt rozbudowana pod względem gameplayu, ale to właśnie przy niej nauczyłem się najwięcej jako początkujący programista. Celem jest pokonanie Popiela poprzez zbieranie myszy na trzech różniących się mapach, które zmieniają się po skompletowaniu wszystkiego, co potrzebne w danej rundzie.</p>
+      <div class="tags reveal"><span>Unity</span><span>C#</span><span>Game Jam</span></div>
     </div>
     <div class="project-media">
       <div class="tile-collage" data-count="2" data-layout="1">
@@ -2055,7 +2276,7 @@
     <div class="project-content">
       <span class="pindex reveal">Projekt 06 / 12</span>
       <h3 class="reveal">Indian Lumberjack</h3>
-      <p class="reveal" data-i18n="p5-p">Zręcznościowa, niekończąca się gra — Indianin musi zebrać odpowiednią ilość drewna, aby przetrwać zimę, rozbijając drzewo na części jednym uderzeniem. Zaprogramowałem całość solo, koordynując przy tym pracę zewnętrznych grafików, kompozytorów i twórcy dźwięku.</p>
+      <p class="reveal" data-i18n="p5-p">Zręcznościowa, niekończąca się gra — Indianin musi zebrać odpowiednią ilość drewna, aby przetrwać zimę, rozbijając drzewo na części jednym uderzeniem. Zaprogramowałem całość samodzielnie, zarządzając przy tym assetami od zewnętrznych grafików, kompozytorów i twórcy dźwięku oraz wpinając je w grę. To właśnie przy tym projekcie nauczyłem się obsługiwać generatywne systemy budujące całą rozgrywkę — między innymi generatywny system kafelków drzewa, które rozpadają się na kawałki w zależności od miejsca i siły trafienia.</p>
       <div class="tags reveal"><span>Unity</span><span>C#</span><span>Arcade</span><span>Solo Dev</span></div>
     </div>
     <div class="project-media">
@@ -2094,18 +2315,19 @@
   <div class="project-row">
     <div class="project-content">
       <span class="pindex reveal">Projekt 07 / 12</span>
-      <h3 class="reveal">Fluffy Savior — Game Jam</h3>
-      <p class="reveal" data-i18n="p6-p">Kilkupoziomowa gra zręcznościowa stworzona na Hello Game Jam — wcielasz się w obrońcę galaktyki i ratujesz kocią planetę przed zagładą, niszcząc wrogie komety i unikając ataków. Dwie planety w pełni grywalne, kolejne wciąż w budowie. Grafika: Paulina Śliwka.</p>
+      <h3 class="reveal">Fluffy Savior</h3>
+      <p class="reveal" data-i18n="p6-p">Kilkupoziomowa gra zręcznościowa stworzona na game jamie — wcielasz się w obrońcę galaktyki i ratujesz kocią planetę przed zagładą, niszcząc wrogie komety i unikając ataków. Każda planeta to osobna mini-gierka z własnym zestawem zagrożeń. Byłem programistą i odpowiadałem za każdą warstwę gameplayu — od sterowania i kolizji, przez logikę fal wrogów, po system punktacji i przejścia między planetami.</p>
       <div class="tags reveal"><span>Unity</span><span>C#</span><span>Game Jam</span><span>Arcade</span></div>
     </div>
     <div class="project-media">
-      <div class="tile-collage" data-count="2" data-layout="4">
+      <div class="tile-collage" data-count="3" data-layout="4">
         <div class="tile tile-a">
           <div class="about-photo" style="background-image:url('images/fluffy-1.jpg?v=1')" role="img" aria-label="Fluffy Savior — rozgrywka, niszczenie komet"></div>
         </div>
         <div class="tile tile-b">
-          <div class="about-photo" style="background-image:url('images/fluffy-2.jpg?v=1')" role="img" aria-label="Fluffy Savior — ekran tytułowy"></div>
+          <div class="about-photo" style="background-image:url('images/fluffy-3.jpg?v=1')" role="img" aria-label="Fluffy Savior — ekran tytułowy"></div>
         </div>
+        <div class="tile tile-new1"><div class="about-photo" style="background-image:url('images/fluffy-2.jpg?v=1')"></div></div>
       </div>
     </div>
   </div>
@@ -2129,7 +2351,7 @@
     <div class="project-content">
       <span class="pindex reveal">Projekt 08 / 12</span>
       <h3 class="reveal">Simply Signals</h3>
-      <p class="reveal" data-i18n="p8-p">Silnie typowany, zero-alokacyjny kanał komunikacji między systemami gry. Sygnał deklaruje się przez okno edytorowe zamiast ręcznie pisanych interfejsów — Source Generator (Roslyn) buduje z tego publiczne API i logikę rejestracji, a Cecil (IL Weaving) odpowiada wyłącznie za wstrzyknięcie wywołań rejestrujących w <code>Awake</code> i <code>OnDestroy</code>. Struktura assembly wzorowana na sprawdzonym podejściu Zenject, DOTween i Odin.</p>
+      <p class="reveal" data-i18n="p8-p">Silnie typowany, zero-alokacyjny system komunikacji między systemami gry, zaprojektowany tak, żeby komunikacja cross-assembly przestała być bólem głowy. Zamiast trzymać referencje między modułami albo przepychać dane przez singletony, wystarczy jedno wywołanie — <code>Signals.Send(...)</code> — i dane trafiają dokładnie tam, gdzie trzeba, niezależnie od tego, w którym assembly siedzi odbiorca. Systemy nie muszą nawzajem o sobie wiedzieć, a mimo to swobodnie się komunikują, bez ryzyka konfliktów między dostawcami sygnału w różnych modułach. Nowy sygnał deklaruje się przez dedykowane okno edytorowe — dodanie kolejnego kanału komunikacji to kwestia sekund. W planach: wizualny graf zależności pokazujący na żywo, kto z kim faktycznie rozmawia w danym momencie gry.</p>
       <div class="tags reveal"><span>Source Generators</span><span>IL Weaving</span><span>Cecil</span><span>Zero-Allocation</span></div>
     </div>
     <div class="project-media">
@@ -2161,7 +2383,7 @@
     <div class="project-content">
       <span class="pindex reveal">Projekt 09 / 12</span>
       <h3 class="reveal">Runtime Inspector</h3>
-      <p class="reveal" data-i18n="p9-p">Wysuwana konsola deweloperska działająca na żywej scenie — dowolna metoda w kodzie staje się wywoływalną komendą dzięki resolverowi opartemu o reflection, bezpiecznemu w IL2CPP release dzięki punktowemu atrybutowi <code>[Preserve]</code>. Pełny autocomplete z podpowiedziami sygnatur, zagnieżdżanie wywołań (wynik jednej komendy jako argument drugiej) oraz undo/redo i wsparcie dla komend asynchronicznych.</p>
+      <p class="reveal" data-i18n="p9-p">Wysuwana konsola deweloperska działająca w runtime, wewnątrz builda gry — dowolna metoda w kodzie staje się silnie typowaną, wywoływalną komendą (exec), bez pisania osobnego panelu do każdego testu. Bezpieczna w buildach IL2CPP dzięki punktowemu atrybutowi <code>[Preserve]</code>, dzięki czemu trafia też do builda testowego dla QA, nie tylko do Edytora. Każde wywołanie zapisywane jest w logu — dokładnie widać, jaka komenda, z jakimi argumentami i z jakim wynikiem została wykonana, co ułatwia odtworzenie i zgłoszenie buga. Pełny autocomplete z podpowiedziami sygnatur, zagnieżdżanie wywołań (wynik jednej komendy jako argument drugiej) oraz undo/redo, dzięki czemu cofnięcie serii testowych zmian to jedna komenda, nie restart sceny — świetne narzędzie do szybkich testów bezpośrednio na buildzie, bez podpinania debuggera.</p>
       <div class="tags reveal"><span>Reflection</span><span>Editor Tools</span><span>Debug Console</span><span>IL2CPP</span></div>
     </div>
     <div class="project-media">
@@ -2193,7 +2415,7 @@
     <div class="project-content">
       <span class="pindex reveal">Projekt 10 / 12</span>
       <h3 class="reveal" data-i18n="p10-h3">Narzędzia edytorskie</h3>
-      <p class="reveal" data-i18n="p10-p">Zestaw mniejszych narzędzi przyspieszających pracę reszty zespołu: Anchor Converter konwertujący UI na anchory względne do ekranu, Font Auto-Size Converter ujednolicający skalowanie tekstów pod różne rozdzielczości, oraz Interface Drawer serializujący interfejsy w Inspectorze — czego Unity domyślnie nie potrafi. Całość spięta własnym systemem wstrzykiwania referencji przez atrybuty i reflection oraz atrybutem <code>[OnValueChange]</code> generującym backing field przez IL Weaving.</p>
+      <p class="reveal" data-i18n="p10-p">Nikt nie chwali się narzędziami edytorskimi na pierwszej rozmowie kwalifikacyjnej, a to one najbardziej przyspieszają pracę całego zespołu. Zestaw mniejszych narzędzi używanych codziennie: Anchor Converter konwertujący UI na anchory względne do ekranu, Font Auto-Size Converter ujednolicający skalowanie tekstów pod różne rozdzielczości, oraz Interface Drawer serializujący interfejsy w Inspectorze — czego Unity domyślnie nie potrafi. Całość spięta własnym systemem wstrzykiwania referencji przez atrybuty i reflection oraz atrybutem <code>[OnValueChange]</code> generującym backing field przez IL Weaving.</p>
       <div class="tags reveal"><span>Custom Editor</span><span>Property Drawer</span><span>C# Reflection</span><span>IL Weaving</span></div>
     </div>
     <div class="project-media">
@@ -2234,7 +2456,13 @@
     <div class="project-content">
       <span class="pindex reveal">Projekt 11 / 12</span>
       <h3 class="reveal" data-i18n="p11-h3">W rozwoju — kolejne systemy</h3>
-      <p class="reveal" data-i18n="p11-p">Równolegle rozwijam kilka większych systemów, które upublicznię, gdy osiągną stabilną wersję beta: <strong>LScene</strong> — loader scen wspierający ładowanie sieciowe, z architekturą core / menu / mapa; <strong>Storex</strong> — system zapisu stanu gry; <strong>Config Injector</strong> — wstrzykiwanie configów z Resources przez reflection; oraz <strong>Hermes</strong> — własna, sztywna architektura DI inspirowana Zenjectem.</p>
+      <p class="reveal" data-i18n="p11-p">Równolegle rozwijam kilka większych systemów, które upublicznię, gdy osiągną stabilną wersję beta:</p>
+      <ul class="reveal wip-list" data-i18n="p11-list">
+        <li><strong>LScene</strong> — loader scen wspierający ładowanie sieciowe, z architekturą core / menu / mapa</li>
+        <li><strong>Storex</strong> — system zapisu stanu gry</li>
+        <li><strong>Config Injector</strong> — wstrzykiwanie configów z Resources przez reflection</li>
+        <li><strong>Hermes</strong> — własna, sztywna architektura DI inspirowana Zenjectem</li>
+      </ul>
       <div class="tags reveal"><span>Scene Loading</span><span>Save System</span><span>Dependency Injection</span><span>Work in Progress</span></div>
     </div>
     <div class="project-media">
@@ -2290,10 +2518,17 @@
       <p class="reveal" data-i18n="about-p-0">Lubię proste rozwiązania trudnych problemów. Nie lubię kodu, który rozumiem tylko ja.</p>
       <p class="reveal" data-i18n="about-p-0b">Trzymam się sprawdzonych zasad architektury i wzorców projektowych — a jak trzeba, schodzę głębiej: Reflection, IL Weaving, Source Generators. Zbudowałem sporo systemów wstrzykiwania zależności, z których korzysta cały zespół, nie tylko ja.</p>
       <p class="reveal" data-i18n="about-p-0c">Potrafię dogadać się w zespole — pracowałem sam, w małych kilkuosobowych ekipach (game jamy, projekty uczelniane), a także w zespole produkcyjnym liczącym 13 osób. Komunikacja nigdy nie była dla mnie problemem.</p>
-      <div class="testimonial reveal">
-        <p data-i18n="about-quote">„Osoba zaangażowana i chętna do nauki, otwarta na feedback i konsekwentnie rozwijająca swoje umiejętności — od pisania czytelnego kodu, przez rozwiązywanie problemów, po pracę z repozytorium. Rzetelny, ambitny i godny zaufania współpracownik.”</p>
-        <cite data-i18n="about-quote-cite">— referencja, 2025</cite>
+      <div class="testimonial-wrap reveal">
+        <button type="button" class="test-nav test-prev" id="test-prev" aria-label="Poprzednia referencja" disabled>‹</button>
+        <div class="testimonial-track" id="testimonial-track">
+          <div class="testimonial">
+            <p data-i18n="about-quote">„Osoba zaangażowana i chętna do nauki, otwarta na feedback i konsekwentnie rozwijająca swoje umiejętności — od pisania czytelnego kodu, przez rozwiązywanie problemów, po pracę z repozytorium. Rzetelny, ambitny i godny zaufania współpracownik.”</p>
+            <cite data-i18n="about-quote-cite">— referencja, 2025</cite>
+          </div>
+        </div>
+        <button type="button" class="test-nav test-next" id="test-next" aria-label="Następna referencja" disabled>›</button>
       </div>
+      <div class="testimonial-dots" id="testimonial-dots"><span class="active"></span></div>
       <div class="tags reveal"><span>Reflection</span><span>IL Weaving</span><span>Source Generators</span></div>
     </div>
     <div class="project-media">
@@ -2354,7 +2589,7 @@
     <div class="project-content">
       <span class="pindex reveal" data-i18n="about-eyebrow-2">O mnie 03/03</span>
       <h3 class="reveal" data-i18n="about-h-2">W co gram</h3>
-      <p class="reveal" data-i18n="about-p-2">Kilka gier, przy których świetnie się bawiłem — różne gatunki, ale wszystkie mają jedno wspólne: dopracowany, satysfakcjonujący gameplay.</p>
+      <p class="reveal" data-i18n="about-p-2">Zapytaj developera, co gra po godzinach, a zwykle usłyszysz research przebrany za odpoczynek. U mnie szczerze — po prostu lubię, kiedy gameplay jest dopracowany i satysfakcjonujący, niezależnie od gatunku. Kilka tytułów, przy których się nie oszukiwałem:</p>
       <div class="tags reveal"><span>Cuphead</span><span>Age of Empires IV</span><span>Rust</span><span>Lies of P</span><span>Black Myth: Wukong</span></div>
       <div class="links reveal">
         <a href="https://steamcommunity.com/profiles/76561198025641193/" target="_blank" rel="noopener" data-i18n="about-steam-link">Mój profil Steam ↗</a>
@@ -2396,7 +2631,8 @@
       <a href="CV_Tobiasz_Mazurek.pdf" target="_blank" rel="noopener">CV (PDF) <span class="arrow">↓</span></a>
       <a href="Referencje.pdf" target="_blank" rel="noopener" data-i18n="contact-reference">Referencja (PDF) <span class="arrow">↓</span></a>
     </div>
-    <p style="margin-top:2.5rem; font-size:0.8125rem;" data-i18n="contact-copyright">© 2026 Tobiasz Mazurek</p>
+    <p class="reveal" style="margin-top:0.75rem; margin-bottom:0.5rem; font-size:0.8125rem; color:var(--text-dim);" data-i18n="contact-p3">Swoją drogą — podoba Ci się ta strona? Robię też takie na zamówienie, a Unity uczę indywidualnie. Daj znać, jeśli coś z tego brzmi ciekawie.</p>
+    <p style="margin-top:0.5rem; font-size:0.8125rem;" data-i18n="contact-copyright">© 2026 Tobiasz Mazurek</p>
   </div>
 </section>
 
@@ -2513,8 +2749,11 @@
   window.addEventListener('wheel', (e) => {
     if(!isDesktop()) return; // let mobile scroll natively
     if(animating) return;
+    if(e.target.closest && e.target.closest('#edit-panel')) return; // panel edycji przewija się natywnie
     const lb = document.getElementById('lightbox');
     if(lb && lb.classList.contains('active')) return; // preview open — don't touch page scroll
+    const sm = document.getElementById('summary-modal');
+    if(sm && sm.classList.contains('active')) return; // summary open — don't touch page scroll
 
     const activeSection = sections[index];
 
@@ -2557,6 +2796,8 @@
     if(!isDesktop() || animating) return;
     const lb = document.getElementById('lightbox');
     if(lb && lb.classList.contains('active')) return; // preview open — arrows belong to it, not page nav
+    const sm = document.getElementById('summary-modal');
+    if(sm && sm.classList.contains('active')) return; // summary open — arrows belong to it, not page nav
     if(['ArrowDown','ArrowRight','PageDown',' '].includes(e.key)){ e.preventDefault(); goTo(index + 1); }
     if(['ArrowUp','ArrowLeft','PageUp'].includes(e.key)){ e.preventDefault(); goTo(index - 1); }
   });
@@ -2640,7 +2881,7 @@
     const EN = {
       'nav-start':'Home','nav-about':'About','nav-career':'Career','nav-skills':'Skills','nav-productions':'Productions','nav-games':'Games',
       'nav-tools':'Tools','nav-software':'Software','nav-contact':'Contact',
-      'nav-editor':'Editor Tools','nav-wip':'In Progress',
+      'nav-editor':'Editor Tools','nav-wip':'More',
 
       'hero-loc':'RELOCATION / REMOTE — OPEN TO EITHER',
       'hero-h1':'Hey! Great to have you here.',
@@ -2660,7 +2901,7 @@
       'about-p-0c':'I can hold my own in a team — I\'ve worked solo, in small crews (game jams, university projects), and in a 13-person production team. Communication has never been a problem for me.',
       'about-p-1':'Calisthenics and running keep me in enough shape that the screen hasn\'t fully absorbed me yet — winning, for now. I watch my diet too, though I don\'t always beat the midnight pizza.',
       'about-p-1b':'Gaming has always been a passion of mine — not just downtime, but inspiration for my own projects. I pick up a squash racket sometimes, and whenever I get the chance, I pack a bag and disappear somewhere new — the best reset I know.',
-      'about-p-2':'A few games I\'ve had a great time with — different genres, but they all share one thing: polished, satisfying gameplay.',
+      'about-p-2':'Ask a developer what they play after hours and you\'ll usually get research disguised as relaxation. Honestly, for me it\'s simpler — I just like it when gameplay is polished and satisfying, whatever the genre. A few titles I wasn\'t faking it with:',
       'about-steam-link':'My Steam profile ↗',
       'about-cs2-caption':'“I can shoot a little bit”',
       'about-stat1':'years in Unity','about-stat2':'completed projects','about-stat3':'titles on Steam',
@@ -2682,21 +2923,22 @@
       'skills-items1':'C# (advanced), C/C++ (basic), Python',
       'skills-items2':'Unity (advanced, URP), Unreal Engine 5 (basic)',
 
-      'p1-p':'A short, comedic point-and-click adventure released in Early Access by Radikate / FreeMind S.A. / PlayWay S.A. You help forty-year-old Mervin move out of his mom\'s house — through absurd odd jobs and even more absurd trouble. I handled gameplay programming on the Radikate team.',
-      'p2-p':'A first-person public restroom management sim — clean up, charge fees, kick out freeloaders, and grow your bathroom empire. Published by Radikate / FreeMind S.A. / PlayWay S.A., co-developed by me as part of the Unity team.',
-      'p3-h3':'Space Defense — university project',
-      'p3-p':'A cyberpunk-styled Tower Defense built with a four-person team as a university project, run fully by SCRUM — short sprints, stand-ups, retrospectives, planning. I handled gameplay programming alongside Michał Rudelicz. Design by Paulina Śliwka and Michał Tofel.',
-      'p4-p':'The first game I ever made — solo, at the PolskiGamedev.pl Game Jam. The goal is to defeat Popiel by collecting mice across three different maps, which change once you\'ve gathered everything needed for that round.',
-      'p5-p':'An endless arcade game — a lumberjack has to gather enough wood to survive winter, chopping a tree into pieces with a single hit. I coded the whole thing solo, coordinating external artists, composers, and a sound designer.',
-      'p6-p':"A multi-level arcade game made at Hello Game Jam — you play a galaxy defender saving a cat planet from destruction, destroying enemy comets and dodging attacks. Two planets are fully playable, more are still in progress. Art by Paulina Śliwka.",
+      'p1-p':'And since you were just reading about scrubbing a toilet — yes, I also made a game literally about being a nerd. Quite the pairing. A short, comedic point-and-click adventure where you help forty-year-old Mervin move out of his mom\'s house — through absurd odd jobs and even more absurd trouble. I was responsible for a broad range of gameplay work, including a standalone pseudo-clicker minigame woven into one of those absurd odd jobs.',
+      'p2-p':'Yes, it\'s literally a simulator about cleaning a public restroom — sometimes the best gameplay hides in the least glamorous premise. Clean up, charge fees, kick out freeloaders, and grow your bathroom empire. I was responsible for a broad range of gameplay systems — from early prototypes through to polished, finished mechanics, including UI and object customization. This was the project where I learned the real process of shipping a game on Steam — platform requirements, build configuration, and how that process differs across other distribution channels.',
+      'p3-h3':'Space Defense',
+      'p3-p':'A cyberpunk-styled Tower Defense — you defend a path from waves of enemies by placing and upgrading defense turrets. Built as a university project with a four-person team, run fully by SCRUM — short sprints, stand-ups, retrospectives, planning. I was the gameplay programmer.',
+      'p4-p':'The first game I ever made — in a three-person team at the PolskiGamedev.pl Game Jam. The game itself is short and not exactly deep in terms of gameplay, but it\'s where I learned the most as a beginner programmer. The goal is to defeat Popiel by collecting mice across three different maps, which change once you\'ve gathered everything needed for that round.',
+      'p5-p':'An endless arcade game — a lumberjack has to gather enough wood to survive winter, chopping a tree into pieces with a single hit. I coded the whole thing myself, managing assets from external artists, composers, and a sound designer and wiring them into the game. This was the project where I learned to work with generative systems driving the whole game — including a generative tree-tile system, where the tree breaks apart differently depending on where and how hard it\'s hit.',
+      'p6-p':"A multi-level arcade game made at a game jam — you play a galaxy defender saving a cat planet from destruction, destroying enemy comets and dodging attacks. Each planet is its own self-contained minigame, with its own set of threats. I was the programmer, responsible for every layer of gameplay — from controls and collision, through enemy wave logic, to the scoring system and transitions between planets.",
       'p7-h3':'Wild Bar — in development',
-      'p7-p':'My own solo project — pitched as <em>“Overcooked meets base defense”</em>. You defend a backyard from living, attacking food, cook it up on the grill, and race to serve hungry guests before the forest breaks through the fence. Co-op for 1–4 players. I\'m aiming to release a demo in January 2027 — I\'ll leave the rest as a surprise.',
-      'p8-p':'A strongly-typed, zero-allocation communication channel between game systems. Signals are declared through an editor window instead of hand-written interfaces — a Source Generator (Roslyn) builds the public API and registration logic from that, while Cecil (IL Weaving) only handles injecting the registration calls into <code>Awake</code> and <code>OnDestroy</code>. Assembly structure modeled on the proven approach used by Zenject, DOTween, and Odin.',
-      'p9-p':'A slide-out developer console that runs on the live scene — any method in the code becomes a callable command through a reflection-based resolver, made safe for IL2CPP release builds via a targeted <code>[Preserve]</code> attribute. Full autocomplete with signature hints, command nesting (using one command\'s result as another\'s argument), undo/redo, and support for async commands.',
+      'p7-p':'My own game, which I\'m building myself — pitched as <em>“Overcooked meets base defense”</em>. You defend a backyard from living, attacking food, cook it up on the grill, and race to serve hungry guests before the forest breaks through the fence. Co-op for 1–4 players. I\'m aiming to release a demo in January 2027 — I\'ll leave the rest as a surprise.',
+      'p8-p':'A strongly-typed, zero-allocation communication system between game systems, built so cross-assembly communication stops being a headache. Instead of holding references between modules or pushing data through singletons, one call — <code>Signals.Send(...)</code> — is enough, and the data lands exactly where it needs to, no matter which assembly the receiver lives in. Systems don\'t need to know about each other, yet they communicate freely, with no risk of signal-provider conflicts across modules. A new signal is declared through a dedicated editor window — adding another communication channel takes seconds. Coming up: a visual dependency graph showing, live, who\'s actually talking to whom at any given moment in the game.',
+      'p9-p':'A slide-out developer console that runs at runtime, inside the game build — any method in the code becomes a strongly-typed, callable command (exec), with no need to write a dedicated panel for every test. Safe in IL2CPP builds thanks to a targeted <code>[Preserve]</code> attribute, so it ships in QA test builds too, not just the Editor. Every call gets logged — you can see exactly which command ran, with which arguments, and what it returned, which makes reproducing and reporting bugs far easier. Full autocomplete with signature hints, command nesting (using one command\'s result as another\'s argument), and undo/redo, so rolling back a batch of test changes is one command, not a scene restart — great for fast testing directly on the build, without ever attaching a debugger.',
       'p10-h3':'Editor Tools',
-      'p10-p':'A set of smaller tools that speed up the rest of the team\'s work: an Anchor Converter that turns UI elements into screen-relative anchors, a Font Auto-Size Converter that unifies text scaling across resolutions, and an Interface Drawer that serializes interfaces in the Inspector — something Unity can\'t do out of the box. All tied together by my own attribute- and reflection-based reference injection system, plus the <code>[OnValueChange]</code> attribute that generates a backing field via IL Weaving.',
+      'p10-p':'Nobody brags about editor tools in a first interview, yet they\'re what speeds up the whole team the most. A set of smaller tools used daily: an Anchor Converter that turns UI elements into screen-relative anchors, a Font Auto-Size Converter that unifies text scaling across resolutions, and an Interface Drawer that serializes interfaces in the Inspector — something Unity can\'t do out of the box. All tied together by my own attribute- and reflection-based reference injection system, plus the <code>[OnValueChange]</code> attribute that generates a backing field via IL Weaving.',
       'p11-h3':'In Progress — More Systems',
-      'p11-p':'I\'m developing several bigger systems in parallel, which I\'ll open up once they hit a stable beta: <strong>LScene</strong> — a scene loader with network-loading support, built around a core / menu / map architecture; <strong>Storex</strong> — a game-state save system; <strong>Config Injector</strong> — reflection-based config injection from Resources; and <strong>Hermes</strong> — my own opinionated DI architecture inspired by Zenject.',
+      'p11-p':'I\'m developing several bigger systems in parallel, which I\'ll open up once they hit a stable beta:',
+      'p11-list':'<li><strong>LScene</strong> — a scene loader with network-loading support, built around a core / menu / map architecture</li><li><strong>Storex</strong> — a game-state save system</li><li><strong>Config Injector</strong> — reflection-based config injection from Resources</li><li><strong>Hermes</strong> — my own opinionated DI architecture inspired by Zenject</li>',
       'p12-h3':'Route System — Waste Management',
       'p12-p':'A transport app built for a waste management company. The system generates collection routes in GPX format, and the navigation module guides the driver point by point along the planned route — no manual stop-by-stop planning needed.',
 
@@ -2704,6 +2946,7 @@
       'contact-h2':'Open to collaboration<br>and project talk',
       'contact-p1':'Looking for a Unity Developer to work with — full-time, project-based, or a one-off job? Reach out, I usually reply within 24h.',
       'contact-p2':"If you'd like to talk shop or just chat about game dev in general — I'm always up for it, and if you're nearby, we might even grab a beer.",
+      'contact-p3':"By the way — like this site? I also build ones like it on commission, and teach Unity one-on-one. Let me know if either sounds interesting.",
       'contact-more':'More projects <span class="arrow">↗</span>',
       'contact-reference':'Reference (PDF) <span class="arrow">↓</span>',
       'foot-more':'More projects ↗',
@@ -2757,8 +3000,8 @@
             date: { pl:'2017 – 2021', en:'2017 – 2021' },
             title: { pl:'Technikum — Chłodnictwo i Klimatyzacja', en:'Technical school — Refrigeration & Air Conditioning' },
             desc: {
-              pl:'Zespół Szkół Transportowo-Elektrycznych, Ostrów Wielkopolski. Zanim trafiłem do programowania, uczyłem się zupełnie innego fachu.',
-              en:'Transport-Electrical School Complex, Ostrów Wielkopolski. Before I found programming, I was training in a completely different trade.'
+              pl:'Zespół Szkół Transportowo-Elektrycznych, Ostrów Wielkopolski. Zanim zacząłem programować, uczyłem się zupełnie innego fachu.',
+              en:'Transport-Electrical School Complex, Ostrów Wielkopolski. Before I started programming, I was training in a completely different trade.'
             },
             tags: ['Technikum']
           },
@@ -2766,8 +3009,8 @@
             date: { pl:'Marzec 2021 – Marzec 2024', en:'March 2021 – March 2024' },
             title: { pl:'Uniwersytet Dolnośląski DSW', en:'University of Lower Silesia' },
             desc: {
-              pl:'Informatyka, specjalizacja Programowanie Gier — tu zaczęła się cała reszta.',
-              en:'Computer Science, Game Programming track — where everything else started.'
+              pl:'Informatyka, specjalizacja Programowanie Gier — tu zaczęła się moja przygoda.',
+              en:'Computer Science, Game Programming track — where my journey really began.'
             },
             tags: ['Informatyka', 'Programowanie Gier']
           }
@@ -2788,8 +3031,8 @@
             date: { pl:'Listopad 2022 – Czerwiec 2023', en:'November 2022 – June 2023' },
             title: { pl:'Dream Eater Interactive', en:'Dream Eater Interactive' },
             desc: {
-              pl:'Równolegle do koła naukowego pracowałem nad dwoma nieukończonymi prototypami: <strong>Projekt G</strong> — system multiplayer (zarządzanie sesjami, matchmaking, synchronizacja danych między klientami), oraz <strong>Projekt D</strong> — AI przeciwników sterująca ich zachowaniem względem gracza. Żaden z nich finalnie nie doczekał się premiery.',
-              en:'Alongside the student club, I worked on two unfinished prototypes: <strong>Project G</strong> — a multiplayer system (session management, matchmaking, cross-client data sync), and <strong>Project D</strong> — enemy AI driving their behavior toward the player. Neither one ultimately made it to release.'
+              pl:'Równolegle do koła naukowego pracowałem jako programista Unity w mniejszym zespole nad dwoma prototypami: przy <strong>Projekcie G</strong> odpowiadałem za warstwę multiplayer — zarządzanie sesjami, matchmaking i synchronizację danych między klientami; przy <strong>Projekcie D</strong> tworzyłem AI przeciwników, w tym logikę decyzyjną sterującą ich zachowaniem względem gracza. Żaden z projektów finalnie nie doczekał się premiery, ale to właśnie tam nauczyłem się budować systemy sieciowe i AI od podstaw.',
+              en:'Alongside the student club, I worked as a Unity programmer in a small team on two prototypes: on <strong>Project G</strong> I was responsible for the multiplayer layer — session management, matchmaking, and cross-client data sync; on <strong>Project D</strong> I built enemy AI, including the decision logic driving their behavior toward the player. Neither project ultimately made it to release, but that\'s where I learned to build networking and AI systems from scratch.'
             },
             tags: ['Multiplayer', 'AI', 'C#']
           }
@@ -2827,8 +3070,8 @@
             date: { pl:'2026 – teraz', en:'2026 – present' },
             title: { pl:'Własna produkcja', en:'Own production' },
             desc: {
-              pl:'Kontynuuję pracę jako Unity Developer Freelance, a równolegle rozwijam własną, autorską produkcję — pracuję nad nią solo, demo planuję wypuścić w styczniu 2027. Więcej szczegółów zdradzę bliżej premiery.',
-              en:"I'm continuing to work as a Unity Developer Freelance, while also developing my own solo production on the side — aiming for a demo release in January 2027. More details closer to launch."
+              pl:'Kontynuuję pracę jako Unity Developer Freelance, a równolegle rozwijam własną, autorską produkcję — pracuję nad nią samodzielnie, demo planuję wypuścić w styczniu 2027. Więcej szczegółów zdradzę bliżej premiery.',
+              en:"I'm continuing to work as a Unity Developer Freelance, while also developing my own game on the side — aiming for a demo release in January 2027. More details closer to launch."
             },
             tags: ['Solo Dev', 'Unity', 'C#']
           }
@@ -2903,16 +3146,25 @@
   });
 
   // --- Big background icon click-to-toggle glow ---
+  function toggleMotif(wrap){
+    wrap.classList.toggle('lit');
+    wrap.setAttribute('aria-label', wrap.classList.contains('lit') ? 'Zgaś ikonę' : 'Zapal ikonę');
+  }
   document.querySelectorAll('.motif-wrap.motif-clickable').forEach(wrap => {
-    const toggle = (e) => {
-      e.stopPropagation();
-      wrap.classList.toggle('lit');
-      wrap.setAttribute('aria-label', wrap.classList.contains('lit') ? 'Zgaś ikonę' : 'Zapal ikonę');
-    };
+    const toggle = (e) => { e.stopPropagation(); toggleMotif(wrap); };
     wrap.addEventListener('click', toggle);
     wrap.addEventListener('keydown', (e) => {
       if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); toggle(e); }
     });
+  });
+  // Klik gdziekolwiek indziej w danej sekcji (nie na zdjęciu/tekście/linku/przycisku)
+  // też przełącza poświatę ikony tła tej sekcji — nie trzeba już celować dokładnie w ikonę.
+  document.addEventListener('click', function(e){
+    if(e.target.closest('.tile, .solo-photo, [data-i18n], a, button, input, .motif-wrap, #edit-toggle, #edit-panel, .lightbox, .tags')) return;
+    const section = e.target.closest('section');
+    if(!section) return;
+    const wrap = section.querySelector('.motif-wrap.motif-clickable');
+    if(wrap) toggleMotif(wrap);
   });
 
   // --- Click-anywhere background ripple, tinted to the active section's accent color ---
@@ -3025,6 +3277,37 @@
     zoomAtPoint(e.clientX, e.clientY, zoomLevel > 1.02 ? 1 : 2.5);
   });
 
+  // --- Karuzela referencji: działa dla 1 albo N cytatów, bez zmian w kodzie przy dokładaniu kolejnych ---
+  (function(){
+    const track = document.getElementById('testimonial-track');
+    const prevBtn = document.getElementById('test-prev');
+    const nextBtn = document.getElementById('test-next');
+    const dotsWrap = document.getElementById('testimonial-dots');
+    if(!track || !prevBtn || !nextBtn || !dotsWrap) return;
+    const slides = Array.from(track.children);
+    if(slides.length <= 1){
+      dotsWrap.style.display = 'none';
+      return;
+    }
+    dotsWrap.innerHTML = slides.map((_, i) => `<span${i === 0 ? ' class="active"' : ''}></span>`).join('');
+    const dots = Array.from(dotsWrap.children);
+    function updateState(){
+      const idx = Math.round(track.scrollLeft / track.clientWidth);
+      prevBtn.disabled = idx <= 0;
+      nextBtn.disabled = idx >= slides.length - 1;
+      dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+    }
+    function goTo(idx){
+      idx = Math.max(0, Math.min(slides.length - 1, idx));
+      track.scrollTo({ left: idx * track.clientWidth, behavior: 'smooth' });
+    }
+    prevBtn.addEventListener('click', () => goTo(Math.round(track.scrollLeft / track.clientWidth) - 1));
+    nextBtn.addEventListener('click', () => goTo(Math.round(track.scrollLeft / track.clientWidth) + 1));
+    track.addEventListener('scroll', () => { window.clearTimeout(track._t); track._t = window.setTimeout(updateState, 80); }, { passive: true });
+    dots.forEach((d, i) => d.addEventListener('click', () => goTo(i)));
+    updateState();
+  })();
+
   document.querySelectorAll('.about-photo, .solo-photo').forEach(function(el){
     el.addEventListener('click', function(e){
       if(document.body.classList.contains('edit-mode')) return;
@@ -3048,9 +3331,95 @@
 })();
 </script>
 
+<button id="summary-fab" type="button" title="Szybkie podsumowanie" aria-label="Szybkie podsumowanie">⚡ Szybkie podsumowanie</button>
+<div id="summary-modal">
+  <div id="summary-card">
+    <div id="summary-modal-inner">
+      <button id="summary-close" type="button" aria-label="Zamknij">✕</button>
+      <h2>Tobiasz Mazurek</h2>
+      <p class="sum-role">Unity Developer — relokacja / zdalnie, dostępny w każdym wariancie</p>
+      <p class="sum-lead">
+        Ponad 4-letnie doświadczenie w gameplayu, systemach sieciowych i własnych narzędziach
+        edytorskich — od game jamów po dwa tytuły wydane na Steam. Pracował samodzielnie i w zespołach
+        do 13 osób, przy architekturze ECS, serwerach dedykowanych i Unity Game Services.
+      </p>
+
+      <h4>Oś kariery</h4>
+      <div class="sum-projects">
+        <div class="sum-project"><strong>2026 – teraz</strong><span>Własna produkcja + Unity Developer Freelance</span></div>
+        <div class="sum-project"><strong>2025</strong><span>Radikate — Unity Developer (Nerd Simulator, Mr Toilet)</span></div>
+        <div class="sum-project"><strong>2024 – 2025</strong><span>Unity Developer Freelance — 13-osobowa grupa, ECS, serwer dedykowany</span></div>
+        <div class="sum-project"><strong>2021 – 2024</strong><span>Studia (Informatyka, Programowanie Gier) + koło naukowe Hello IT</span></div>
+      </div>
+
+      <h4>Umiejętności</h4>
+      <div class="sum-skills">
+        <span>C# (zaawansowany)</span><span>C/C++</span><span>Python</span>
+        <span>Unity (zaawansowany, URP)</span><span>Unreal Engine 5</span>
+        <span>Source Generators</span><span>IL Weaving (Mono.Cecil)</span><span>Reflection</span>
+        <span>Netcode for GameObjects</span><span>PurrNet</span><span>Photon Pun 2</span><span>FishNet</span>
+        <span>PlayFab</span><span>Unity Game Services</span><span>ECS</span>
+        <span>Zenject</span><span>Odin Inspector</span><span>DoTween</span><span>Spine 2D</span>
+        <span>Git</span><span>Jira</span><span>ClickUp</span>
+      </div>
+
+      <h4>Projekty</h4>
+      <div class="sum-projects">
+        <a href="#project-1" class="sum-project" data-jump="project-1"><strong>Mr Toilet</strong><span>Steam</span></a>
+        <a href="#project-2" class="sum-project" data-jump="project-2"><strong>Nerd Simulator</strong><span>Steam</span></a>
+        <a href="#project-3" class="sum-project" data-jump="project-3"><strong>Wild Bar</strong><span>W produkcji</span></a>
+        <a href="#project-4" class="sum-project" data-jump="project-4"><strong>Space Defense</strong><span>Projekt uczelniany</span></a>
+        <a href="#project-9" class="sum-project" data-jump="project-9"><strong>Runtime Inspector</strong><span>Narzędzie autorskie</span></a>
+        <a href="#project-8" class="sum-project" data-jump="project-8"><strong>Simply Signals</strong><span>Narzędzie autorskie</span></a>
+      </div>
+
+      <h4>Kontakt</h4>
+      <div class="sum-projects">
+        <a href="mailto:tobiasz7182@gmail.com" class="sum-project"><strong>Email</strong><span>tobiasz7182@gmail.com</span></a>
+        <a href="https://github.com/veli-dev" target="_blank" rel="noopener" class="sum-project"><strong>GitHub</strong><span>github.com/veli-dev ↗</span></a>
+        <a href="https://sites.google.com/view/tobiasz-mazurek-v2/strona-g%C5%82%C3%B3wna" target="_blank" rel="noopener" class="sum-project"><strong>Więcej projektów</strong><span>portfolio ↗</span></a>
+      </div>
+
+      <div class="sum-actions">
+        <a href="#contact" class="btn btn-primary" data-jump="contact">Przejdź do kontaktu</a>
+      </div>
+    </div>
+  </div>
+</div>
+
 <button id="edit-toggle" type="button" title="Tryb edycji layoutu">✎</button>
+<script>
+(function(){
+  const modal = document.getElementById('summary-modal');
+  const openBtn = document.getElementById('summary-fab');
+  const closeBtn = document.getElementById('summary-close');
+
+  function openModal(){ modal.classList.add('active'); }
+  function closeModal(){ modal.classList.remove('active'); }
+
+  openBtn.addEventListener('click', openModal);
+  closeBtn.addEventListener('click', closeModal);
+  modal.addEventListener('click', function(e){ if(e.target === modal) closeModal(); });
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeModal(); });
+
+  // Linki wewnątrz modala (np. do projektów) — zamknij modal, potem przewiń do sekcji.
+  modal.querySelectorAll('[data-jump]').forEach(function(a){
+    a.addEventListener('click', function(e){
+      e.preventDefault();
+      closeModal();
+      const targetId = a.dataset.jump;
+      setTimeout(function(){
+        document.getElementById(targetId)?.scrollIntoView({ behavior:'smooth', block:'start' });
+      }, 200);
+    });
+  });
+})();
+</script>
 <div id="edit-panel">
-  <h4>Tryb edycji layoutu</h4>
+  <div class="ep-head">
+    <h4>Tryb edycji layoutu</h4>
+    <button type="button" id="ep-hide" title="Schowaj panel (klawisz H)">Schowaj ›</button>
+  </div>
   <p class="ep-hint">
     Klikaj i przeciągaj zdjęcia, tekst i kontener, żeby ustawić layout. Suwaki niżej
     to alternatywa dla myszki. Na koniec kliknij "Wygeneruj CSS" i wklej kod do pliku
@@ -3074,7 +3443,43 @@
       <p class="ep-hint" style="margin:6px 0 0;">Rozciąga/spłaszcza kadr zdjęcia niezależnie od szerokości (samo zdjęcie się nie deformuje — obcina nadmiar, jak w Instagramie).</p>
     </div>
     <div class="ep-row">
+      <label>Nazwa pliku (output) <span class="ep-val" id="ep-filename-val"></span></label>
+      <input type="text" id="ep-filename" placeholder="np. fluffy-3" style="width:100%; box-sizing:border-box; background:#0E0F11; color:#EDEDE9; border:1px solid #2A2D31; border-radius:6px; padding:8px 10px; font-family:monospace; font-size:13px;">
+      <p class="ep-hint" style="margin:6px 0 0;">To tylko nazwa pliku (bez ".jpg"), zachowuje folder "images/" i rozszerzenie. Zmienia się na żywo w podglądzie — jeśli plik o tej nazwie jeszcze nie istnieje, zdjęcie na chwilę zniknie, dopóki nie wgrasz pliku pod tą nazwą.</p>
+    </div>
+    <div class="ep-row">
       <button type="button" id="ep-delete-tile" style="background:#B8452E;">Usuń to zdjęcie</button>
+    </div>
+  </div>
+  <div class="ep-row" id="ep-motif-controls" style="display:none;">
+    <div class="ep-row">
+      <label>Zaznaczona ikonka (motyw): <span id="ep-motif-name">—</span></label>
+      <p class="ep-hint" style="margin:6px 0 0;">Kliknij lub przeciągnij ikonkę w tle sekcji, żeby ją tu zaznaczyć. Scroll na ikonce = obrót, Ctrl+scroll = skala (tak jak przy zdjęciach).</p>
+    </div>
+    <div class="ep-row">
+      <label>Obrót ikonki <span class="ep-val" id="ep-motif-rot-val">0°</span></label>
+      <input type="range" id="ep-motif-rotate" min="-180" max="180" step="1" value="0">
+    </div>
+    <div class="ep-row">
+      <label>Skala ikonki <span class="ep-val" id="ep-motif-scale-val">100%</span></label>
+      <input type="range" id="ep-motif-scale" min="40" max="200" step="2" value="100">
+    </div>
+    <div class="ep-row">
+      <label>Kolor ikonki (kreska/linia) <span class="ep-val" id="ep-motif-icon-color-val">—</span></label>
+      <div style="display:flex; gap:8px;">
+        <input type="color" id="ep-motif-icon-color" value="#7C9A92" style="flex:0 0 3.5rem; height:2.25rem; padding:2px; background:transparent; border:1px solid #2A2D31; border-radius:6px;">
+        <input type="text" id="ep-motif-icon-color-hex" value="#7C9A92" placeholder="#7C9A92" maxlength="7" style="flex:1; min-width:0; height:2.25rem; box-sizing:border-box; background:#0E0F11; color:#EDEDE9; border:1px solid #2A2D31; border-radius:6px; padding:0 10px; font-family:monospace; font-size:13px;">
+      </div>
+    </div>
+    <div class="ep-row">
+      <label>Kolor "odpalenia" (poświata, dotyczy całej sekcji) <span class="ep-val" id="ep-motif-color-val">—</span></label>
+      <div style="display:flex; gap:8px;">
+        <input type="color" id="ep-motif-color" value="#7C9A92" style="flex:0 0 3.5rem; height:2.25rem; padding:2px; background:transparent; border:1px solid #2A2D31; border-radius:6px;">
+        <input type="text" id="ep-motif-color-hex" value="#7C9A92" placeholder="#7C9A92" maxlength="7" style="flex:1; min-width:0; height:2.25rem; box-sizing:border-box; background:#0E0F11; color:#EDEDE9; border:1px solid #2A2D31; border-radius:6px; padding:0 10px; font-family:monospace; font-size:13px;">
+      </div>
+    </div>
+    <div class="ep-row">
+      <button type="button" id="ep-motif-reset">Reset tej ikonki</button>
     </div>
   </div>
   <div class="ep-row">
@@ -3098,7 +3503,7 @@
     <label>Skala tekstu w tej sekcji <span class="ep-val" id="ep-txt-val">100%</span></label>
     <input type="range" id="ep-txt-scale" min="0.7" max="1.6" step="0.02" value="1">
     <label style="margin-top:6px; text-transform:none; font-size:12px; display:flex; align-items:center; gap:6px;">
-      <input type="checkbox" id="ep-txt-center" style="width:auto;"> Skaluj względem środka (nie lewego górnego rogu)
+      <input type="checkbox" id="ep-txt-center" checked style="width:auto;"> Skaluj względem środka (nie lewego górnego rogu)
     </label>
   </div>
   <div class="ep-row">
@@ -3140,18 +3545,26 @@
       <li><kbd>Klik na zdjęcie</kbd><span>zaznacz (suwaki)</span></li>
       <li><kbd>Klik w tekst</kbd><span>edytuj treść</span></li>
       <li><kbd>Ctrl + Z</kbd><span>cofnij ostatnią zmianę</span></li>
+      <li><kbd>Przeciągnij ikonę tła</kbd><span>przesuń</span></li>
+      <li><kbd>H</kbd><span>schowaj/pokaż ten panel</span></li>
     </ul>
   </div>
 </div>
+<button id="ep-reopen" type="button" title="Pokaż panel edycji (klawisz H)">Panel ‹</button>
 <script>
 (function(){
   const toggleBtn = document.getElementById('edit-toggle');
+  if(new URLSearchParams(window.location.search).has('edit')){
+    toggleBtn.classList.add('visible');
+  }
   const panel = document.getElementById('edit-panel');
   const txtScaleInput = document.getElementById('ep-txt-scale');
   const txtScaleVal = document.getElementById('ep-txt-val');
   const outputBox = document.getElementById('ep-output');
 
   const tileState = new Map();   // selector -> {left, top, width, rotate, unit}
+  const tileFilenameState = new Map(); // "sectionId :: tag" -> nowy pełny url obrazka
+  const tileFilenameOriginal = new Map(); // "sectionId :: tag" -> oryginalny url obrazka (do resetu)
 
   // ===== Cofnij (Ctrl+Z) =====
   const undoStack = [];
@@ -3174,6 +3587,31 @@
     const fn = undoStack.pop();
     if(fn) fn();
   }
+  // Ogólny "zapisz stan przed zmianą" — działa dla dowolnej mapy stanu (tekst, media, gap, motyw, kolor),
+  // nie tylko dla zdjęć. styleProps może zawierać zwykłe właściwości ('transform', 'gap', ...) albo
+  // customowe zmienne CSS (zaczynające się od '--').
+  function snapshotState(mapRef, key, el, styleProps){
+    const hadKey = mapRef ? mapRef.has(key) : false;
+    const rawVal = hadKey ? mapRef.get(key) : null;
+    const prevVal = (rawVal && typeof rawVal === 'object') ? Object.assign({}, rawVal) : rawVal;
+    const prevStyles = {};
+    styleProps.forEach(function(p){
+      prevStyles[p] = p.indexOf('--') === 0 ? el.style.getPropertyValue(p) : el.style[p];
+    });
+    undoStack.push(function(){
+      styleProps.forEach(function(p){
+        if(p.indexOf('--') === 0){
+          if(prevStyles[p]) el.style.setProperty(p, prevStyles[p]); else el.style.removeProperty(p);
+        } else {
+          el.style[p] = prevStyles[p];
+        }
+      });
+      if(mapRef){
+        if(hadKey) mapRef.set(key, prevVal); else mapRef.delete(key);
+      }
+    });
+    if(undoStack.length > 60) undoStack.shift();
+  }
   document.addEventListener('keydown', function(e){
     if(!document.body.classList.contains('edit-mode')) return;
     if((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z'){
@@ -3185,6 +3623,66 @@
   const deletedTiles = new Set(); // "sectionId :: tag" usuniętych zdjęć
   const addedTiles = new Map();   // tag -> {sectionId, orientation} nowo dodanych zdjęć
   let addedTileCounter = 0;
+
+  // ===== Przeciąganie dużych ikon tła (motif) w trybie edycji =====
+  const motifState = new Map(); // "sectionId :: motif-class" -> {top, left, rot, scale}
+  const motifColorState = new Map(); // sectionId -> hex color (poświata / glow)
+  const motifIconColorState = new Map(); // sectionId -> hex color (sama ikonka / kreska)
+  const motifColorOriginal = new Map(); // sectionId -> oryginalny --motif-color z HTML (do prawdziwego resetu)
+  const motifIconColorOriginal = new Map(); // sectionId -> oryginalny --motif-icon-color (zwykle brak = puste)
+  document.querySelectorAll('.motif-wrap').forEach(function(wrap){
+    let dragging = false, sx = 0, sy = 0, startTop = 0, startLeft = 0, parentRect = null, moved = false;
+    wrap.addEventListener('mousedown', function(e){
+      if(!document.body.classList.contains('edit-mode')) return;
+      e.preventDefault();
+      e.stopPropagation();
+      dragging = true; moved = false;
+      sx = e.clientX; sy = e.clientY;
+      const parent = wrap.offsetParent || wrap.parentElement;
+      parentRect = parent.getBoundingClientRect();
+      const cs = getComputedStyle(wrap);
+      startTop = parseFloat(cs.top) || 0;
+      startLeft = parseFloat(cs.left) || 0;
+      {
+        const sectionEl0 = wrap.closest('section[id]');
+        const motifClass0 = Array.from(wrap.classList).find(c => c.startsWith('motif-') && c !== 'motif-wrap' && c !== 'motif-clickable' && c !== 'lit');
+        if(sectionEl0 && motifClass0) snapshotState(motifState, sectionEl0.id + ' :: ' + motifClass0, wrap, ['top','left','right']);
+      }
+      function onMove(ev){
+        const dx = ev.clientX - sx, dy = ev.clientY - sy;
+        if(Math.abs(dx) > 3 || Math.abs(dy) > 3) moved = true;
+        const topPx = startTop + dy, leftPx = startLeft + dx;
+        const topPct = (topPx / parentRect.height) * 100;
+        const leftPct = (leftPx / parentRect.width) * 100;
+        wrap.style.top = topPct.toFixed(2) + '%';
+        wrap.style.left = leftPct.toFixed(2) + '%';
+        wrap.style.right = 'auto';
+        wrap.style.bottom = 'auto';
+        const sectionEl = wrap.closest('section[id]');
+        const motifClass = Array.from(wrap.classList).find(c => c.startsWith('motif-') && c !== 'motif-wrap' && c !== 'motif-clickable' && c !== 'lit');
+        if(sectionEl && motifClass){
+          const key = sectionEl.id + ' :: ' + motifClass;
+          const prev = motifState.get(key) || {};
+          motifState.set(key, Object.assign({}, prev, { top: wrap.style.top, left: wrap.style.left }));
+        }
+      }
+      function onUp(){
+        dragging = false;
+        document.removeEventListener('mousemove', onMove);
+        document.removeEventListener('mouseup', onUp);
+        selectMotif(wrap);
+      }
+      document.addEventListener('mousemove', onMove);
+      document.addEventListener('mouseup', onUp);
+    }, true);
+    // Nie przełączaj poświaty, jeśli to było przeciąganie, nie klik.
+    wrap.addEventListener('click', function(e){
+      if(document.body.classList.contains('edit-mode')){
+        e.stopPropagation(); e.preventDefault();
+        if(!moved) selectMotif(wrap);
+      }
+    }, true);
+  });
 
   function initTile(el){
     const badge = document.createElement('div');
@@ -3259,10 +3757,35 @@
     let tag = 'tile-?';
     if(el.classList.contains('solo-photo')) tag = 'solo-photo';
     else {
-      const m = Array.from(el.classList).find(c => /^tile-[a-d]$/.test(c));
+      const m = Array.from(el.classList).find(c => /^tile-/.test(c));
       if(m) tag = m;
     }
     return { sectionId, tag, key: sectionId + ' :: ' + tag };
+  }
+
+  // --- Nazwa pliku zdjęcia (output) ---
+  function getImageEl(tileEl){
+    return tileEl.classList.contains('solo-photo') ? tileEl : tileEl.querySelector('.about-photo');
+  }
+  function getBgUrl(imgEl){
+    const m = /url\((['"]?)([^'")]+)\1\)/.exec(imgEl.style.backgroundImage || '');
+    return m ? m[2] : '';
+  }
+  function getFilenameFromUrl(url){
+    const base = url.split('/').pop().split('?')[0];
+    const dot = base.lastIndexOf('.');
+    return dot > -1 ? base.slice(0, dot) : base;
+  }
+  function setFilenameOnUrl(url, newName){
+    const qIdx = url.indexOf('?');
+    const query = qIdx > -1 ? url.slice(qIdx) : '';
+    const path = qIdx > -1 ? url.slice(0, qIdx) : url;
+    const lastSlash = path.lastIndexOf('/');
+    const dir = lastSlash > -1 ? path.slice(0, lastSlash + 1) : '';
+    const base = lastSlash > -1 ? path.slice(lastSlash + 1) : path;
+    const dot = base.lastIndexOf('.');
+    const ext = dot > -1 ? base.slice(dot) : '';
+    return dir + newName + ext + query;
   }
 
   function currentRotation(el){
@@ -3295,6 +3818,7 @@
   // nawet jeśli leży pod innym w stosie.
   const tileControls = document.getElementById('ep-tile-controls');
   const activeNameEl = document.getElementById('ep-active-name');
+  const filenameInput = document.getElementById('ep-filename');
   const rotateSlider = document.getElementById('ep-rotate');
   const rotateVal = document.getElementById('ep-rot-val');
   const sizeSlider = document.getElementById('ep-size');
@@ -3302,6 +3826,173 @@
 
   let activeEl = null;
   let mode = null, startX = 0, startY = 0, startLeft = 0, startTop = 0, parentRect = null, dragElW = 0, dragElH = 0;
+
+  // --- Kontrolki ikonek-motywów (obrót / skala / kolor poświaty) ---
+  const motifControls = document.getElementById('ep-motif-controls');
+  const motifNameEl = document.getElementById('ep-motif-name');
+  const motifRotSlider = document.getElementById('ep-motif-rotate');
+  const motifRotVal = document.getElementById('ep-motif-rot-val');
+  const motifScaleSlider = document.getElementById('ep-motif-scale');
+  const motifScaleVal = document.getElementById('ep-motif-scale-val');
+  const motifColorInput = document.getElementById('ep-motif-color');
+  const motifColorVal = document.getElementById('ep-motif-color-val');
+  const motifColorHex = document.getElementById('ep-motif-color-hex');
+  const motifIconColorInput = document.getElementById('ep-motif-icon-color');
+  const motifIconColorVal = document.getElementById('ep-motif-icon-color-val');
+  const motifIconColorHex = document.getElementById('ep-motif-icon-color-hex');
+  function isValidHex(v){ return /^#[0-9a-fA-F]{6}$/.test(v); }
+  let activeMotif = null;
+
+  function getMotifClass(wrap){
+    return Array.from(wrap.classList).find(c => c.startsWith('motif-') && c !== 'motif-wrap' && c !== 'motif-clickable' && c !== 'lit');
+  }
+  function getMotifState(wrap){
+    const sectionEl = wrap.closest('section[id]');
+    const motifClass = getMotifClass(wrap);
+    const key = sectionEl ? sectionEl.id + ' :: ' + motifClass : null;
+    const st = (key && motifState.get(key)) || {};
+    return { sectionEl, motifClass, key, rot: st.rot || 0, scale: st.scale != null ? st.scale : 1 };
+  }
+  function applyMotifTransform(wrap, rot, scale){
+    wrap.style.setProperty('--motif-transform', 'rotate(' + rot + 'deg) scale(' + scale + ')');
+    const sectionEl = wrap.closest('section[id]');
+    const motifClass = getMotifClass(wrap);
+    if(sectionEl && motifClass){
+      const key = sectionEl.id + ' :: ' + motifClass;
+      const prev = motifState.get(key) || {};
+      motifState.set(key, Object.assign({}, prev, { rot: rot, scale: scale }));
+    }
+  }
+  function selectMotif(wrap){
+    activeMotif = wrap;
+    motifControls.style.display = 'block';
+    tileControls.style.display = 'none';
+    const st = getMotifState(wrap);
+    motifNameEl.textContent = (st.sectionEl ? st.sectionEl.id : '?') + ' / ' + (st.motifClass || '?');
+    motifRotSlider.value = st.rot;
+    motifRotVal.textContent = st.rot + '°';
+    motifScaleSlider.value = Math.round(st.scale * 100);
+    motifScaleVal.textContent = Math.round(st.scale * 100) + '%';
+    const sectionColor = st.sectionEl ? (getComputedStyle(st.sectionEl).getPropertyValue('--motif-color').trim() || '#7C9A92') : '#7C9A92';
+    motifColorInput.value = sectionColor.length === 7 ? sectionColor : '#7C9A92';
+    motifColorVal.textContent = motifColorInput.value;
+    motifColorHex.value = motifColorInput.value;
+    const iconColor = st.sectionEl ? getComputedStyle(st.sectionEl).getPropertyValue('--motif-icon-color').trim() : '';
+    motifIconColorInput.value = iconColor.length === 7 ? iconColor : motifColorInput.value;
+    motifIconColorVal.textContent = motifIconColorInput.value;
+    motifIconColorHex.value = motifIconColorInput.value;
+  }
+  motifRotSlider.addEventListener('mousedown', function(){
+    if(!activeMotif) return;
+    snapshotState(motifState, getMotifState(activeMotif).key, activeMotif, ['--motif-transform']);
+  });
+  motifRotSlider.addEventListener('input', function(){
+    if(!activeMotif) return;
+    const rot = parseInt(motifRotSlider.value, 10);
+    motifRotVal.textContent = rot + '°';
+    const st = getMotifState(activeMotif);
+    applyMotifTransform(activeMotif, rot, st.scale);
+  });
+  motifScaleSlider.addEventListener('mousedown', function(){
+    if(!activeMotif) return;
+    snapshotState(motifState, getMotifState(activeMotif).key, activeMotif, ['--motif-transform']);
+  });
+  motifScaleSlider.addEventListener('input', function(){
+    if(!activeMotif) return;
+    const scale = parseInt(motifScaleSlider.value, 10) / 100;
+    motifScaleVal.textContent = Math.round(scale * 100) + '%';
+    const st = getMotifState(activeMotif);
+    applyMotifTransform(activeMotif, st.rot, scale);
+  });
+  function applyGlowColor(hex, sectionEl){
+    sectionEl.style.setProperty('--motif-color', hex);
+    motifColorVal.textContent = hex;
+    motifColorInput.value = hex;
+    motifColorHex.value = hex;
+    motifColorState.set(sectionEl.id, hex);
+  }
+  function applyIconColor(hex, sectionEl){
+    sectionEl.style.setProperty('--motif-icon-color', hex);
+    motifIconColorVal.textContent = hex;
+    motifIconColorInput.value = hex;
+    motifIconColorHex.value = hex;
+    motifIconColorState.set(sectionEl.id, hex);
+  }
+  motifColorInput.addEventListener('mousedown', function(){
+    if(!activeMotif) return;
+    const sectionEl = activeMotif.closest('section[id]');
+    if(!sectionEl) return;
+    if(!motifColorOriginal.has(sectionEl.id)) motifColorOriginal.set(sectionEl.id, sectionEl.style.getPropertyValue('--motif-color'));
+    snapshotState(motifColorState, sectionEl.id, sectionEl, ['--motif-color']);
+  });
+  motifColorInput.addEventListener('input', function(){
+    if(!activeMotif) return;
+    const sectionEl = activeMotif.closest('section[id]');
+    if(!sectionEl) return;
+    applyGlowColor(motifColorInput.value, sectionEl);
+  });
+  let glowHexSnapshotTaken = false;
+  motifColorHex.addEventListener('focus', function(){ glowHexSnapshotTaken = false; });
+  motifColorHex.addEventListener('input', function(){
+    if(!activeMotif) return;
+    const sectionEl = activeMotif.closest('section[id]');
+    if(!sectionEl) return;
+    let v = motifColorHex.value.trim();
+    if(v && v[0] !== '#') v = '#' + v;
+    if(!isValidHex(v)) return; // czekaj aż wpisze pełne 6 znaków, nie stosuj częściowego wpisu
+    if(!glowHexSnapshotTaken){
+      if(!motifColorOriginal.has(sectionEl.id)) motifColorOriginal.set(sectionEl.id, sectionEl.style.getPropertyValue('--motif-color'));
+      snapshotState(motifColorState, sectionEl.id, sectionEl, ['--motif-color']);
+      glowHexSnapshotTaken = true;
+    }
+    applyGlowColor(v, sectionEl);
+  });
+  motifIconColorInput.addEventListener('mousedown', function(){
+    if(!activeMotif) return;
+    const sectionEl = activeMotif.closest('section[id]');
+    if(!sectionEl) return;
+    if(!motifIconColorOriginal.has(sectionEl.id)) motifIconColorOriginal.set(sectionEl.id, sectionEl.style.getPropertyValue('--motif-icon-color'));
+    snapshotState(motifIconColorState, sectionEl.id, sectionEl, ['--motif-icon-color']);
+  });
+  motifIconColorInput.addEventListener('input', function(){
+    if(!activeMotif) return;
+    const sectionEl = activeMotif.closest('section[id]');
+    if(!sectionEl) return;
+    applyIconColor(motifIconColorInput.value, sectionEl);
+  });
+  let iconHexSnapshotTaken = false;
+  motifIconColorHex.addEventListener('focus', function(){ iconHexSnapshotTaken = false; });
+  motifIconColorHex.addEventListener('input', function(){
+    if(!activeMotif) return;
+    const sectionEl = activeMotif.closest('section[id]');
+    if(!sectionEl) return;
+    let v = motifIconColorHex.value.trim();
+    if(v && v[0] !== '#') v = '#' + v;
+    if(!isValidHex(v)) return;
+    if(!iconHexSnapshotTaken){
+      if(!motifIconColorOriginal.has(sectionEl.id)) motifIconColorOriginal.set(sectionEl.id, sectionEl.style.getPropertyValue('--motif-icon-color'));
+      snapshotState(motifIconColorState, sectionEl.id, sectionEl, ['--motif-icon-color']);
+      iconHexSnapshotTaken = true;
+    }
+    applyIconColor(v, sectionEl);
+  });
+  document.getElementById('ep-motif-reset').addEventListener('click', function(){
+    if(!activeMotif) return;
+    const sectionEl = activeMotif.closest('section[id]');
+    const motifClass = getMotifClass(activeMotif);
+    activeMotif.style.removeProperty('--motif-transform');
+    activeMotif.style.top = ''; activeMotif.style.left = ''; activeMotif.style.right = ''; activeMotif.style.bottom = '';
+    if(sectionEl && motifClass) motifState.delete(sectionEl.id + ' :: ' + motifClass);
+    if(sectionEl){
+      const origColor = motifColorOriginal.get(sectionEl.id);
+      if(origColor) sectionEl.style.setProperty('--motif-color', origColor); else sectionEl.style.removeProperty('--motif-color');
+      motifColorState.delete(sectionEl.id); motifColorOriginal.delete(sectionEl.id);
+      const origIconColor = motifIconColorOriginal.get(sectionEl.id);
+      if(origIconColor) sectionEl.style.setProperty('--motif-icon-color', origIconColor); else sectionEl.style.removeProperty('--motif-icon-color');
+      motifIconColorState.delete(sectionEl.id); motifIconColorOriginal.delete(sectionEl.id);
+    }
+    selectMotif(activeMotif);
+  });
 
   function currentWidthPct(el){
     if(el.style.width && el.style.width.indexOf('%') !== -1) return parseFloat(el.style.width);
@@ -3326,6 +4017,7 @@
     zCounter += 1;
     el.style.setProperty('z-index', zCounter, 'important');
     tileControls.style.display = 'block';
+    motifControls.style.display = 'none';
     const { sectionId, tag } = selectorFor(el);
     activeNameEl.textContent = sectionId + ' — ' + tag;
     rotateSlider.value = Math.round(currentRotation(el));
@@ -3336,6 +4028,8 @@
     const h = Math.round(currentHeightPct(el));
     heightSlider.value = h;
     heightVal.textContent = el.style.height ? h + '%' : 'auto (' + h + '%)';
+    const imgEl = getImageEl(el);
+    filenameInput.value = imgEl ? getFilenameFromUrl(getBgUrl(imgEl)) : '';
   }
 
   document.querySelectorAll('.tile, .solo-photo').forEach(function(el){
@@ -3350,6 +4044,7 @@
 
   document.addEventListener('wheel', function(e){
     if(!document.body.classList.contains('edit-mode')) return;
+    if(e.target.closest('#edit-panel')) return; // panel edycji przewija się natywnie, nie edytuje elementów pod spodem
 
     // Zdjęcie: scroll = obrót, Ctrl+scroll = szerokość, Alt+scroll = wysokość, Ctrl+Alt = oba naraz.
     const tile = e.target.closest('.tile, .solo-photo');
@@ -3395,12 +4090,36 @@
       return;
     }
 
+    // Ikonka-motyw: scroll = obrót, Ctrl+scroll = skala.
+    const motifWrap = e.target.closest('.motif-wrap');
+    if(motifWrap){
+      e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation();
+      if(activeMotif !== motifWrap) selectMotif(motifWrap);
+      const st = getMotifState(motifWrap);
+      snapshotState(motifState, st.key, motifWrap, ['--motif-transform']);
+      if(e.ctrlKey){
+        const dir = e.deltaY > 0 ? -1 : 1;
+        const nextScale = Math.max(0.4, Math.min(2, +(st.scale + dir * 0.04).toFixed(2)));
+        applyMotifTransform(motifWrap, st.rot, nextScale);
+        motifScaleSlider.value = Math.round(nextScale * 100);
+        motifScaleVal.textContent = Math.round(nextScale * 100) + '%';
+      } else {
+        const dir = e.deltaY > 0 ? 1 : -1;
+        const nextRot = Math.max(-180, Math.min(180, Math.round(st.rot + dir * 2)));
+        applyMotifTransform(motifWrap, nextRot, st.scale);
+        motifRotSlider.value = nextRot;
+        motifRotVal.textContent = nextRot + '°';
+      }
+      return;
+    }
+
     // Tekst: sam scroll = skala tekstu (z zachowaniem wybranego punktu odniesienia).
     const textBlock = e.target.closest('.project-content, .inner');
     if(textBlock && !e.ctrlKey){
       e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation();
       const sid = currentSectionId();
       if(!sid) return;
+      snapshotState(textState, sid, textBlock, ['transform','transformOrigin']);
       const st = getTextState(sid);
       st.scale = Math.max(0.7, Math.min(1.6, +(st.scale - e.deltaY * 0.001).toFixed(3)));
       applyTextTransform(sid, textBlock);
@@ -3415,6 +4134,22 @@
       e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation();
       const sid = currentSectionId();
       if(!sid) return;
+      {
+        const collage0 = media.querySelector('.tile-collage'), solo0 = media.querySelector('.solo-photo');
+        const hadKey0 = containerState.has(sid), prevVal0 = hadKey0 ? containerState.get(sid) : null;
+        const prev0 = {
+          mediaFlexBasis: media.style.flexBasis, mediaMaxWidth: media.style.maxWidth,
+          collageWidth: collage0 ? collage0.style.width : null, collageMaxWidth: collage0 ? collage0.style.maxWidth : null,
+          soloMaxWidth: solo0 ? solo0.style.maxWidth : null
+        };
+        undoStack.push(function(){
+          media.style.flexBasis = prev0.mediaFlexBasis; media.style.maxWidth = prev0.mediaMaxWidth;
+          if(collage0){ collage0.style.width = prev0.collageWidth; collage0.style.maxWidth = prev0.collageMaxWidth; }
+          if(solo0) solo0.style.maxWidth = prev0.soloMaxWidth;
+          if(hadKey0) containerState.set(sid, prevVal0); else containerState.delete(sid);
+        });
+        if(undoStack.length > 60) undoStack.shift();
+      }
       const cur = containerState.has(sid) ? containerState.get(sid) : Math.round(pxToRem(media.getBoundingClientRect().width));
       const next = Math.max(20, Math.min(70, cur - Math.round(e.deltaY * 0.03)));
       containerState.set(sid, next);
@@ -3457,6 +4192,26 @@
     activeEl.style.aspectRatio = 'auto'; // rozprzęga wysokość od szerokości
     activeEl.style.height = pct + '%';
     recordState(activeEl);
+  });
+
+  let filenameSnapshotTaken = false;
+  filenameInput.addEventListener('focus', function(){ filenameSnapshotTaken = false; });
+  filenameInput.addEventListener('input', function(){
+    if(!activeEl) return;
+    const imgEl = getImageEl(activeEl);
+    if(!imgEl) return;
+    const newName = filenameInput.value.trim();
+    if(!newName) return;
+    const { key } = selectorFor(activeEl);
+    if(!filenameSnapshotTaken){
+      if(!tileFilenameOriginal.has(key)) tileFilenameOriginal.set(key, imgEl.style.backgroundImage);
+      snapshotState(tileFilenameState, key, imgEl, ['backgroundImage']);
+      filenameSnapshotTaken = true;
+    }
+    const curUrl = getBgUrl(imgEl);
+    const newUrl = setFilenameOnUrl(curUrl, newName);
+    imgEl.style.backgroundImage = "url('" + newUrl + "')";
+    tileFilenameState.set(key, newUrl);
   });
 
   document.getElementById('ep-delete-tile').addEventListener('click', function(){
@@ -3525,12 +4280,30 @@
     });
   });
 
-  toggleBtn.addEventListener('click', function(){
+  function toggleEditMode(){
     const on = document.body.classList.toggle('edit-mode');
     toggleBtn.classList.toggle('active');
+    if(!on) document.body.classList.remove('ep-panel-hidden');
     document.querySelectorAll('[data-i18n]').forEach(function(el){
       el.contentEditable = on;
     });
+  }
+  toggleBtn.addEventListener('click', toggleEditMode);
+
+  // Chowanie panelu edycji (żeby nie zasłaniał treści podczas przeciągania), bez wychodzenia z trybu edycji.
+  const epHideBtn = document.getElementById('ep-hide');
+  const epReopenBtn = document.getElementById('ep-reopen');
+  function setPanelHidden(hidden){
+    document.body.classList.toggle('ep-panel-hidden', hidden);
+  }
+  epHideBtn.addEventListener('click', function(){ setPanelHidden(true); });
+  epReopenBtn.addEventListener('click', function(){ setPanelHidden(false); });
+  document.addEventListener('keydown', function(e){
+    if(!document.body.classList.contains('edit-mode')) return;
+    if(e.target && (e.target.tagName === 'INPUT' || e.target.isContentEditable)) return;
+    if(e.key.toLowerCase() === 'h'){
+      setPanelHidden(!document.body.classList.contains('ep-panel-hidden'));
+    }
   });
 
   function currentSectionId(){
@@ -3604,6 +4377,27 @@
     if(currentSectionId() !== containerSyncedFor) syncContainerSlider();
   }, 400);
 
+  containerSlider.addEventListener('mousedown', function(){
+    const sid = currentSectionId(); if(!sid) return;
+    const media = getMediaEl(sid);
+    const collage = document.querySelector('#' + sid + ' .tile-collage');
+    const solo = document.querySelector('#' + sid + ' .solo-photo');
+    const hadKey = containerState.has(sid);
+    const prevVal = hadKey ? containerState.get(sid) : null;
+    const prev = {
+      mediaFlexBasis: media ? media.style.flexBasis : null, mediaMaxWidth: media ? media.style.maxWidth : null,
+      collageWidth: collage ? collage.style.width : null, collageMaxWidth: collage ? collage.style.maxWidth : null,
+      soloMaxWidth: solo ? solo.style.maxWidth : null
+    };
+    undoStack.push(function(){
+      if(media){ media.style.flexBasis = prev.mediaFlexBasis; media.style.maxWidth = prev.mediaMaxWidth; }
+      if(collage){ collage.style.width = prev.collageWidth; collage.style.maxWidth = prev.collageMaxWidth; }
+      if(solo) solo.style.maxWidth = prev.soloMaxWidth;
+      if(hadKey) containerState.set(sid, prevVal); else containerState.delete(sid);
+      containerVal.textContent = containerSlider.value = (hadKey ? prevVal : containerSlider.value) + 'rem';
+    });
+    if(undoStack.length > 60) undoStack.shift();
+  });
   containerSlider.addEventListener('input', function(){
     const sid = currentSectionId();
     if(!sid) return;
@@ -3649,7 +4443,7 @@
     if(content){
       const origin = document.getElementById('ep-txt-center').checked ? 'center' : 'top left';
       content.style.transformOrigin = origin;
-      content.style.transform = 'translate(' + st.x + 'px,' + st.y + 'px) scale(' + st.scale + ')';
+      content.style.transform = 'translate(' + pxToRem(st.x).toFixed(3) + 'rem,' + pxToRem(st.y).toFixed(3) + 'rem) scale(' + st.scale + ')';
     }
   }
 
@@ -3665,13 +4459,13 @@
   function applyMediaTransform(sid, elDirect){
     const st = getMediaPos(sid);
     const media = elDirect || document.querySelector('#' + sid + ' .project-media');
-    if(media) media.style.transform = 'translate(' + st.x + 'px,' + st.y + 'px)';
+    if(media) media.style.transform = 'translate(' + pxToRem(st.x).toFixed(3) + 'rem,' + pxToRem(st.y).toFixed(3) + 'rem)';
   }
 
   // Przeciąganie myszką całych bloków (tekst / kontener zdjęć), z synchronizacją suwaków.
   // Zoptymalizowane: żadnych zapytań do DOM ani odczytów layoutu w trakcie ruchu myszy —
   // wszystko co potrzebne mierzymy raz, na starcie przeciągania.
-  function setupBlockDrag(el, getState, applyFn, xSlider, ySlider, xVal, yVal){
+  function setupBlockDrag(el, getState, applyFn, xSlider, ySlider, xVal, yVal, stateMap){
     let dragging = false, sx = 0, sy = 0, ox = 0, oy = 0, rowRect = null, elW = 0, elH = 0, elLeft0 = 0, elTop0 = 0;
     let pendingX = 0, pendingY = 0, rafScheduled = false;
 
@@ -3700,6 +4494,7 @@
       if(!sid || el.closest('section[id]').id !== sid) return;
       el.dataset.editSid = sid;
       dragging = true;
+      if(stateMap) snapshotState(stateMap, sid, el, ['transform']);
       sx = e.clientX; sy = e.clientY;
       const st = getState(sid);
       ox = st.x; oy = st.y;
@@ -3738,17 +4533,25 @@
   const gapVal = document.getElementById('ep-gap-val');
 
   document.querySelectorAll('.project-content, .inner').forEach(function(el){
-    setupBlockDrag(el, getTextState, applyTextTransform, textXInput, textYInput, textXVal, textYVal);
+    setupBlockDrag(el, getTextState, applyTextTransform, textXInput, textYInput, textXVal, textYVal, textState);
   });
   document.querySelectorAll('.project-media').forEach(function(el){
-    setupBlockDrag(el, getMediaPos, applyMediaTransform, mediaXInput, mediaYInput, mediaXVal, mediaYVal);
+    setupBlockDrag(el, getMediaPos, applyMediaTransform, mediaXInput, mediaYInput, mediaXVal, mediaYVal, mediaPosState);
   });
 
+  mediaXInput.addEventListener('mousedown', function(){
+    const sid = currentSectionId(); const media = sid && getMediaEl(sid);
+    if(media) snapshotState(mediaPosState, sid, media, ['transform']);
+  });
   mediaXInput.addEventListener('input', function(){
     const sid = currentSectionId(); if(!sid) return;
     getMediaPos(sid).x = parseInt(mediaXInput.value, 10);
     mediaXVal.textContent = mediaXInput.value + 'px';
     applyMediaTransform(sid);
+  });
+  mediaYInput.addEventListener('mousedown', function(){
+    const sid = currentSectionId(); const media = sid && getMediaEl(sid);
+    if(media) snapshotState(mediaPosState, sid, media, ['transform']);
   });
   mediaYInput.addEventListener('input', function(){
     const sid = currentSectionId(); if(!sid) return;
@@ -3756,17 +4559,30 @@
     mediaYVal.textContent = mediaYInput.value + 'px';
     applyMediaTransform(sid);
   });
+  function getTextEl(sid){ return document.querySelector('#' + sid + ' .project-content, #' + sid + ' .inner'); }
+  textXInput.addEventListener('mousedown', function(){
+    const sid = currentSectionId(); const el = sid && getTextEl(sid);
+    if(el) snapshotState(textState, sid, el, ['transform','transformOrigin']);
+  });
   textXInput.addEventListener('input', function(){
     const sid = currentSectionId(); if(!sid) return;
     getTextState(sid).x = parseInt(textXInput.value, 10);
     textXVal.textContent = textXInput.value + 'px';
     applyTextTransform(sid);
   });
+  textYInput.addEventListener('mousedown', function(){
+    const sid = currentSectionId(); const el = sid && getTextEl(sid);
+    if(el) snapshotState(textState, sid, el, ['transform','transformOrigin']);
+  });
   textYInput.addEventListener('input', function(){
     const sid = currentSectionId(); if(!sid) return;
     getTextState(sid).y = parseInt(textYInput.value, 10);
     textYVal.textContent = textYInput.value + 'px';
     applyTextTransform(sid);
+  });
+  gapInput.addEventListener('mousedown', function(){
+    const sid = currentSectionId(); const row = sid && document.querySelector('#' + sid + ' .project-row');
+    if(row) snapshotState(gapState, sid, row, ['gap']);
   });
   gapInput.addEventListener('input', function(){
     const sid = currentSectionId(); if(!sid) return;
@@ -3782,6 +4598,10 @@
     if(sid) applyTextTransform(sid);
   });
 
+  txtScaleInput.addEventListener('mousedown', function(){
+    const sid = currentSectionId(); const el = sid && getTextEl(sid);
+    if(el) snapshotState(textState, sid, el, ['transform','transformOrigin']);
+  });
   txtScaleInput.addEventListener('input', function(){
     const val = parseFloat(txtScaleInput.value);
     txtScaleVal.textContent = Math.round(val*100) + '%';
@@ -3819,16 +4639,36 @@
     const txtOrigin = document.getElementById('ep-txt-center').checked ? 'center' : 'top left';
     textState.forEach(function(st, sid){
       const sel = document.querySelector('#' + sid + ' .project-content') ? '.project-content' : '.inner';
-      css += '#' + sid + ' ' + sel + '{ transform:translate(' + st.x + 'px,' + st.y + 'px) scale(' + st.scale + '); transform-origin:' + txtOrigin + '; }\n';
+      css += '#' + sid + ' ' + sel + '{ transform:translate(' + pxToRem(st.x).toFixed(3) + 'rem,' + pxToRem(st.y).toFixed(3) + 'rem) scale(' + st.scale + '); transform-origin:' + txtOrigin + '; }\n';
     });
     mediaPosState.forEach(function(st, sid){
       if(st.x !== 0 || st.y !== 0){
-        css += '#' + sid + ' .project-media{ transform:translate(' + st.x + 'px,' + st.y + 'px); }\n';
+        css += '#' + sid + ' .project-media{ transform:translate(' + pxToRem(st.x).toFixed(3) + 'rem,' + pxToRem(st.y).toFixed(3) + 'rem); }\n';
       }
     });
     gapState.forEach(function(rem, sid){
       css += '#' + sid + ' .project-row{ gap:' + rem + 'rem; }\n';
     });
+    motifState.forEach(function(v, key){
+      const parts = key.split(' :: ');
+      let decl = 'top:' + v.top + '; left:' + v.left + '; right:auto; bottom:auto;';
+      if(v.rot || (v.scale != null && v.scale !== 1)){
+        decl += ' --motif-transform:rotate(' + (v.rot || 0) + 'deg) scale(' + (v.scale != null ? v.scale : 1) + ');';
+      }
+      css += '#' + parts[0] + ' .' + parts[1] + '{ ' + decl + ' }\n';
+    });
+    motifColorState.forEach(function(hex, sid){
+      css += '#' + sid + '{ --motif-color:' + hex + ' !important; }\n';
+    });
+    motifIconColorState.forEach(function(hex, sid){
+      css += '#' + sid + '{ --motif-icon-color:' + hex + ' !important; }\n';
+    });
+    if(tileFilenameState.size){
+      css += '\n/* Zmienione nazwy plików zdjęć — wgraj/zmień nazwę pliku na dysku na tę, i podmień url w HTML dla tego kafelka: */\n';
+      tileFilenameState.forEach(function(url, key){
+        css += '  ' + key + ' -> images/' + url.split('/').pop() + '\n';
+      });
+    }
     if(textEditState.size){
       css += '\n/* Zmieniony tekst (podmień ręcznie w HTML przy tym data-i18n="..."): */\n';
       textEditState.forEach(function(newText, key){
@@ -3874,7 +4714,35 @@
     Array.from(tileState.keys()).forEach(function(k){
       if(k.indexOf(sid + ' ::') === 0) tileState.delete(k);
     });
+    Array.from(tileFilenameState.keys()).forEach(function(k){
+      if(k.indexOf(sid + ' ::') === 0){
+        const tag = k.split(' :: ')[1];
+        const tileEl = tag === 'solo-photo' ? scope.querySelector('.solo-photo') : scope.querySelector('.' + tag);
+        const imgEl = tileEl && getImageEl(tileEl);
+        if(imgEl && tileFilenameOriginal.has(k)) imgEl.style.backgroundImage = tileFilenameOriginal.get(k);
+        tileFilenameState.delete(k); tileFilenameOriginal.delete(k);
+      }
+    });
     textState.delete(sid); containerState.delete(sid); mediaPosState.delete(sid); gapState.delete(sid);
+    Array.from(motifState.keys()).forEach(function(k){
+      if(k.indexOf(sid + ' ::') === 0){
+        motifState.delete(k);
+        const wrap = scope.querySelector('.' + k.split(' :: ')[1]);
+        if(wrap){ wrap.style.top = ''; wrap.style.left = ''; wrap.style.right = ''; wrap.style.bottom = ''; wrap.style.removeProperty('--motif-transform'); }
+      }
+    });
+    if(motifColorState.has(sid)){
+      motifColorState.delete(sid);
+      const orig = motifColorOriginal.get(sid);
+      if(orig) scope.style.setProperty('--motif-color', orig); else scope.style.removeProperty('--motif-color');
+      motifColorOriginal.delete(sid);
+    }
+    if(motifIconColorState.has(sid)){
+      motifIconColorState.delete(sid);
+      const orig = motifIconColorOriginal.get(sid);
+      if(orig) scope.style.setProperty('--motif-icon-color', orig); else scope.style.removeProperty('--motif-icon-color');
+      motifIconColorOriginal.delete(sid);
+    }
     Array.from(deletedTiles).forEach(function(k){ if(k.indexOf(sid + ' ::') === 0) deletedTiles.delete(k); });
     Array.from(addedTiles.keys()).forEach(function(tag){ if(addedTiles.get(tag).sectionId === sid) addedTiles.delete(tag); });
     outputBox.value = '';
@@ -3902,10 +4770,35 @@
       el.style.width = ''; el.style.maxWidth = '';
     });
     document.querySelectorAll('.project-row').forEach(function(el){ el.style.gap = ''; });
+    document.querySelectorAll('.motif-wrap').forEach(function(el){
+      el.style.top = ''; el.style.left = ''; el.style.right = ''; el.style.bottom = '';
+      el.style.removeProperty('--motif-transform');
+    });
+    document.querySelectorAll('section[id]').forEach(function(el){
+      const origC = motifColorOriginal.get(el.id);
+      if(origC) el.style.setProperty('--motif-color', origC); else el.style.removeProperty('--motif-color');
+      const origIC = motifIconColorOriginal.get(el.id);
+      if(origIC) el.style.setProperty('--motif-icon-color', origIC); else el.style.removeProperty('--motif-icon-color');
+    });
+    motifState.clear();
+    motifColorState.clear();
+    motifIconColorState.clear();
+    motifColorOriginal.clear();
+    motifIconColorOriginal.clear();
+    activeMotif = null;
+    motifControls.style.display = 'none';
     document.querySelectorAll('[data-i18n]').forEach(function(el){
       if(el.dataset.origText !== undefined) el.textContent = el.dataset.origText;
     });
     textEditState.clear();
+    tileFilenameOriginal.forEach(function(origUrl, key){
+      const parts = key.split(' :: ');
+      const scope2 = document.getElementById(parts[0]);
+      const tileEl = scope2 && (parts[1] === 'solo-photo' ? scope2.querySelector('.solo-photo') : scope2.querySelector('.' + parts[1]));
+      const imgEl = tileEl && getImageEl(tileEl);
+      if(imgEl) imgEl.style.backgroundImage = origUrl;
+    });
+    tileFilenameState.clear(); tileFilenameOriginal.clear();
     tileState.clear(); textState.clear(); containerState.clear(); mediaPosState.clear(); gapState.clear();
     deletedTiles.clear(); addedTiles.clear();
     activeEl = null;
