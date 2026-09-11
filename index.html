@@ -486,7 +486,6 @@
   .motif-custom-mask{
     aspect-ratio:1/1;
     position:relative;
-    z-index:0;
     -webkit-mask-image:var(--custom-mask-url);
     mask-image:var(--custom-mask-url);
     -webkit-mask-size:contain; mask-size:contain;
@@ -494,13 +493,12 @@
     -webkit-mask-position:center; mask-position:center;
     background-color:currentColor;
   }
-  /* Poświata NIE może siedzieć wewnątrz zamaskowanego elementu — mask-image przycina
-     wszystko w środku, łącznie z pseudo-elementami, więc rozmycie nigdy by się nie rozlało.
-     Dlatego poświata siedzi na rodzicu (.motif-wrap), który maski nie ma. */
-  .motif-wrap.motif-clickable.lit.has-custom-mask::before{
-    content:"";
+  /* Prawdziwy, osobny element (nie pseudo-element) — wstawiany JS-em jako PIERWSZE dziecko
+     .motif-wrap, więc maluje się za ikonką bez potrzeby z-index. Jako rodzeństwo (nie dziecko)
+     zamaskowanej ikonki, nie jest przez nią przycinany. */
+  .motif-glow{
     position:absolute;
-    inset:-6%;
+    inset:-8%;
     background-color:var(--motif-icon-color, var(--motif-color, var(--accent)));
     -webkit-mask-image:var(--custom-mask-url);
     mask-image:var(--custom-mask-url);
@@ -508,8 +506,12 @@
     -webkit-mask-repeat:no-repeat; mask-repeat:no-repeat;
     -webkit-mask-position:center; mask-position:center;
     filter:blur(18px);
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .4s ease;
+  }
+  .motif-wrap.motif-clickable.lit .motif-glow{
     opacity:.9;
-    z-index:-1;
   }
   .motif-wrap.motif-clickable{
     pointer-events:auto;
@@ -5300,9 +5302,11 @@
       el.style.display = 'block';
       if(el.nextElementSibling) el.nextElementSibling.style.display = 'none';
       const wrap = el.parentElement;
-      if(wrap){
-        wrap.style.setProperty('--custom-mask-url', "url('" + src + "')");
-        wrap.classList.add('has-custom-mask');
+      if(wrap && !wrap.querySelector('.motif-glow')){
+        const glow = document.createElement('div');
+        glow.className = 'motif-glow';
+        glow.style.setProperty('--custom-mask-url', "url('" + src + "')");
+        wrap.insertBefore(glow, wrap.firstChild);
       }
     };
     test.onerror = function(){}; // plik nie istnieje — zostaje ukryta, pokazuje się domyślna ikonka SVG obok
