@@ -483,6 +483,15 @@
     transition:opacity .5s ease, filter .5s ease;
     animation:floatY 8s ease-in-out infinite alternate;
   }
+  .motif-custom-mask{
+    aspect-ratio:1/1;
+    -webkit-mask-image:var(--custom-mask-url);
+    mask-image:var(--custom-mask-url);
+    -webkit-mask-size:contain; mask-size:contain;
+    -webkit-mask-repeat:no-repeat; mask-repeat:no-repeat;
+    -webkit-mask-position:center; mask-position:center;
+    background-color:currentColor;
+  }
   .motif-wrap.motif-clickable{
     pointer-events:auto;
     cursor:pointer;
@@ -2045,7 +2054,7 @@
   <div class="bg-decor" aria-hidden="true">
     <div class="blob blob-hero"></div>
     <div class="motif-wrap motif-hero motif-clickable lit" role="button" tabindex="0" aria-label="Zgaś ikonę">
-      <img class="motif motif-custom" src="images/icons/start.svg" alt="" style="display:none" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
+      <div class="motif motif-custom-mask" data-custom-src="images/icons/start.svg" style="display:none;"></div>
       <svg class="motif motif-default" viewBox="0 0 120 80" fill="none" xmlns="http://www.w3.org/2000/svg">
       <rect x="12" y="26" width="96" height="34" rx="17" stroke="currentColor" stroke-width="3"/>
       <line x1="34" y1="35" x2="34" y2="51" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
@@ -2092,7 +2101,7 @@
   <div class="bg-decor" aria-hidden="true">
     <div class="blob blob-career"></div>
     <div class="motif-wrap motif-flag motif-clickable" role="button" tabindex="0" aria-label="Zapal ikonę">
-      <img class="motif motif-custom" src="images/icons/career.svg" alt="" style="display:none" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
+      <div class="motif motif-custom-mask" data-custom-src="images/icons/career.svg" style="display:none;"></div>
       <svg class="motif motif-default" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
       <line x1="20" y1="90" x2="20" y2="10" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
       <path d="M20 12 L82 12 L62 28 L82 44 L20 44 Z" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round"/>
@@ -2157,7 +2166,7 @@
   <div class="bg-decor" aria-hidden="true">
     <div class="blob blob-skills"></div>
     <div class="motif-wrap motif-skills motif-clickable" role="button" tabindex="0" aria-label="Zapal ikonę">
-      <img class="motif motif-custom" src="images/icons/skills.svg" alt="" style="display:none" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
+      <div class="motif motif-custom-mask" data-custom-src="images/icons/skills.svg" style="display:none;"></div>
       <svg class="motif motif-default" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
       <circle cx="50" cy="50" r="14" stroke="currentColor" stroke-width="3.5"/>
       <path d="M50 20v10M50 70v10M80 50h-10M30 50h-10M70.7 29.3l-7.1 7.1M36.4 63.6l-7.1 7.1M70.7 70.7l-7.1-7.1M36.4 36.4l-7.1-7.1" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/>
@@ -2200,7 +2209,7 @@
   <div class="bg-decor" aria-hidden="true">
     <div class="blob blob-toilet"></div>
     <div class="motif-wrap motif-toilet motif-clickable" role="button" tabindex="0" aria-label="Zapal ikonę">
-      <img class="motif motif-custom" src="images/icons/mr-toilet.svg" alt="" style="display:none" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
+      <div class="motif motif-custom-mask" data-custom-src="images/icons/mr-toilet.svg" style="display:none;"></div>
       <svg class="motif motif-default" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
       <rect x="28" y="8" width="34" height="18" rx="3" stroke="currentColor" stroke-width="3.5"/>
       <path d="M22 30 L68 30 L62 50 Q62 78 45 78 Q28 78 28 50 Z" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round"/>
@@ -2235,7 +2244,7 @@
   <div class="bg-decor" aria-hidden="true">
     <div class="blob blob-nerd"></div>
     <div class="motif-wrap motif-glasses motif-clickable" role="button" tabindex="0" aria-label="Zapal ikonę">
-      <img class="motif motif-custom" src="images/icons/nerd-simulator.svg" alt="" style="display:none" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
+      <div class="motif motif-custom-mask" data-custom-src="images/icons/nerd-simulator.svg" style="display:none;"></div>
       <svg class="motif motif-default" viewBox="0 0 100 80" fill="none" xmlns="http://www.w3.org/2000/svg">
       <circle cx="28" cy="42" r="19" stroke="currentColor" stroke-width="4"/>
       <circle cx="72" cy="42" r="19" stroke="currentColor" stroke-width="4"/>
@@ -2272,7 +2281,7 @@
   <div class="bg-decor" aria-hidden="true">
     <div class="blob blob-lumberjack"></div>
     <div class="motif-wrap motif-axe motif-clickable" role="button" tabindex="0" aria-label="Zapal ikonę">
-      <img class="motif motif-custom" src="images/icons/indian-lumberjack.svg" alt="" style="display:none" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
+      <div class="motif motif-custom-mask" data-custom-src="images/icons/indian-lumberjack.svg" style="display:none;"></div>
       <svg class="motif motif-default" viewBox="5 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
       <line x1="28" y1="90" x2="66" y2="24" stroke="currentColor" stroke-width="4.5" stroke-linecap="round"/>
       <path d="M56 16 Q82 8 80 34 Q77 46 58 34 Z" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round"/>
@@ -2308,7 +2317,7 @@
   <div class="bg-decor" aria-hidden="true">
     <div class="blob blob-blade"></div>
     <div class="motif-wrap motif-blade motif-clickable" role="button" tabindex="0" aria-label="Zapal ikonę">
-      <img class="motif motif-custom" src="images/icons/blade-river.svg" alt="" style="display:none" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
+      <div class="motif motif-custom-mask" data-custom-src="images/icons/blade-river.svg" style="display:none;"></div>
       <svg class="motif motif-default" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
       <line x1="24" y1="88" x2="80" y2="20" stroke="currentColor" stroke-width="4.5" stroke-linecap="round"/>
       <line x1="34" y1="52" x2="52" y2="38" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/>
@@ -2345,7 +2354,7 @@
   <div class="bg-decor" aria-hidden="true">
     <div class="blob blob-spacedef"></div>
     <div class="motif-wrap motif-turret motif-clickable" role="button" tabindex="0" aria-label="Zapal ikonę">
-      <img class="motif motif-custom" src="images/icons/space-defense.svg" alt="" style="display:none" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
+      <div class="motif motif-custom-mask" data-custom-src="images/icons/space-defense.svg" style="display:none;"></div>
       <svg class="motif motif-default" viewBox="0 11 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
       <line x1="50" y1="88" x2="50" y2="34" stroke="currentColor" stroke-width="3.5"/>
       <path d="M30 88 L70 88 L60 68 L40 68 Z" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round"/>
@@ -2380,7 +2389,7 @@
   <div class="bg-decor" aria-hidden="true">
     <div class="blob blob-fluffy"></div>
     <div class="motif-wrap motif-paw motif-clickable" role="button" tabindex="0" aria-label="Zapal ikonę">
-      <img class="motif motif-custom" src="images/icons/fluffy-saviour.svg" alt="" style="display:none" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
+      <div class="motif motif-custom-mask" data-custom-src="images/icons/fluffy-saviour.svg" style="display:none;"></div>
       <svg class="motif motif-default" viewBox="5 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
       <ellipse cx="50" cy="68" rx="26" ry="20" stroke="currentColor" stroke-width="3.5"/>
       <circle cx="22" cy="40" r="10" stroke="currentColor" stroke-width="3.5"/>
@@ -2414,7 +2423,7 @@
   <div class="bg-decor" aria-hidden="true">
     <div class="blob blob-popiel"></div>
     <div class="motif-wrap motif-flame motif-clickable" role="button" tabindex="0" aria-label="Zapal ikonę">
-      <img class="motif motif-custom" src="images/icons/popiel.svg" alt="" style="display:none" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
+      <div class="motif motif-custom-mask" data-custom-src="images/icons/popiel.svg" style="display:none;"></div>
       <svg class="motif motif-default" viewBox="0 -8 100 110" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M50 8 C30 32 24 48 29 64 C33 78 42 86 50 86 C58 86 67 78 71 64 C76 48 70 32 50 8 Z" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round"/>
       <path d="M50 42 C42 56 42 68 50 74 C58 68 58 56 50 42 Z" stroke="currentColor" stroke-width="3"/>
@@ -2444,7 +2453,7 @@
   <div class="bg-decor" aria-hidden="true">
     <div class="blob blob-signals"></div>
     <div class="motif-wrap motif-signal motif-clickable" role="button" tabindex="0" aria-label="Zapal ikonę">
-      <img class="motif motif-custom" src="images/icons/simply-signals.svg" alt="" style="display:none" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
+      <div class="motif motif-custom-mask" data-custom-src="images/icons/simply-signals.svg" style="display:none;"></div>
       <svg class="motif motif-default" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
       <circle cx="50" cy="50" r="6" fill="currentColor" stroke="none"/>
       <path d="M32 32a25.5 25.5 0 0 1 36 0" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/>
@@ -2478,7 +2487,7 @@
   <div class="bg-decor" aria-hidden="true">
     <div class="blob blob-inspector"></div>
     <div class="motif-wrap motif-console motif-clickable" role="button" tabindex="0" aria-label="Zapal ikonę">
-      <img class="motif motif-custom" src="images/icons/runtime-inspector.svg" alt="" style="display:none" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
+      <div class="motif motif-custom-mask" data-custom-src="images/icons/runtime-inspector.svg" style="display:none;"></div>
       <svg class="motif motif-default" viewBox="0 0 110 90" fill="none" xmlns="http://www.w3.org/2000/svg">
       <rect x="10" y="10" width="90" height="70" rx="6" stroke="currentColor" stroke-width="3.5"/>
       <path d="M24 34 L36 45 L24 56" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -2510,7 +2519,7 @@
   <div class="bg-decor" aria-hidden="true">
     <div class="blob blob-toolkit"></div>
     <div class="motif-wrap motif-screwdriver motif-clickable" role="button" tabindex="0" aria-label="Zapal ikonę">
-      <img class="motif motif-custom" src="images/icons/narzedzia-edytorskie.svg" alt="" style="display:none" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
+      <div class="motif motif-custom-mask" data-custom-src="images/icons/narzedzia-edytorskie.svg" style="display:none;"></div>
       <svg class="motif motif-default" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
       <rect x="38" y="8" width="24" height="32" rx="4" stroke="currentColor" stroke-width="3.5"/>
       <line x1="50" y1="40" x2="50" y2="78" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
@@ -2541,7 +2550,7 @@
   <div class="bg-decor" aria-hidden="true">
     <div class="blob blob-wip"></div>
     <div class="motif-wrap motif-wip motif-clickable" role="button" tabindex="0" aria-label="Zapal ikonę">
-      <img class="motif motif-custom" src="images/icons/systemy.svg" alt="" style="display:none" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
+      <div class="motif motif-custom-mask" data-custom-src="images/icons/systemy.svg" style="display:none;"></div>
       <svg class="motif motif-default" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
       <g stroke="currentColor" stroke-width="3.5" stroke-linejoin="round">
         <rect x="45" y="4" width="10" height="16" transform="rotate(0 50 50)"/>
@@ -2589,7 +2598,7 @@
   <div class="bg-decor" aria-hidden="true">
     <div class="blob blob-route"></div>
     <div class="motif-wrap motif-route motif-clickable" role="button" tabindex="0" aria-label="Zapal ikonę">
-      <img class="motif motif-custom" src="images/icons/system-tras.svg" alt="" style="display:none" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
+      <div class="motif motif-custom-mask" data-custom-src="images/icons/system-tras.svg" style="display:none;"></div>
       <svg class="motif motif-default" viewBox="0 0 100 110" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M50 8 C68 8 82 22 82 40 C82 62 50 100 50 100 C50 100 18 62 18 40 C18 22 32 8 50 8 Z" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round"/>
       <circle cx="50" cy="40" r="10" stroke="currentColor" stroke-width="3.5"/>
@@ -2610,7 +2619,7 @@
   <div class="bg-decor" aria-hidden="true">
     <div class="blob blob-roadmap"></div>
     <div class="motif-wrap motif-roadmap motif-clickable" role="button" tabindex="0" aria-label="Zapal ikonę">
-      <img class="motif motif-custom" src="images/icons/roadmap.svg" alt="" style="display:none" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
+      <div class="motif motif-custom-mask" data-custom-src="images/icons/roadmap.svg" style="display:none;"></div>
       <svg class="motif motif-default" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
       <line x1="10" y1="80" x2="90" y2="80" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
       <circle cx="22" cy="80" r="5" fill="currentColor"/>
@@ -2639,7 +2648,7 @@
   <div class="bg-decor" aria-hidden="true">
     <div class="blob blob-about"></div>
     <div class="motif-wrap motif-about motif-clickable" role="button" tabindex="0" aria-label="Zapal ikonę">
-      <img class="motif motif-custom" src="images/icons/to-moja-dzialka.svg" alt="" style="display:none" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
+      <div class="motif motif-custom-mask" data-custom-src="images/icons/to-moja-dzialka.svg" style="display:none;"></div>
       <svg class="motif motif-default" viewBox="0 0 120 80" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M46 20 L24 40 L46 60" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
       <path d="M74 20 L96 40 L74 60" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -2694,7 +2703,7 @@
   <div class="bg-decor" aria-hidden="true">
     <div class="blob blob-about"></div>
     <div class="motif-wrap motif-star motif-clickable" role="button" tabindex="0" aria-label="Zapal ikonę">
-      <img class="motif motif-custom" src="images/icons/tak-to-ja.svg" alt="" style="display:none" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
+      <div class="motif motif-custom-mask" data-custom-src="images/icons/tak-to-ja.svg" style="display:none;"></div>
       <svg class="motif motif-default" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M50 8 L58 40 L90 48 L58 56 L50 88 L42 56 L10 48 L42 40 Z" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/>
     </svg>
@@ -2731,7 +2740,7 @@
   <div class="bg-decor" aria-hidden="true">
     <div class="blob blob-about"></div>
     <div class="motif-wrap motif-controller motif-clickable" role="button" tabindex="0" aria-label="Zapal ikonę">
-      <img class="motif motif-custom" src="images/icons/w-co-gram.svg" alt="" style="display:none" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
+      <div class="motif motif-custom-mask" data-custom-src="images/icons/w-co-gram.svg" style="display:none;"></div>
       <svg class="motif motif-default" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
       <rect x="12" y="38" width="76" height="38" rx="19" stroke="currentColor" stroke-width="4"/>
       <line x1="20" y1="49" x2="20" y2="65" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
@@ -2769,7 +2778,7 @@
   <div class="bg-decor" aria-hidden="true">
     <div class="blob blob-contact"></div>
     <div class="motif-wrap motif-contact motif-clickable" role="button" tabindex="0" aria-label="Zapal ikonę">
-      <img class="motif motif-custom" src="images/icons/kontakt.svg" alt="" style="display:none" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
+      <div class="motif motif-custom-mask" data-custom-src="images/icons/kontakt.svg" style="display:none;"></div>
       <svg class="motif motif-default" viewBox="0 0 100 110" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M50 6 L92 30 L92 80 L50 104 L8 80 L8 30 Z" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round"/>
       <path d="M50 6 L50 54 L92 30 M50 54 L92 80 M50 54 L8 80 M50 54 L8 30" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>
@@ -5254,6 +5263,26 @@
     activeEl = null;
     tileControls.style.display = 'none';
     outputBox.value = '';
+  });
+})();
+</script>
+<script>
+(function(){
+  // Wczytuje customowe ikonki jako maskę CSS (zamiast <img>), dzięki czemu suwak koloru
+  // w edytorze działa na nich dokładnie tak samo jak na domyślnych ikonkach SVG.
+  // Uwaga: mask-image z zewnętrznego pliku wymaga http(s)://, nie zadziała przy otwarciu
+  // pliku lokalnie (file://) — to celowe zabezpieczenie przeglądarek, nie błąd tego kodu.
+  document.querySelectorAll('.motif-custom-mask').forEach(function(el){
+    const src = el.dataset.customSrc;
+    if(!src) return;
+    const test = new Image();
+    test.onload = function(){
+      el.style.setProperty('--custom-mask-url', "url('" + src + "')");
+      el.style.display = 'block';
+      if(el.nextElementSibling) el.nextElementSibling.style.display = 'none';
+    };
+    test.onerror = function(){}; // plik nie istnieje — zostaje ukryta, pokazuje się domyślna ikonka SVG obok
+    test.src = src;
   });
 })();
 </script>
