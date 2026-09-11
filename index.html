@@ -486,33 +486,30 @@
   .motif-custom-mask{
     aspect-ratio:1/1;
     position:relative;
+    z-index:1;
     -webkit-mask-image:var(--custom-mask-url);
     mask-image:var(--custom-mask-url);
     -webkit-mask-size:contain; mask-size:contain;
     -webkit-mask-repeat:no-repeat; mask-repeat:no-repeat;
     -webkit-mask-position:center; mask-position:center;
     background-color:currentColor;
-    padding:18px;
-    margin:-18px;
   }
-  /* Sprawdzona technika "smart glow": kolorowa kopia tego samego kształtu siedzi z tyłu
-     (bez rozmycia, bez z-index — po prostu pierwsza w kolejności, więc maluje się za spodem),
-     a ostra ikonka na wierzchu rozmywa backdrop-filterem to, co jest pod nią. Dlatego widać
-     poświatę w przezroczystych miejscach maski, a sam kształt zostaje ostry.
-     padding+ujemny margines na ikonce zapobiega ucinaniu rozmycia na jej własnej krawędzi. */
+  /* Prawdziwa poświata — miękkie, okrągłe światło za ikonką, BEZ maskowania na kształt
+     ikonki (to właśnie tak wygląda glow w prawdziwym życiu — rozlane światło, nie duplikat
+     konturu). Zero ryzyka rozjazdu/duplikatu, bo nie próbuje kopiować kształtu ikonki wcale. */
   .motif-glow-src{
     position:absolute;
-    inset:0;
-    background-color:var(--motif-icon-color, var(--motif-color, var(--accent)));
-    -webkit-mask-image:var(--custom-mask-url);
-    mask-image:var(--custom-mask-url);
-    -webkit-mask-size:contain; mask-size:contain;
-    -webkit-mask-repeat:no-repeat; mask-repeat:no-repeat;
-    -webkit-mask-position:center; mask-position:center;
+    inset:calc(var(--motif-glow-size, 1) * -3.5rem);
+    z-index:0;
+    border-radius:50%;
+    background:radial-gradient(circle, var(--motif-color, var(--accent)) 0%, transparent 68%);
+    opacity:0;
+    filter:blur(6px);
+    transition:opacity .4s ease;
+    pointer-events:none;
   }
-  .motif-wrap.motif-clickable.lit .motif-custom-mask{
-    -webkit-backdrop-filter:blur(15px) saturate(2);
-    backdrop-filter:blur(15px) saturate(2);
+  .motif-wrap.motif-clickable.lit .motif-glow-src{
+    opacity:.85;
   }
   .motif-wrap.motif-clickable{
     pointer-events:auto;
@@ -520,7 +517,7 @@
   }
   .motif-wrap.motif-clickable.lit .motif{
     opacity:1;
-    filter:drop-shadow(0 0 22px var(--motif-color, var(--accent))) drop-shadow(0 0 55px var(--motif-color, var(--accent))) drop-shadow(0 0 90px var(--motif-color, var(--accent)));
+    filter:drop-shadow(0 0 calc(var(--motif-glow-size, 1) * 22px) var(--motif-color, var(--accent))) drop-shadow(0 0 calc(var(--motif-glow-size, 1) * 55px) var(--motif-color, var(--accent))) drop-shadow(0 0 calc(var(--motif-glow-size, 1) * 90px) var(--motif-color, var(--accent)));
   }
   @keyframes driftBlob{
     0%{transform:translate(0,0) scale(1);}
@@ -3754,6 +3751,11 @@
       </div>
     </div>
     <div class="ep-row">
+      <label>Rozmiar poświaty (dotyczy całej sekcji) <span class="ep-val" id="ep-motif-glow-size-val">100%</span></label>
+      <input type="range" id="ep-motif-glow-size" min="30" max="250" step="5" value="100">
+      <p class="ep-hint" style="margin:6px 0 0;">Domyślnie dopasowany pod wielkość ikonki — 100% to punkt startowy.</p>
+    </div>
+    <div class="ep-row">
       <button type="button" id="ep-motif-reset">Reset tej ikonki</button>
     </div>
   </div>
@@ -3912,6 +3914,7 @@
   const motifState = new Map(); // "sectionId :: motif-class" -> {top, left, rot, scale}
   const motifColorState = new Map(); // sectionId -> hex color (poświata / glow)
   const motifIconColorState = new Map(); // sectionId -> hex color (sama ikonka / kreska)
+  const motifGlowSizeState = new Map(); // sectionId -> mnożnik rozmiaru poświaty (1 = 100%, domyślny)
   const motifColorOriginal = new Map(); // sectionId -> oryginalny --motif-color z HTML (do prawdziwego resetu)
   const motifIconColorOriginal = new Map(); // sectionId -> oryginalny --motif-icon-color (zwykle brak = puste)
   document.querySelectorAll('.motif-wrap').forEach(function(wrap){
@@ -4120,6 +4123,8 @@
   const motifIconColorInput = document.getElementById('ep-motif-icon-color');
   const motifIconColorVal = document.getElementById('ep-motif-icon-color-val');
   const motifIconColorHex = document.getElementById('ep-motif-icon-color-hex');
+  const motifGlowSizeSlider = document.getElementById('ep-motif-glow-size');
+  const motifGlowSizeVal = document.getElementById('ep-motif-glow-size-val');
   function isValidHex(v){ return /^#[0-9a-fA-F]{6}$/.test(v); }
   let activeMotif = null;
 
@@ -4161,6 +4166,10 @@
     motifIconColorInput.value = iconColor.length === 7 ? iconColor : motifColorInput.value;
     motifIconColorVal.textContent = motifIconColorInput.value;
     motifIconColorHex.value = motifIconColorInput.value;
+    const glowSizeRaw = st.sectionEl ? getComputedStyle(st.sectionEl).getPropertyValue('--motif-glow-size').trim() : '';
+    const glowSizePct = glowSizeRaw ? Math.round(parseFloat(glowSizeRaw) * 100) : 100;
+    motifGlowSizeSlider.value = isNaN(glowSizePct) ? 100 : glowSizePct;
+    motifGlowSizeVal.textContent = motifGlowSizeSlider.value + '%';
   }
   motifRotSlider.addEventListener('mousedown', function(){
     if(!activeMotif) return;
@@ -4256,6 +4265,25 @@
     }
     applyIconColor(v, sectionEl);
   });
+  function applyGlowSize(pct, sectionEl){
+    const mult = pct / 100;
+    sectionEl.style.setProperty('--motif-glow-size', mult);
+    motifGlowSizeVal.textContent = pct + '%';
+    motifGlowSizeSlider.value = pct;
+    motifGlowSizeState.set(sectionEl.id, mult);
+  }
+  motifGlowSizeSlider.addEventListener('mousedown', function(){
+    if(!activeMotif) return;
+    const sectionEl = activeMotif.closest('section[id]');
+    if(!sectionEl) return;
+    snapshotState(motifGlowSizeState, sectionEl.id, sectionEl, ['--motif-glow-size']);
+  });
+  motifGlowSizeSlider.addEventListener('input', function(){
+    if(!activeMotif) return;
+    const sectionEl = activeMotif.closest('section[id]');
+    if(!sectionEl) return;
+    applyGlowSize(parseInt(motifGlowSizeSlider.value, 10), sectionEl);
+  });
   document.getElementById('ep-motif-reset').addEventListener('click', function(){
     if(!activeMotif) return;
     const sectionEl = activeMotif.closest('section[id]');
@@ -4270,6 +4298,8 @@
       const origIconColor = motifIconColorOriginal.get(sectionEl.id);
       if(origIconColor) sectionEl.style.setProperty('--motif-icon-color', origIconColor); else sectionEl.style.removeProperty('--motif-icon-color');
       motifIconColorState.delete(sectionEl.id); motifIconColorOriginal.delete(sectionEl.id);
+      sectionEl.style.removeProperty('--motif-glow-size');
+      motifGlowSizeState.delete(sectionEl.id);
     }
     selectMotif(activeMotif);
   });
@@ -5130,6 +5160,9 @@
     motifIconColorState.forEach(function(hex, sid){
       css += '#' + sid + '{ --motif-icon-color:' + hex + ' !important; }\n';
     });
+    motifGlowSizeState.forEach(function(mult, sid){
+      css += '#' + sid + '{ --motif-glow-size:' + mult + ' !important; }\n';
+    });
     if(tileFilenameState.size){
       css += '\n/* Zmienione nazwy plików zdjęć — wgraj/zmień nazwę pliku na dysku na tę, i podmień url w HTML dla tego kafelka: */\n';
       tileFilenameState.forEach(function(url, key){
@@ -5255,10 +5288,12 @@
       if(origC) el.style.setProperty('--motif-color', origC); else el.style.removeProperty('--motif-color');
       const origIC = motifIconColorOriginal.get(el.id);
       if(origIC) el.style.setProperty('--motif-icon-color', origIC); else el.style.removeProperty('--motif-icon-color');
+      el.style.removeProperty('--motif-glow-size');
     });
     motifState.clear();
     motifColorState.clear();
     motifIconColorState.clear();
+    motifGlowSizeState.clear();
     motifColorOriginal.clear();
     motifIconColorOriginal.clear();
     activeMotif = null;
