@@ -492,6 +492,27 @@
     -webkit-mask-repeat:no-repeat; mask-repeat:no-repeat;
     -webkit-mask-position:center; mask-position:center;
     background-color:currentColor;
+    padding:18px;
+    margin:-18px;
+  }
+  /* Sprawdzona technika "smart glow": kolorowa kopia tego samego kształtu siedzi z tyłu
+     (bez rozmycia, bez z-index — po prostu pierwsza w kolejności, więc maluje się za spodem),
+     a ostra ikonka na wierzchu rozmywa backdrop-filterem to, co jest pod nią. Dlatego widać
+     poświatę w przezroczystych miejscach maski, a sam kształt zostaje ostry.
+     padding+ujemny margines na ikonce zapobiega ucinaniu rozmycia na jej własnej krawędzi. */
+  .motif-glow-src{
+    position:absolute;
+    inset:0;
+    background-color:var(--motif-icon-color, var(--motif-color, var(--accent)));
+    -webkit-mask-image:var(--custom-mask-url);
+    mask-image:var(--custom-mask-url);
+    -webkit-mask-size:contain; mask-size:contain;
+    -webkit-mask-repeat:no-repeat; mask-repeat:no-repeat;
+    -webkit-mask-position:center; mask-position:center;
+  }
+  .motif-wrap.motif-clickable.lit .motif-custom-mask{
+    -webkit-backdrop-filter:blur(15px) saturate(2);
+    backdrop-filter:blur(15px) saturate(2);
   }
   .motif-wrap.motif-clickable{
     pointer-events:auto;
@@ -5281,6 +5302,13 @@
       el.style.setProperty('--custom-mask-url', "url('" + src + "')");
       el.style.display = 'block';
       if(el.nextElementSibling) el.nextElementSibling.style.display = 'none';
+      const wrap = el.parentElement;
+      if(wrap && !wrap.querySelector('.motif-glow-src')){
+        const glowSrc = document.createElement('div');
+        glowSrc.className = 'motif-glow-src';
+        glowSrc.style.setProperty('--custom-mask-url', "url('" + src + "')");
+        wrap.insertBefore(glowSrc, wrap.firstChild);
+      }
     };
     test.onerror = function(){}; // plik nie istnieje — zostaje ukryta, pokazuje się domyślna ikonka SVG obok
     test.src = src;
