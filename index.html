@@ -5312,13 +5312,21 @@
   // Uwaga: mask-image z zewnętrznego pliku wymaga http(s)://, nie zadziała przy otwarciu
   // pliku lokalnie (file://) — to celowe zabezpieczenie przeglądarek, nie błąd tego kodu.
   document.querySelectorAll('.motif-custom-mask').forEach(function(el){
-    test.onload = function(){
-      el.style.setProperty('--custom-mask-url', "url('" + src + "')");
-      el.style.display = 'block';
-      if(el.nextElementSibling) el.nextElementSibling.style.display = 'none';
-    };
-    test.onerror = function(){}; // plik nie istnieje — zostaje ukryta, pokazuje się domyślna ikonka SVG obok
-    test.src = src;
+    try {
+      const src = el.dataset.customSrc;
+      if(!src) return;
+      const test = new Image();
+      test.onload = function(){
+        el.style.setProperty('--custom-mask-url', "url('" + src + "')");
+        el.style.display = 'block';
+        if(el.nextElementSibling) el.nextElementSibling.style.display = 'none';
+      };
+      test.onerror = function(){}; // plik nie istnieje — zostaje ukryta, pokazuje się domyślna ikonka SVG obok
+      test.src = src;
+    } catch(err) {
+      // Jedna zepsuta ikonka nigdy więcej nie zablokuje wczytywania reszty.
+      console.warn('Nie udało się wczytać customowej ikonki:', el, err);
+    }
   });
 })();
 </script>
