@@ -218,10 +218,10 @@
     justify-content:center;
     gap:4px 8px;
     position:absolute;
-    top:100%;
+    top:calc(100% - 8px);
     left:0;
     right:0;
-    padding:10px 16px 20px;
+    padding:2px 16px 20px;
     background:transparent;
     border:none;
     box-shadow:none;
@@ -238,7 +238,7 @@
   }
   .sidenav .subnav-link{
     font-family:'Inter', sans-serif;
-    font-size:12.5px;
+    font-size:11px;
     line-height:1.2;
     color:var(--text-dim);
     position:relative;
@@ -522,6 +522,7 @@
   .blob-spacedef{ --blob-color:#8B6FD9; bottom:-9.375rem; right:-5.625rem; }
   .blob-popiel{ --blob-color:#B8452E; top:-7.5rem; left:-5.625rem; }
   .blob-lumberjack{ --blob-color:#6B9B5E; bottom:-9.375rem; right:-5.625rem; }
+  .blob-blade{ --blob-color:#5A9B4A; top:-7.5rem; left:-5.625rem; }
   .blob-signals{ --blob-color:#5B8FD9; top:-7.5rem; left:-5.625rem; }
   .blob-inspector{ --blob-color:#3FBF8F; bottom:-9.375rem; right:-5.625rem; }
   .blob-toolkit{ --blob-color:#8A93A6; top:-7.5rem; left:-5.625rem; }
@@ -529,6 +530,7 @@
   .blob-route{ --blob-color:#A67C52; top:-7.5rem; left:-5.625rem; }
   .blob-fluffy{ --blob-color:#C9789F; top:-7.5rem; left:-5.625rem; }
   .blob-wildbar{ --blob-color:#9AA84A; bottom:-9.375rem; right:-5.625rem; }
+  .blob-roadmap{ --blob-color:#9AA84A; top:-7.5rem; left:-5.625rem; }
 
   .motif-hero{ top:14%; right:8%; width:22.5rem; }
   .motif-about{ bottom:10%; left:6%; width:18.75rem; }
@@ -550,17 +552,74 @@
   .motif-screwdriver{ bottom:8%; left:8%; width:9.375rem; }
   .motif-paw{ top:12%; right:8%; width:11.875rem; }
   .motif-flag{ top:10%; right:8%; width:11.25rem; }
+  .motif-star{ top:10%; right:8%; width:11.25rem; }
+  .motif-controller{ top:10%; right:8%; width:11.25rem; }
+  .motif-blade{ top:10%; right:8%; width:11.25rem; }
+  .motif-roadmap{ top:10%; right:8%; width:11.25rem; }
+  .roadmap-inner{ max-width:var(--maxw); }
+  .roadmap-track{
+    position:relative;
+    display:flex;
+    align-items:flex-start;
+    flex-wrap:wrap;
+    gap:3.5rem;
+    margin-top:3.5rem;
+    padding-top:0.5rem;
+  }
+  .roadmap-line{
+    position:absolute;
+    top:0.5rem; left:0; right:0;
+    height:2px;
+    background:var(--line);
+  }
+  .roadmap-item{
+    position:relative;
+    display:flex;
+    flex-direction:column;
+    gap:0.5rem;
+    min-width:9rem;
+    padding-top:1.75rem;
+  }
+  .roadmap-dot{
+    position:absolute;
+    top:0; left:0;
+    width:1rem; height:1rem;
+    border-radius:50%;
+    background:var(--bg);
+    border:2px solid var(--accent);
+  }
+  .roadmap-name{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:600;
+    font-size:1.375rem;
+    color:var(--text);
+  }
+  .roadmap-status{
+    font-size:0.8125rem;
+    color:var(--text-dim);
+  }
+  @media (max-width:860px){
+    .roadmap-track{ flex-direction:column; gap:1.75rem; }
+    .roadmap-line{ top:0; bottom:0; left:0.4375rem; right:auto; width:2px; height:auto; }
+    .roadmap-item{ padding-top:0; padding-left:1.75rem; }
+    .roadmap-dot{ top:0.2rem; left:0; }
+  }
   .motif-grill{ bottom:10%; right:8%; width:13.125rem; }
   /* Pozycje motywów dopieszczone ręcznie w trybie edycji na 2560x1440 (nadpisują domyślne powyżej dla tych sekcji) */
-  #project-2 .motif-glasses{ top:12.54%; left:80.44%; right:auto; }
-  #project-4 .motif-turret{ top:10.56%; left:85.36%; right:auto; }
-  #project-6 .motif-axe{ top:52.55%; left:31.23%; right:auto; bottom:auto; --motif-transform:rotate(24deg) scale(1); }
-  #project-9 .motif-console{ top:55.4%; left:43.36%; right:auto; bottom:auto; --motif-transform:rotate(-2deg) scale(1); }
+  #project-2 .motif-glasses{ top:12.54%; left:80.44%; right:auto; bottom:auto; }
+  #project-4 .motif-turret{ top:10.56%; left:85.36%; right:auto; bottom:auto; }
+  #project-6 .motif-axe{ top:57.66%; left:30.92%; right:auto; bottom:auto; }
+  #project-9 .motif-console{ top:57.69%; left:43.95%; right:auto; bottom:auto; --motif-transform:rotate(-6deg) scale(0.84); }
   #project-8 .motif-signal{ top:62.43%; left:14.48%; right:auto; bottom:auto; }
   #about-technical .motif-about{ top:63.28%; left:7.25%; right:auto; bottom:auto; --motif-transform:rotate(153deg) scale(0.88); }
+  /* Sekcja "To moja działka" miała za dużo treści na wysokość 100vh — ściśnięte odstępy, żeby zmieściło się bez wewnętrznego scrolla */
+  #about-technical .project-content p{ margin-bottom:0.875rem; }
+  #about-technical .testimonial-wrap{ margin-top:0.875rem; }
+  #about-technical .project-content .tags{ margin-bottom:0.5rem; }
   #contact .motif-contact{ top:19.19%; left:58.75%; right:auto; bottom:auto; }
   #project-7 .motif-paw{ top:35.87%; left:50.19%; right:auto; bottom:auto; }
   #career .motif-flag{ top:10.53%; left:81.66%; right:auto; bottom:auto; }
+  #project-11 .motif-wip{ top:12.91%; left:9.61%; right:auto; bottom:auto; }
   #skills{ --motif-color:#a35724 !important; }
   #skills{ --motif-icon-color:#a35724 !important; }
   @media (max-width:860px){
@@ -836,19 +895,16 @@
     flex:0 1 34rem;
     min-width:0;
     max-height:calc(100vh - 170px - 6.25rem);
-    overflow-y:auto;
-    scrollbar-width:none;
-    opacity:0;
-    transform:translateX(calc(var(--mdir, 1) * 90px * var(--ent, 1))) rotate(calc(var(--mdir, 1) * -5deg * var(--ent, 1))) scale(max(.55, calc(1 - .14 * var(--ent, 1))));
-    filter:blur(calc(6px * var(--ent, 1)));
-    transition:opacity .8s ease, transform .8s cubic-bezier(.22,1,.36,1), filter .8s ease;
+    overflow-y:hidden;
+    opacity:.15;
+    transform:translate(var(--media-x, 0), var(--media-y, 0)) scale(.5);
+    transition:opacity .6s ease, transform .6s cubic-bezier(.34, 1.2, .64, 1);
     transition-delay:180ms;
   }
   .project-media::-webkit-scrollbar{ display:none; }
   .project-slide.in-view .project-media{
     opacity:1;
-    transform:none;
-    filter:blur(0);
+    transform:translate(var(--media-x, 0), var(--media-y, 0)) scale(1);
   }
   .project-media img{
     width:100%;
@@ -1000,9 +1056,6 @@
     cursor:default;
   }
   body:not(.edit-mode) .solo-photo:hover{ transform:rotate(0deg) scale(1.05); box-shadow:0 28px 55px -18px rgba(0,0,0,.85); }
-  #project-3 .project-media{ flex-basis:40rem; max-width:40rem; transform:translate(1.965rem,-1.103rem);}
-  #project-3 .tile-collage{ width:40rem; max-width:40rem; }
-  #project-3 .solo-photo{ width:86.00%; max-width:46rem; aspect-ratio:16/10; transform:rotate(-3deg); z-index:63; }
 
   /* Washi-tape accent — a small strip that makes a photo look physically taped down. */
   .tile.has-tape::before{
@@ -1025,16 +1078,16 @@
      and it comes with its own layout picker. */
   .tile-collage{
     position:relative;
-    width:min(34rem, calc((var(--media-max-h) - 3rem) / 0.82));
+    width:min(34rem, calc((var(--media-max-h) - 6rem) / 0.82));
     max-width:34rem;
     aspect-ratio:1/0.82;
     margin:2.5rem auto 0.5rem;
     padding:1.25rem 1.75rem;
   }
-  .tile-collage[data-count="3"]{ aspect-ratio:1/1.15; width:min(34rem, calc((var(--media-max-h) - 3rem) / 1.15)); }
-  .tile-collage[data-count="4"]{ aspect-ratio:1/1.35; width:min(34rem, calc((var(--media-max-h) - 3rem) / 1.35)); }
+  .tile-collage[data-count="3"]{ aspect-ratio:1/1.15; width:min(34rem, calc((var(--media-max-h) - 6rem) / 1.15)); }
+  .tile-collage[data-count="4"]{ aspect-ratio:1/1.35; width:min(34rem, calc((var(--media-max-h) - 6rem) / 1.35)); }
   .tile{ position:absolute; transition:width .35s ease, height .35s ease, top .35s ease, left .35s ease, right .35s ease, bottom .35s ease, transform .35s cubic-bezier(.22,1,.36,1); cursor:default; }
-  body:not(.edit-mode) .tile:hover{ transform:rotate(0deg) scale(1.06) !important; z-index:9 !important; }
+  body:not(.edit-mode) .tile:hover{ transform:rotate(0deg) scale(1.06) !important; z-index:500 !important; }
   .tile:hover .about-photo{ box-shadow:0 28px 55px -18px rgba(0,0,0,.85); }
   .tile .about-photo{
     width:100%; height:100%;
@@ -1056,68 +1109,71 @@
   .tile-collage[data-count="2"][data-layout="3"] .tile-b{ width:64%; aspect-ratio:16/10; bottom:7%; right:8%; transform:rotate(-5.4deg); z-index:1; }
   .tile-collage[data-count="2"][data-layout="4"] .tile-a{ width:46%; aspect-ratio:4/5; top:7%; left:8%; transform:rotate(-7.2deg); z-index:1; }
   .tile-collage[data-count="2"][data-layout="4"] .tile-b{ width:46%; aspect-ratio:4/5; bottom:7%; right:8%; transform:rotate(7.2deg); z-index:2; }
-  #project-1 .project-media{ flex-basis:39rem; transform:translate(-1.103rem,0.000rem); }
-  #project-1 .tile-collage{ aspect-ratio:1/0.95; width:min(39rem, calc((var(--media-max-h) - 3rem) / 0.95)); max-width:39rem; }
+  #project-1 .project-media{ flex-basis:39rem; --media-x:-2.780rem; --media-y:0.000rem; }
+  #project-1 .tile-collage{ aspect-ratio:1/0.95; width:min(39rem, calc((var(--media-max-h) - 6rem) / 0.95)); max-width:39rem; }
   #project-1 .tile-a{ width:70%; aspect-ratio:16/10; top:4%; left:4%; transform:rotate(-5deg); z-index:1; }
   #project-1 .tile-b{ width:60.00%; aspect-ratio:16/10; bottom:3%; right:3%; transform:rotate(3deg); z-index:11; }
-  #project-8 .project-media{ flex-basis:36rem; max-width:36rem; transform:translate(0.192rem,0.000rem); }
-  #project-8 .tile-collage{ aspect-ratio:1/0.95; width:36rem; max-width:36rem; }
+  #project-8 .project-media{ flex-basis:36rem; max-width:36rem; --media-x:0.192rem; --media-y:0.000rem; }
+  #project-8 .tile-collage{ aspect-ratio:1/0.95; width:min(36rem, calc((var(--media-max-h) - 6rem) / 0.95)); max-width:36rem; }
   #project-8 .tile-a{ width:67.00%; height:44%; aspect-ratio:auto; top:5.75%; left:4.53%; transform:rotate(-4deg); z-index:66; }
   #project-8 .tile-b{ width:60%; height:40%; aspect-ratio:auto; top:55.2%; left:35.89%; transform:rotate(3deg); z-index:2; }
-  #project-9 .project-media{ flex-basis:36rem; max-width:36rem; transform:translate(1.007rem,-2.109rem); }
-  #project-9 .tile-collage{ aspect-ratio:1/0.95; width:36rem; max-width:36rem; }
-  #project-4 .project-media{ flex-basis:41rem; max-width:41rem; transform:translate(2.397rem,0.000rem); }
-  #project-4 .tile-collage{ width:41rem; max-width:41rem; }
+  #project-9 .project-media{ flex-basis:36rem; max-width:36rem; --media-x:2.397rem; --media-y:-4.219rem; }
+  #project-9 .tile-collage{ aspect-ratio:1/0.95; width:min(36rem, calc((var(--media-max-h) - 6rem) / 0.95)); max-width:36rem; }
+  #project-4 .project-media{ flex-basis:41rem; max-width:41rem; --media-x:2.397rem; --media-y:0.000rem; }
+  #project-4 .tile-collage{ width:min(41rem, calc((var(--media-max-h) - 6rem) / 0.82)); max-width:41rem; }
   #project-4 .tile-a{ width:80%; height:39%; aspect-ratio:auto; top:10.56%; left:10%; transform:rotate(-2deg); z-index:1; }
   #project-4 .tile-b{ width:47%; height:28%; aspect-ratio:auto; top:51.13%; left:2.57%; transform:rotate(5.4deg); z-index:3; }
   #project-4 .tile-c{ width:49%; height:30%; aspect-ratio:auto; top:48.99%; left:48.26%; transform:rotate(-7deg); z-index:2; }
-  #project-5 .project-media{ flex-basis:40rem; max-width:40rem; transform:translate(-1.007rem,0.000rem); }
-  #project-5 .tile-collage{ width:40rem; max-width:none; }
-  #project-7 .project-media{ flex-basis:40rem; transform:translate(36.721rem,1.151rem); }
+  #project-5 .project-media{ flex-basis:40rem; max-width:40rem; --media-x:-1.007rem; --media-y:0.000rem; }
+  #project-5 .tile-collage{ width:min(40rem, calc((var(--media-max-h) - 6rem) / 0.82)); max-width:none; }
+  #project-7 .project-media{ flex-basis:40rem; --media-x:36.721rem; --media-y:1.151rem; }
   #project-7 .tile-new1{ width:53.00%; height:31%; aspect-ratio:auto; top:41.1%; left:37.85%; transform:rotate(13deg); z-index:50; }
   #project-7 .tile-a{ width:38.00%; height:40%; aspect-ratio:auto; top:11.05%; left:52.92%; transform:rotate(-25deg); z-index:54; }
   #project-7 .tile-b{ width:64.00%; height:35%; aspect-ratio:auto; top:57.14%; left:8.4%; transform:rotate(-7deg); z-index:48; }
-  #project-7 .tile-collage{ width:min(40rem, calc((var(--media-max-h) - 3rem) / 0.82)); max-width:40rem; }
-  #project-10 .project-media{ flex-basis:34rem; max-width:34rem; transform:translate(0.431rem,0.000rem); }
-  #project-10 .tile-collage{ width:34rem; max-width:34rem; }
-  #project-10 .tile-b{ width:46.00%; aspect-ratio:4/5; transform:rotate(7deg); z-index:52; }
-  #project-11 .project-media{ flex-basis:34rem; max-width:34rem; transform:translate(-1.870rem,-0.767rem); }
-  #project-11 .tile-collage{ width:34rem; max-width:34rem; }
-  #project-11 .tile-a{ width:46.00%; aspect-ratio:4/5; transform:rotate(-7deg); z-index:53; }
-  #project-11 .tile-b{ width:46.00%; aspect-ratio:4/5; transform:rotate(7deg); z-index:73; }
-  #project-9 .tile-a{ width:66.00%; height:43%; aspect-ratio:auto; top:8.18%; left:3.61%; transform:rotate(4deg); z-index:72; }
-  #project-9 .tile-b{ width:58.00%; aspect-ratio:16/10; top:57.72%; left:34.46%; transform:rotate(-4deg); z-index:76; }
+  #project-7 .tile-collage{ width:min(40rem, calc((var(--media-max-h) - 6rem) / 0.82)); max-width:40rem; }
+  #project-10 .project-media{ flex-basis:43rem; max-width:43rem; --media-x:0.431rem; --media-y:0.000rem; }
+  #project-10 .tile-collage{ width:min(43rem, calc((var(--media-max-h) - 6rem) / 0.82)); max-width:none; }
+  #project-10 .tile-a{ width:54.00%; height:47%; aspect-ratio:auto; top:5.43%; left:5.81%; transform:rotate(-27deg); z-index:23; }
+  #project-10 .tile-b{ width:53.00%; height:50%; aspect-ratio:auto; top:36.99%; left:35.18%; transform:rotate(-15deg); z-index:27; }
+  #project-11 .project-media{ flex-basis:55rem; max-width:55rem; --media-x:-2.349rem; --media-y:0.000rem; }
+  #project-11 .tile-collage{ width:min(55rem, calc((var(--media-max-h) - 6rem) / 0.82)); max-width:none; }
+  #project-11 .tile-a{ width:50.00%; height:25%; aspect-ratio:auto; top:35.5%; left:5.44%; transform:rotate(-7deg); z-index:2; }
+  #project-11 .tile-b{ width:47.00%; height:24%; aspect-ratio:auto; top:36.31%; left:48.45%; transform:rotate(7deg); z-index:1; }
+  #project-11 .tile-new2{ width:54.00%; height:24%; aspect-ratio:auto; top:12.47%; left:0.79%; transform:rotate(-9deg); z-index:3; }
+  #project-11 .tile-new4{ width:43.00%; height:25%; aspect-ratio:auto; top:12.5%; left:53.61%; transform:rotate(9deg); z-index:4; }
+  #project-9 .tile-a{ width:82.00%; height:38%; aspect-ratio:auto; top:7.19%; left:4.01%; transform:rotate(3deg); z-index:23; }
+  #project-9 .tile-b{ width:70.00%; height:36%; aspect-ratio:auto; top:56.87%; left:25.79%; transform:rotate(-4deg); z-index:1; }
   /* "To moja działka" — wachlarz: jedno zdjęcie na środku (proste, na wierzchu, największe),
      reszta wygląda zza niego pod różnymi kątami, jak rozrzucone/przypięte zdjęcia na biurku. */
-  #about-technical .project-media{ flex-basis:49rem; transform:translate(-2.445rem,1.151rem); }
+  #about-technical .project-media{ flex-basis:49rem; --media-x:-2.445rem; --media-y:1.151rem; }
   #about-technical .tile-collage{
     position:relative;
-    width:min(49rem, calc((var(--media-max-h) - 3rem) / 1.5));
+    width:min(49rem, calc((var(--media-max-h) - 6rem) / 1.5));
     max-width:none;
     aspect-ratio:1/1.5;
     margin:2.5rem auto 0.5rem;
   }
   #about-technical .tile{ transition:transform .35s cubic-bezier(.22,1,.36,1), z-index 0s; cursor:default; }
-  body:not(.edit-mode) #about-technical .tile:hover{ transform:rotate(0deg) scale(1.07) !important; z-index:9 !important; }
+  body:not(.edit-mode) #about-technical .tile:hover{ transform:rotate(0deg) scale(1.07) !important; z-index:500 !important; }
   #about-technical .tile:hover .about-photo{ box-shadow:0 28px 55px -18px rgba(0,0,0,.85); }
-  #about-technical .tile-a{ width:50%; aspect-ratio:4/5; top:0.68%; left:8.08%; transform:rotate(6deg); z-index:3; }
-  #about-technical .tile-b{ width:40%; height:37%; aspect-ratio:auto; top:7.36%; left:57.4%; transform:rotate(-2deg); z-index:2; }
-  #about-technical .tile-c{ width:50.00%; height:45%; aspect-ratio:auto; top:39.55%; left:19.99%; transform:rotate(-3deg); z-index:50; }
-  #about-technical .tile-d{ width:48%; aspect-ratio:4/5; top:45.61%; left:52.52%; transform:rotate(8deg); z-index:1; }
+  #about-technical .tile-a{ width:61.00%; height:44%; aspect-ratio:auto; top:0.34%; left:-18.86%; transform:rotate(3deg); z-index:1; }
+  #about-technical .tile-b{ width:78.00%; height:34%; aspect-ratio:auto; top:4.87%; left:46.72%; transform:rotate(-2deg); z-index:2; }
+  #about-technical .tile-c{ width:100.00%; height:42%; aspect-ratio:auto; top:49.92%; left:-18.27%; transform:rotate(-6deg); z-index:3; }
+  #about-technical .tile-d{ width:61.00%; height:41%; aspect-ratio:auto; top:43.12%; left:69.1%; transform:rotate(5deg); z-index:4; }
   #about-technical .tile .about-photo{ width:100%; height:100%; aspect-ratio:auto; }
 
   /* "Tak to ja" — ten sam wachlarz co w "To moja działka", ale lustrzane kąty obrotu,
      żeby obie sekcje O mnie nie wyglądały identycznie mimo wspólnego wzorca. */
-  #about-life .project-media{ flex-basis:49rem; transform:translate(-1.198rem,0.000rem); }
+  #about-life .project-media{ flex-basis:49rem; --media-x:-1.198rem; --media-y:0.000rem; }
   #about-life .tile-collage{
     position:relative;
-    width:min(49rem, calc((var(--media-max-h) - 3rem) / 1.42));
+    width:min(49rem, calc((var(--media-max-h) - 6rem) / 1.42));
     max-width:none;
     aspect-ratio:1/1.42;
     margin:2.5rem auto 0.5rem;
   }
   #about-life .tile{ transition:transform .35s cubic-bezier(.22,1,.36,1), z-index 0s; cursor:default; }
-  body:not(.edit-mode) #about-life .tile:hover{ transform:rotate(0deg) scale(1.07) !important; z-index:9 !important; }
+  body:not(.edit-mode) #about-life .tile:hover{ transform:rotate(0deg) scale(1.07) !important; z-index:500 !important; }
   #about-life .tile:hover .about-photo{ box-shadow:0 28px 55px -18px rgba(0,0,0,.85); }
   #about-life .tile-a{ width:45%; height:32%; aspect-ratio:auto; top:5.08%; left:47.92%; transform:rotate(-15deg); z-index:1; }
   #about-life .tile-b{ width:45%; height:34%; aspect-ratio:auto; top:15.51%; left:7.11%; transform:rotate(11deg); z-index:2; }
@@ -1150,13 +1206,19 @@
   .tile-collage[data-count="4"][data-layout="2"] .tile-b{ width:44%; aspect-ratio:4/5; top:7%; right:8%; transform:rotate(-7.2deg); z-index:1; }
   .tile-collage[data-count="4"][data-layout="2"] .tile-c{ width:58%; top:7%; left:8%; height:46%; aspect-ratio:auto; bottom:7%; transform:rotate(-3.6deg); z-index:3; }
   .tile-collage[data-count="4"][data-layout="2"] .tile-d{ width:34%; aspect-ratio:4/5; bottom:7%; right:2%; transform:rotate(10.8deg); z-index:4; }
-  #project-6 .project-media{ flex-basis:58rem; max-width:58rem; transform:translate(2.109rem,0.815rem); }
+  #project-6 .project-media{ flex-basis:58rem; max-width:58rem; --media-x:2.109rem; --media-y:0.815rem; }
   #project-6 .project-row{ gap:0.5rem; max-width:none; }
-  #project-6 .tile-collage{ width:58rem; max-width:none; aspect-ratio:1/0.55; }
+  #project-6 .tile-collage{ width:min(58rem, calc((var(--media-max-h) - 6rem) / 0.55)); max-width:none; aspect-ratio:1/0.55; }
   #project-6 .tile-a{ width:47.00%; height:47%; aspect-ratio:auto; top:-2.51%; left:7.14%; transform:rotate(-4deg); z-index:23; }
   #project-6 .tile-b{ width:47%; height:48%; aspect-ratio:auto; top:-2.7%; left:50.78%; transform:rotate(3deg); z-index:1; }
   #project-6 .tile-c{ width:46%; height:47%; aspect-ratio:auto; top:44.51%; left:7.13%; transform:rotate(1deg); z-index:3; }
   #project-6 .tile-d{ width:47%; height:48%; aspect-ratio:auto; top:44.35%; left:51.48%; transform:rotate(-4deg); z-index:4; }
+  #project-blade .project-media{ flex-basis:58rem; max-width:58rem; }
+  #project-blade .tile-collage{ width:min(58rem, calc((var(--media-max-h) - 6rem) / 0.55)); max-width:none; aspect-ratio:1/0.55; }
+  #project-blade .tile-a{ width:47.00%; height:47%; aspect-ratio:auto; top:-2.51%; left:7.14%; transform:rotate(-4deg); z-index:1; }
+  #project-blade .tile-b{ width:47%; height:48%; aspect-ratio:auto; top:-2.7%; left:50.78%; transform:rotate(3deg); z-index:2; }
+  #project-blade .tile-c{ width:46%; height:47%; aspect-ratio:auto; top:44.51%; left:7.13%; transform:rotate(1deg); z-index:3; }
+  #project-blade .tile-d{ width:47%; height:48%; aspect-ratio:auto; top:44.35%; left:51.48%; transform:rotate(-4deg); z-index:4; }
   .tile-collage[data-count="4"][data-layout="4"] .tile-a{ width:58%; aspect-ratio:4/5; top:7%; left:8%; transform:rotate(-3.6deg); z-index:4; }
   .tile-collage[data-count="4"][data-layout="4"] .tile-b{ width:36%; aspect-ratio:4/5; top:7%; right:8%; transform:rotate(7.2deg); z-index:3; }
   .tile-collage[data-count="4"][data-layout="4"] .tile-c{ width:36%; aspect-ratio:4/5; bottom:7%; right:8%; transform:rotate(-7.2deg); z-index:2; }
@@ -1330,10 +1392,13 @@
   .gallery-3 img:first-child{ grid-row:1 / 3; aspect-ratio:3/4; }
   .gallery-4{ grid-template-columns:1fr 1fr; }
   .gallery-4 img:nth-child(2){ margin-top:1.375rem; }
-  #about-recommend .project-media{ flex-basis:36rem; max-width:36rem; transform:translate(0.623rem,0.000rem); }
-  #about-recommend .tile-collage{ width:36rem; max-width:36rem; }
-  #project-2 .project-media{ flex-basis:46rem; transform:translate(3.931rem,0.000rem);}
-  #project-2 .tile-collage{ width:min(46rem, calc((var(--media-max-h) - 3rem) / 0.82)); max-width:46rem; }
+  #about-recommend .project-media{ flex-basis:49rem; max-width:49rem; --media-x:4.410rem; --media-y:0.000rem; }
+  #about-recommend .tile-collage{ width:49rem; max-width:none; height:42rem; aspect-ratio:auto; }
+  #about-recommend .tile-a{ width:57.00%; height:41%; aspect-ratio:auto; top:25.35%; left:37.67%; transform:rotate(6deg); z-index:3; }
+  #about-recommend .tile-b{ width:55.00%; height:40%; aspect-ratio:auto; top:5.93%; left:5.57%; transform:rotate(-8deg); z-index:1; }
+  #about-recommend .tile-new1{ width:56.00%; height:42%; aspect-ratio:auto; top:49.67%; left:5.3%; transform:rotate(10deg); z-index:2; }
+  #project-2 .project-media{ flex-basis:46rem; --media-x:3.931rem; --media-y:0.000rem;}
+  #project-2 .tile-collage{ width:min(46rem, calc((var(--media-max-h) - 6rem) / 0.82)); max-width:46rem; }
   .gallery-4 img:nth-child(3){ margin-top:-0.625rem; }
   @media (max-width:860px){
     .gallery-2 img:nth-child(2), .gallery-4 img:nth-child(2), .gallery-4 img:nth-child(3){ margin-top:0; }
@@ -1814,19 +1879,18 @@
   #skills .inner{ transform:translate(0.000rem,0.000rem) scale(0.9); transform-origin:center; }
   #contact .inner{ transform:translate(0.000rem,-0.959rem) scale(0.9); transform-origin:center; }
   #project-12 .project-content{ transform:translate(0.000rem,-0.911rem) scale(0.9); transform-origin:center; }
-  #about-recommend .project-content{ transform:translate(6.951rem,0.000rem) scale(0.9); transform-origin:center; }
+  #about-recommend .project-content{ transform:translate(8.293rem,0.000rem) scale(0.9); transform-origin:center; }
   #project-1 .project-content{ transform:translate(-4.219rem,0.000rem) scale(0.9); transform-origin:center; }
   #project-2 .project-content{ transform:translate(8.198rem,0.000rem) scale(0.9); transform-origin:center; }
-  #project-3 .project-content{ transform:translate(7.239rem,0.000rem) scale(0.9); transform-origin:center; }
   #project-4 .project-content{ transform:translate(6.520rem,0.000rem) scale(0.9); transform-origin:center; }
   #project-5 .project-content{ transform:translate(-4.794rem,0.000rem) scale(0.9); transform-origin:center; }
   #project-6 .project-content{ transform:translate(6.855rem,-3.547rem) scale(0.9); transform-origin:center; }
   #project-7 .project-content{ transform:translate(-39.693rem,0.000rem) scale(0.9); transform-origin:center; }
-  #project-8 .project-content{ transform:translate(-4.506rem,-1.055rem) scale(0.9); transform-origin:center; }
+  #project-8 .project-content{ transform:translate(-1.534rem,4.986rem) scale(0.9); transform-origin:center; }
   #project-9 .project-content{ transform:translate(5.129rem,-4.410rem) scale(0.9); transform-origin:center; }
   #project-10 .project-content{ transform:translate(-3.452rem,0.000rem) scale(0.9); transform-origin:center; }
-  #project-11 .project-content{ transform:translate(4.314rem,0.000rem) scale(0.9); transform-origin:center; }
-  #about-technical .project-content{ transform:translate(12.320rem,2.301rem) scale(0.9); transform-origin:center; }
+  #project-11 .project-content{ transform:translate(-0.288rem,7.718rem) scale(0.9); transform-origin:center; }
+  #about-technical .project-content{ transform:translate(5.034rem,0.767rem) scale(0.8); transform-origin:center; }
   #about-life .project-content{ transform:translate(-11.649rem,0.000rem) scale(0.9); transform-origin:center; }
   /* ===== Szybkie podsumowanie (modal dla rekruterów bez czasu na scrollowanie) ===== */
   #summary-modal{
@@ -1868,16 +1932,58 @@
   #summary-card .sum-project span{ font-size:14px; color:var(--text-dim, #9A9D9F); white-space:nowrap; }
   #summary-card .sum-actions{ display:flex; gap:12px; flex-wrap:wrap; margin-top:28px; }
   #summary-fab{
-    position:fixed; bottom:24px; left:24px; z-index:998;
-    height:48px; padding:0 20px; border-radius:999px;
-    background:var(--accent, #7C6A4A); color:#0E0F11; border:none;
+    position:absolute; left:120px; top:50%; z-index:998;
+    transform:translateY(-50%);
+    height:34px; padding:0;
+    border-radius:20px;
+    background:var(--bg-panel); color:var(--text); border:1px solid var(--line);
     font-size:14px; font-weight:600; font-family:'Space Grotesk', sans-serif;
     cursor:pointer; white-space:nowrap;
-    box-shadow:0 8px 24px rgba(0,0,0,.5);
-    display:flex; align-items:center; gap:8px; justify-content:center;
-    transition:transform .2s ease;
+    display:flex; align-items:center;
+    box-shadow:0 8px 24px rgba(0,0,0,.35);
+    transition:background .2s ease, border-color .2s ease;
   }
-  #summary-fab:hover{ transform:scale(1.05); }
+  #summary-fab .summary-icon{
+    flex:0 0 auto; width:34px; height:34px;
+    display:flex; align-items:center; justify-content:center; font-size:14px;
+  }
+  #summary-fab .summary-label{
+    display:inline-block;
+    max-width:0; overflow:hidden;
+    font-size:12.5px; white-space:nowrap;
+    padding-right:0;
+    transition:max-width .55s cubic-bezier(.22,1,.36,1), padding-right .55s cubic-bezier(.22,1,.36,1);
+  }
+  #summary-fab:hover,
+  #summary-fab.auto-expand{
+    background:var(--accent, #7C6A4A); color:#0E0F11; border-color:transparent;
+  }
+  #summary-fab:hover .summary-label,
+  #summary-fab.auto-expand .summary-label{
+    max-width:170px;
+    padding-right:14px;
+  }
+  @media (max-width:860px){ #summary-fab{ display:none; } }
+  .section-nav{
+    position:fixed; bottom:24px; left:50%; z-index:998;
+    transform:translateX(-50%);
+    display:flex; align-items:center; gap:4px;
+    background:rgba(20,20,22,.85);
+    backdrop-filter:blur(8px);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:999px;
+    padding:6px;
+    box-shadow:0 8px 24px rgba(0,0,0,.5);
+  }
+  .section-nav button{
+    width:38px; height:38px; border-radius:999px; border:none; background:transparent;
+    color:#EDEDE9; font-size:16px; font-family:'Space Grotesk', sans-serif;
+    cursor:pointer; display:flex; align-items:center; justify-content:center;
+    transition:background .2s ease, color .2s ease, transform .15s ease;
+  }
+  .section-nav button:hover{ background:var(--accent, #7C6A4A); color:#0E0F11; }
+  .section-nav button:active{ transform:scale(.9); }
+  @media (max-width:860px){ .section-nav{ display:none; } }
   #summary-close{
     position:absolute; top:1rem; right:1rem;
     width:2.25rem; height:2.25rem; border-radius:50%;
@@ -1897,37 +2003,24 @@
     <button type="button" data-lang="pl" class="active">PL</button>
     <button type="button" data-lang="en">EN</button>
   </div>
+  <button id="summary-fab" type="button" class="summary-pill" title="Szybkie podsumowanie" aria-label="Szybkie podsumowanie">
+    <span class="summary-icon">⚡</span>
+    <span class="summary-label">Szybkie podsumowanie</span>
+  </button>
   <ul>
     <li><a href="#hero" class="active" data-nav="hero" data-i18n="nav-start">Start</a></li>
     <li><a href="#career" data-nav="career" data-i18n="nav-career">Kariera</a></li>
     <li><a href="#skills" data-nav="skills" data-i18n="nav-skills">Umiejętności</a></li>
-    <li class="has-sub" data-group="produkcje">
-      <a href="#project-1" data-nav="produkcje" data-i18n="nav-productions">Produkcje</a>
+    <li class="has-sub" data-group="projekty">
+      <a href="#project-1" data-nav="projekty" data-i18n="nav-projects">Projekty</a>
       <ul class="subnav">
-        <li><a href="#project-1" data-nav="project-1" class="subnav-link">Mr Toilet</a></li>
-        <li><a href="#project-2" data-nav="project-2" class="subnav-link">Nerd Simulator</a></li>
-        <li><a href="#project-3" data-nav="project-3" class="subnav-link">Wild Bar</a></li>
+        <li><a href="#project-1" data-nav="produkcje" class="subnav-link" data-i18n="nav-productions">Produkcje</a></li>
+        <li><a href="#project-6" data-nav="gry" class="subnav-link" data-i18n="nav-games">Gry</a></li>
+        <li><a href="#project-8" data-nav="narzedzia" class="subnav-link" data-i18n="nav-tools">Narzędzia</a></li>
+        <li><a href="#project-12" data-nav="oprogramowanie" class="subnav-link" data-i18n="nav-software">Oprogramowanie</a></li>
+        <li><a href="#roadmap" data-nav="roadmap" class="subnav-link" data-i18n="nav-roadmap">Roadmap</a></li>
       </ul>
     </li>
-    <li class="has-sub" data-group="gry">
-      <a href="#project-4" data-nav="gry" data-i18n="nav-games">Gry</a>
-      <ul class="subnav">
-        <li><a href="#project-4" data-nav="project-4" class="subnav-link">Space Defense</a></li>
-        <li><a href="#project-5" data-nav="project-5" class="subnav-link">Popiel</a></li>
-        <li><a href="#project-6" data-nav="project-6" class="subnav-link">Lumberjack</a></li>
-        <li><a href="#project-7" data-nav="project-7" class="subnav-link">Fluffy Savior</a></li>
-      </ul>
-    </li>
-    <li class="has-sub" data-group="narzedzia">
-      <a href="#project-8" data-nav="narzedzia" data-i18n="nav-tools">Narzędzia</a>
-      <ul class="subnav">
-        <li><a href="#project-8" data-nav="project-8" class="subnav-link">Simply Signals</a></li>
-        <li><a href="#project-9" data-nav="project-9" class="subnav-link">Runtime Inspector</a></li>
-        <li><a href="#project-10" data-nav="project-10" class="subnav-link" data-i18n="nav-editor">Edytorskie</a></li>
-        <li><a href="#project-11" data-nav="project-11" class="subnav-link" data-i18n="nav-wip">Więcej</a></li>
-      </ul>
-    </li>
-    <li><a href="#project-12" data-nav="project-12" data-i18n="nav-software">Oprogramowanie</a></li>
     <li class="has-sub" data-group="omnie">
       <a href="#about-technical" data-nav="omnie" data-i18n="nav-about">O mnie</a>
       <ul class="subnav">
@@ -1952,7 +2045,7 @@
   <div class="bg-decor" aria-hidden="true">
     <div class="blob blob-hero"></div>
     <div class="motif-wrap motif-hero motif-clickable lit" role="button" tabindex="0" aria-label="Zgaś ikonę">
-      <img class="motif motif-custom" src="images/icons/hero.svg" alt="" style="display:none" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
+      <img class="motif motif-custom" src="images/icons/start.svg" alt="" style="display:none" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
       <svg class="motif motif-default" viewBox="0 0 120 80" fill="none" xmlns="http://www.w3.org/2000/svg">
       <rect x="12" y="26" width="96" height="34" rx="17" stroke="currentColor" stroke-width="3"/>
       <line x1="34" y1="35" x2="34" y2="51" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
@@ -2020,29 +2113,36 @@
         <button type="button" class="timeline-v-point" data-tl="1">
           <span class="timeline-v-dot"></span>
           <span class="timeline-v-labels">
-            <span class="timeline-v-year">2021–23</span>
-            <span class="timeline-v-role" data-i18n="career-role-1">Junior Unity Developer</span>
+            <span class="timeline-v-year">2021</span>
+            <span class="timeline-v-role" data-i18n="career-role-1">Koło naukowe</span>
           </span>
         </button>
         <button type="button" class="timeline-v-point" data-tl="2">
           <span class="timeline-v-dot"></span>
           <span class="timeline-v-labels">
-            <span class="timeline-v-year">2024</span>
-            <span class="timeline-v-role" data-i18n="career-role-2">Unity Developer Freelance</span>
+            <span class="timeline-v-year">2022</span>
+            <span class="timeline-v-role" data-i18n="career-role-2">Junior Unity Developer</span>
           </span>
         </button>
         <button type="button" class="timeline-v-point" data-tl="3">
           <span class="timeline-v-dot"></span>
           <span class="timeline-v-labels">
-            <span class="timeline-v-year">2025</span>
-            <span class="timeline-v-role" data-i18n="career-role-3">Unity Developer</span>
+            <span class="timeline-v-year">2024</span>
+            <span class="timeline-v-role" data-i18n="career-role-3">Unity Developer Freelance</span>
           </span>
         </button>
         <button type="button" class="timeline-v-point" data-tl="4">
           <span class="timeline-v-dot"></span>
           <span class="timeline-v-labels">
+            <span class="timeline-v-year">2025</span>
+            <span class="timeline-v-role" data-i18n="career-role-4">Unity Developer</span>
+          </span>
+        </button>
+        <button type="button" class="timeline-v-point" data-tl="5">
+          <span class="timeline-v-dot"></span>
+          <span class="timeline-v-labels">
             <span class="timeline-v-year">2026</span>
-            <span class="timeline-v-role" data-i18n="career-role-4">Unity Developer Freelance</span>
+            <span class="timeline-v-role" data-i18n="career-role-5">Unity Developer Freelance</span>
           </span>
         </button>
       </div>
@@ -2096,23 +2196,24 @@
   </div>
 </section>
 
-<section id="project-1" class="project-slide has-media" data-dir="left" data-bg="#0B1517" data-variant="3" style="--motif-color:#3FA7B0">
+<section id="project-1" class="project-slide has-media" data-dir="left" data-bg="#0B1517" data-variant="3" style="--motif-color:#3FA7B0" data-group="produkcje">
   <div class="bg-decor" aria-hidden="true">
     <div class="blob blob-toilet"></div>
     <div class="motif-wrap motif-toilet motif-clickable" role="button" tabindex="0" aria-label="Zapal ikonę">
-      <img class="motif motif-custom" src="images/icons/project-1.svg" alt="" style="display:none" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
+      <img class="motif motif-custom" src="images/icons/mr-toilet.svg" alt="" style="display:none" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
       <svg class="motif motif-default" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
       <rect x="28" y="8" width="34" height="18" rx="3" stroke="currentColor" stroke-width="3.5"/>
       <path d="M22 30 L68 30 L62 50 Q62 78 45 78 Q28 78 28 50 Z" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round"/>
     </svg>
     </div>
   </div>
-  <span class="ghost-num">02</span>
+  <span class="ghost-num">01</span>
   <div class="project-row">
     <div class="project-content">
       <span class="pindex reveal">Projekt 01 / 12</span>
       <h3 class="reveal">Mr Toilet</h3>
-      <p class="reveal" data-i18n="p2-p">Tak, to dosłownie symulator sprzątania publicznej toalety — czasem najlepszy gameplay siedzi w najmniej oczywistym temacie. Sprzątasz, pobierasz opłaty, wyrzucasz nieuczciwych klientów i rozbudowujesz swoje toaletowe imperium. Odpowiadałem za szeroki zakres systemów gameplayowych — od pierwszych prototypów po gotowe, dopracowane mechaniki, w tym UI i customizację obiektów. To właśnie przy tym projekcie nauczyłem się realnego procesu wydawania gry na Steam — wymogów platformy, konfiguracji builda i tego, jak ten proces wygląda na innych kanałach dystrybucji.</p>
+      <p class="reveal" data-i18n="p2-p">Tak, to dosłownie symulator sprzątania publicznej toalety — czasem najlepszy gameplay siedzi w najmniej oczywistym temacie. Sprzątasz, pobierasz opłaty, wyrzucasz nieuczciwych klientów i rozbudowujesz swoje toaletowe imperium. </p>
+      <p class="reveal" data-i18n="p2-p-split">Odpowiadałem za szeroki zakres systemów gameplayowych — od pierwszych prototypów po gotowe, dopracowane mechaniki, w tym UI i customizację obiektów. To właśnie przy tym projekcie nauczyłem się realnego procesu wydawania gry na Steam — wymogów platformy, konfiguracji builda i tego, jak ten proces wygląda na innych kanałach dystrybucji.</p>
       <div class="tags reveal"><span>Unity</span><span>C#</span><span>Steam</span><span>First-person</span></div>
       <div class="links reveal">
         <a href="https://store.steampowered.com/app/3930150/Mr_Toilet/" target="_blank" rel="noopener">Steam ↗</a>
@@ -2121,21 +2222,20 @@
     <div class="project-media">
       <div class="tile-collage" data-count="2" data-layout="4">
         <div class="tile tile-a">
-          <div class="about-photo" style="background-image:url('images/mrtoilet-1.jpg?v=1')" role="img" aria-label="Mr Toilet — grafika ze strony Steam"></div>
+          <div class="about-photo" style="background-image:url('images/mr-toilet-1.jpg?v=1')" role="img" aria-label="Mr Toilet — grafika ze strony Steam"></div>
         </div>
         <div class="tile tile-b">
-          <div class="about-photo" style="background-image:url('images/mrtoilet-2.jpg?v=1')" role="img" aria-label="Mr Toilet — grafika z opisu gry"></div>
+          <div class="about-photo" style="background-image:url('images/mr-toilet-2.jpg?v=1')" role="img" aria-label="Mr Toilet — grafika z opisu gry"></div>
         </div>
       </div>
     </div>
   </div>
 </section>
-
-<section id="project-2" class="project-slide has-media" data-dir="right" data-bg="#170F0B" data-variant="1" style="--motif-color:#C9642E">
+<section id="project-2" class="project-slide has-media" data-dir="right" data-bg="#170F0B" data-variant="1" style="--motif-color:#C9642E" data-group="produkcje">
   <div class="bg-decor" aria-hidden="true">
     <div class="blob blob-nerd"></div>
     <div class="motif-wrap motif-glasses motif-clickable" role="button" tabindex="0" aria-label="Zapal ikonę">
-      <img class="motif motif-custom" src="images/icons/project-2.svg" alt="" style="display:none" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
+      <img class="motif motif-custom" src="images/icons/nerd-simulator.svg" alt="" style="display:none" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
       <svg class="motif motif-default" viewBox="0 0 100 80" fill="none" xmlns="http://www.w3.org/2000/svg">
       <circle cx="28" cy="42" r="19" stroke="currentColor" stroke-width="4"/>
       <circle cx="72" cy="42" r="19" stroke="currentColor" stroke-width="4"/>
@@ -2149,7 +2249,8 @@
     <div class="project-content">
       <span class="pindex reveal">Projekt 02 / 12</span>
       <h3 class="reveal">Nerd Simulator</h3>
-      <p class="reveal" data-i18n="p1-p">A skoro przed chwilą czytałeś o sprzątaniu kibla — tak, zrobiłem też grę dosłownie o byciu nerdem. Niezłe zestawienie, co? Krótka, humorystyczna przygodówka point-and-click, w której pomagasz czterdziestoletniemu Mervinowi wyprowadzić się od mamy — przez absurdalne prace dorywcze i jeszcze bardziej absurdalne kłopoty. Odpowiadałem za szeroki zakres gameplayu, między innymi zbudowałem samodzielną mini-grę w stylu pseudo-klikera, wplecioną w jedną z tych absurdalnych prac dorywczych.</p>
+      <p class="reveal" data-i18n="p1-p">A skoro przed chwilą czytałeś o sprzątaniu kibla — tak, pracowałem też przy grze dosłownie o byciu nerdem. Niezłe zestawienie, co? Krótka, humorystyczna przygodówka point-and-click, w której pomagasz czterdziestoletniemu Mervinowi wyprowadzić się od mamy — przez absurdalne prace dorywcze i jeszcze bardziej absurdalne kłopoty. </p>
+      <p class="reveal" data-i18n="p1-p-split">Odpowiadałem za szeroki zakres gameplayu, między innymi zbudowałem samodzielną mini-grę w stylu pseudo-klikera, wplecioną w jedną z tych absurdalnych prac dorywczych.</p>
       <div class="tags reveal"><span>Unity</span><span>C#</span><span>Steam</span><span>Point & Click</span></div>
       <div class="links reveal">
         <a href="https://store.steampowered.com/app/3128220/Nerd_Simulator/?l=polish" target="_blank" rel="noopener">Steam ↗</a>
@@ -2158,47 +2259,93 @@
     <div class="project-media">
       <div class="tile-collage" data-count="2" data-layout="1">
         <div class="tile tile-a">
-          <div class="about-photo" style="background-image:url('images/nerdsim-1.jpg?v=1')" role="img" aria-label="Nerd Simulator — grafika ze strony Steam"></div>
+          <div class="about-photo" style="background-image:url('images/nerd-simulator-1.jpg?v=1')" role="img" aria-label="Nerd Simulator — grafika ze strony Steam"></div>
         </div>
         <div class="tile tile-b">
-          <div class="about-photo" style="background-image:url('images/nerdsim-2.jpg?v=1')" role="img" aria-label="Nerd Simulator — grafika z opisu gry"></div>
+          <div class="about-photo" style="background-image:url('images/nerd-simulator-2.jpg?v=1')" role="img" aria-label="Nerd Simulator — grafika z opisu gry"></div>
         </div>
       </div>
     </div>
   </div>
 </section>
-
-<section id="project-3" class="project-slide has-media" data-dir="right" data-bg="#12140D" data-variant="8" style="--motif-color:#9AA84A">
+<section id="project-6" class="project-slide has-media" data-dir="right" data-bg="#0D130E" data-variant="5" style="--motif-color:#6B9B5E" data-group="gry">
   <div class="bg-decor" aria-hidden="true">
-    <div class="blob blob-wildbar"></div>
-    <div class="motif-wrap motif-grill motif-clickable" role="button" tabindex="0" aria-label="Zapal ikonę">
-      <img class="motif motif-custom" src="images/icons/project-3.svg" alt="" style="display:none" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
-      <svg class="motif motif-default" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <line x1="20" y1="90" x2="30" y2="55" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/>
-      <line x1="80" y1="90" x2="70" y2="55" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/>
-      <ellipse cx="50" cy="50" rx="38" ry="14" stroke="currentColor" stroke-width="3.5"/>
-      <path d="M32 44 Q50 30 68 44" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+    <div class="blob blob-lumberjack"></div>
+    <div class="motif-wrap motif-axe motif-clickable" role="button" tabindex="0" aria-label="Zapal ikonę">
+      <img class="motif motif-custom" src="images/icons/indian-lumberjack.svg" alt="" style="display:none" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
+      <svg class="motif motif-default" viewBox="5 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <line x1="28" y1="90" x2="66" y2="24" stroke="currentColor" stroke-width="4.5" stroke-linecap="round"/>
+      <path d="M56 16 Q82 8 80 34 Q77 46 58 34 Z" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round"/>
     </svg>
     </div>
   </div>
   <div class="project-row">
     <div class="project-content">
       <span class="pindex reveal">Projekt 03 / 12</span>
-      <h3 class="reveal" data-i18n="p7-h3">Wild Bar — w produkcji</h3>
-      <p class="reveal" data-i18n="p7-p">Własna gra, którą tworzę samodzielnie — pozycjonowana jako <em>„Overcooked spotyka obronę bazy”</em>. Bronisz podwórka przed żywym, atakującym jedzeniem, przyrządzasz je na grillu i musisz zdążyć obsłużyć głodnych gości, zanim las przełamie płot. Co-op dla 1–4 graczy. Demo planuję wypuścić w styczniu 2027 — resztę zostawiam na niespodziankę.</p>
-      <div class="tags reveal"><span>Unity</span><span>C#</span><span>Co-op</span><span>Solo Dev</span></div>
+      <h3 class="reveal">Indian Lumberjack</h3>
+      <p class="reveal" data-i18n="p5-p">Zręcznościowa, niekończąca się gra — Indianin musi zebrać odpowiednią ilość drewna, aby przetrwać zimę, rozbijając drzewo na części jednym uderzeniem. Zaprogramowałem całość samodzielnie, zarządzając przy tym assetami od zewnętrznych grafików, kompozytorów i twórcy dźwięku oraz wpinając je w grę. To właśnie przy tym projekcie nauczyłem się obsługiwać generatywne systemy budujące całą rozgrywkę — między innymi generatywny system kafelków drzewa.</p>
+      <div class="tags reveal"><span>Unity</span><span>C#</span><span>Arcade</span><span>Solo Dev</span></div>
     </div>
     <div class="project-media">
-      <div class="solo-photo" style="background-image:url('images/wildbar-1.jpg?v=1')" role="img" aria-label="Wild Bar — ekran startowy lobby"></div>
+      <div class="tile-collage" data-count="4" data-layout="3">
+        <div class="tile tile-a">
+          <div class="about-photo" style="background-image:url('images/indian-lumberjack-1.jpg?v=1')" role="img" aria-label="Indian Lumberjack — rozgrywka, wariant leśny"></div>
+        </div>
+        <div class="tile tile-b">
+          <div class="about-photo" style="background-image:url('images/indian-lumberjack-2.jpg?v=1')" role="img" aria-label="Indian Lumberjack — rozgrywka, wariant nocny"></div>
+        </div>
+        <div class="tile tile-c">
+          <div class="about-photo" style="background-image:url('images/indian-lumberjack-3.jpg?v=1')" role="img" aria-label="Indian Lumberjack — menu główne"></div>
+        </div>
+        <div class="tile tile-d">
+          <div class="about-photo" style="background-image:url('images/indian-lumberjack-4.jpg?v=1')" role="img" aria-label="Indian Lumberjack — wybór mapy"></div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
-
-<section id="project-4" class="project-slide has-media" data-dir="right" data-bg="#130F1A" data-variant="8" style="--motif-color:#8B6FD9">
+<section id="project-blade" class="project-slide has-media" data-dir="right" data-bg="#0D160D" data-variant="5" style="--motif-color:#5A9B4A" data-group="gry">
+  <div class="bg-decor" aria-hidden="true">
+    <div class="blob blob-blade"></div>
+    <div class="motif-wrap motif-blade motif-clickable" role="button" tabindex="0" aria-label="Zapal ikonę">
+      <img class="motif motif-custom" src="images/icons/blade-river.svg" alt="" style="display:none" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
+      <svg class="motif motif-default" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <line x1="24" y1="88" x2="80" y2="20" stroke="currentColor" stroke-width="4.5" stroke-linecap="round"/>
+      <line x1="34" y1="52" x2="52" y2="38" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/>
+      <path d="M18 82 L30 94 L36 88 L24 76 Z" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round"/>
+    </svg>
+    </div>
+  </div>
+  <div class="project-row">
+    <div class="project-content">
+      <span class="pindex reveal">Projekt 04 / 12</span>
+      <h3 class="reveal" data-i18n="pblade-h3">Blade River</h3>
+      <p class="reveal" data-i18n="pblade-p">Zręcznościowy hack and slash z widokiem z góry — walczysz z falami wrogów, łącząc podstawowy atak z czterema umiejętnościami na cooldownie. Zaprogramowałem całość samodzielnie: system walki, AI przeciwników, fale spawnów i cały zestaw skilli.</p>
+      <div class="tags reveal"><span>Unity</span><span>C#</span><span>Hack and Slash</span><span>Solo Dev</span></div>
+    </div>
+    <div class="project-media">
+      <div class="tile-collage" data-count="4" data-layout="3">
+        <div class="tile tile-a">
+          <div class="about-photo" style="background-image:url('images/blade-river-1.jpg?v=1')" role="img" aria-label="Blade River — starcie z wrogami na polanie"></div>
+        </div>
+        <div class="tile tile-b">
+          <div class="about-photo" style="background-image:url('images/blade-river-2.jpg?v=1')" role="img" aria-label="Blade River — walka z falą rycerzy"></div>
+        </div>
+        <div class="tile tile-c">
+          <div class="about-photo" style="background-image:url('images/blade-river-3.jpg?v=1')" role="img" aria-label="Blade River — ekran wczytywania"></div>
+        </div>
+        <div class="tile tile-d">
+          <div class="about-photo" style="background-image:url('images/blade-river-4.jpg?v=1')" role="img" aria-label="Blade River — walka ze szkieletami"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section id="project-4" class="project-slide has-media" data-dir="right" data-bg="#130F1A" data-variant="8" style="--motif-color:#8B6FD9" data-group="gry">
   <div class="bg-decor" aria-hidden="true">
     <div class="blob blob-spacedef"></div>
     <div class="motif-wrap motif-turret motif-clickable" role="button" tabindex="0" aria-label="Zapal ikonę">
-      <img class="motif motif-custom" src="images/icons/project-4.svg" alt="" style="display:none" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
+      <img class="motif motif-custom" src="images/icons/space-defense.svg" alt="" style="display:none" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
       <svg class="motif motif-default" viewBox="0 11 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
       <line x1="50" y1="88" x2="50" y2="34" stroke="currentColor" stroke-width="3.5"/>
       <path d="M30 88 L70 88 L60 68 L40 68 Z" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round"/>
@@ -2209,7 +2356,7 @@
   </div>
   <div class="project-row">
     <div class="project-content">
-      <span class="pindex reveal">Projekt 04 / 12</span>
+      <span class="pindex reveal">Projekt 05 / 12</span>
       <h3 class="reveal" data-i18n="p3-h3">Space Defense</h3>
       <p class="reveal" data-i18n="p3-p">Tower Defense w cyberpunkowej stylistyce — bronisz trasy przed falami wrogów, rozstawiając i rozwijając wieżyczki obronne. Zrealizowany w ramach projektu uczelnianego, w czteroosobowym zespole, w pełni według metodyki SCRUM — krótkie sprinty, stand-upy, retrospektywy, planowanie. Byłem programistą gameplayu.</p>
       <div class="tags reveal"><span>Unity</span><span>C#</span><span>Tower Defense</span><span>SCRUM</span></div>
@@ -2217,24 +2364,57 @@
     <div class="project-media">
       <div class="tile-collage" data-count="3" data-layout="4">
         <div class="tile tile-a">
-          <div class="about-photo" style="background-image:url('images/spacedefense-1.jpg?v=1')" role="img" aria-label="Space Defense — widok z góry na całą mapę"></div>
+          <div class="about-photo" style="background-image:url('images/space-defense-1.jpg?v=1')" role="img" aria-label="Space Defense — widok z góry na całą mapę"></div>
         </div>
         <div class="tile tile-b">
-          <div class="about-photo" style="background-image:url('images/spacedefense-2.jpg?v=1')" role="img" aria-label="Space Defense — bliższy widok na tor wroga"></div>
+          <div class="about-photo" style="background-image:url('images/space-defense-2.jpg?v=1')" role="img" aria-label="Space Defense — bliższy widok na tor wroga"></div>
         </div>
         <div class="tile tile-c">
-          <div class="about-photo" style="background-image:url('images/spacedefense-3.jpg?v=1')" role="img" aria-label="Space Defense — ekran menu głównego"></div>
+          <div class="about-photo" style="background-image:url('images/space-defense-3.jpg?v=1')" role="img" aria-label="Space Defense — ekran menu głównego"></div>
         </div>
       </div>
     </div>
   </div>
 </section>
-
-<section id="project-5" class="project-slide has-media" data-dir="left" data-bg="#170D0B" data-variant="7" style="--motif-color:#B8452E">
+<section id="project-7" class="project-slide has-media" data-dir="left" data-bg="#170D14" data-variant="6" style="--motif-color:#C9789F" data-group="gry">
+  <div class="bg-decor" aria-hidden="true">
+    <div class="blob blob-fluffy"></div>
+    <div class="motif-wrap motif-paw motif-clickable" role="button" tabindex="0" aria-label="Zapal ikonę">
+      <img class="motif motif-custom" src="images/icons/fluffy-saviour.svg" alt="" style="display:none" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
+      <svg class="motif motif-default" viewBox="5 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="50" cy="68" rx="26" ry="20" stroke="currentColor" stroke-width="3.5"/>
+      <circle cx="22" cy="40" r="10" stroke="currentColor" stroke-width="3.5"/>
+      <circle cx="45" cy="24" r="10" stroke="currentColor" stroke-width="3.5"/>
+      <circle cx="68" cy="24" r="10" stroke="currentColor" stroke-width="3.5"/>
+      <circle cx="88" cy="42" r="10" stroke="currentColor" stroke-width="3.5"/>
+    </svg>
+    </div>
+  </div>
+  <div class="project-row">
+    <div class="project-content">
+      <span class="pindex reveal">Projekt 06 / 12</span>
+      <h3 class="reveal">Fluffy Savior</h3>
+      <p class="reveal" data-i18n="p6-p">Kilkupoziomowa gra zręcznościowa stworzona na game jamie — wcielasz się w obrońcę galaktyki i ratujesz kocią planetę przed zagładą, niszcząc wrogie komety i unikając ataków. Każda planeta to osobna mini-gierka z własnym zestawem zagrożeń. Byłem programistą i odpowiadałem za każdą warstwę gameplayu — od sterowania i kolizji, przez logikę fal wrogów, po system punktacji i przejścia między planetami.</p>
+      <div class="tags reveal"><span>Unity</span><span>C#</span><span>Game Jam</span><span>Arcade</span></div>
+    </div>
+    <div class="project-media">
+      <div class="tile-collage" data-count="3" data-layout="4">
+        <div class="tile tile-a">
+          <div class="about-photo" style="background-image:url('images/fluffy-saviour-1.jpg?v=1')" role="img" aria-label="Fluffy Savior — rozgrywka, niszczenie komet"></div>
+        </div>
+        <div class="tile tile-b">
+          <div class="about-photo" style="background-image:url('images/fluffy-saviour-3.jpg?v=1')" role="img" aria-label="Fluffy Savior — ekran tytułowy"></div>
+        </div>
+        <div class="tile tile-new1"><div class="about-photo" style="background-image:url('images/fluffy-saviour-2.jpg?v=1')"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+<section id="project-5" class="project-slide has-media" data-dir="left" data-bg="#170D0B" data-variant="7" style="--motif-color:#B8452E" data-group="gry">
   <div class="bg-decor" aria-hidden="true">
     <div class="blob blob-popiel"></div>
     <div class="motif-wrap motif-flame motif-clickable" role="button" tabindex="0" aria-label="Zapal ikonę">
-      <img class="motif motif-custom" src="images/icons/project-5.svg" alt="" style="display:none" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
+      <img class="motif motif-custom" src="images/icons/popiel.svg" alt="" style="display:none" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
       <svg class="motif motif-default" viewBox="0 -8 100 110" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M50 8 C30 32 24 48 29 64 C33 78 42 86 50 86 C58 86 67 78 71 64 C76 48 70 32 50 8 Z" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round"/>
       <path d="M50 42 C42 56 42 68 50 74 C58 68 58 56 50 42 Z" stroke="currentColor" stroke-width="3"/>
@@ -2243,7 +2423,7 @@
   </div>
   <div class="project-row">
     <div class="project-content">
-      <span class="pindex reveal">Projekt 05 / 12</span>
+      <span class="pindex reveal">Projekt 07 / 12</span>
       <h3 class="reveal">Popiel</h3>
       <p class="reveal" data-i18n="p4-p">Pierwsza gra, jaką stworzyłem — w trzyosobowym zespole na Game Jamie PolskiGamedev.pl. Sama gra jest krótka i niezbyt rozbudowana pod względem gameplayu, ale to właśnie przy niej nauczyłem się najwięcej jako początkujący programista. Celem jest pokonanie Popiela poprzez zbieranie myszy na trzech różniących się mapach, które zmieniają się po skompletowaniu wszystkiego, co potrzebne w danej rundzie.</p>
       <div class="tags reveal"><span>Unity</span><span>C#</span><span>Game Jam</span></div>
@@ -2260,84 +2440,11 @@
     </div>
   </div>
 </section>
-
-<section id="project-6" class="project-slide has-media" data-dir="right" data-bg="#0D130E" data-variant="5" style="--motif-color:#6B9B5E">
-  <div class="bg-decor" aria-hidden="true">
-    <div class="blob blob-lumberjack"></div>
-    <div class="motif-wrap motif-axe motif-clickable" role="button" tabindex="0" aria-label="Zapal ikonę">
-      <img class="motif motif-custom" src="images/icons/project-6.svg" alt="" style="display:none" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
-      <svg class="motif motif-default" viewBox="5 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <line x1="28" y1="90" x2="66" y2="24" stroke="currentColor" stroke-width="4.5" stroke-linecap="round"/>
-      <path d="M56 16 Q82 8 80 34 Q77 46 58 34 Z" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round"/>
-    </svg>
-    </div>
-  </div>
-  <div class="project-row">
-    <div class="project-content">
-      <span class="pindex reveal">Projekt 06 / 12</span>
-      <h3 class="reveal">Indian Lumberjack</h3>
-      <p class="reveal" data-i18n="p5-p">Zręcznościowa, niekończąca się gra — Indianin musi zebrać odpowiednią ilość drewna, aby przetrwać zimę, rozbijając drzewo na części jednym uderzeniem. Zaprogramowałem całość samodzielnie, zarządzając przy tym assetami od zewnętrznych grafików, kompozytorów i twórcy dźwięku oraz wpinając je w grę. To właśnie przy tym projekcie nauczyłem się obsługiwać generatywne systemy budujące całą rozgrywkę — między innymi generatywny system kafelków drzewa, które rozpadają się na kawałki w zależności od miejsca i siły trafienia.</p>
-      <div class="tags reveal"><span>Unity</span><span>C#</span><span>Arcade</span><span>Solo Dev</span></div>
-    </div>
-    <div class="project-media">
-      <div class="tile-collage" data-count="4" data-layout="3">
-        <div class="tile tile-a">
-          <div class="about-photo" style="background-image:url('images/lumberjack-1.jpg?v=1')" role="img" aria-label="Indian Lumberjack — rozgrywka, wariant leśny"></div>
-        </div>
-        <div class="tile tile-b">
-          <div class="about-photo" style="background-image:url('images/lumberjack-2.jpg?v=1')" role="img" aria-label="Indian Lumberjack — rozgrywka, wariant nocny"></div>
-        </div>
-        <div class="tile tile-c">
-          <div class="about-photo" style="background-image:url('images/lumberjack-3.jpg?v=1')" role="img" aria-label="Indian Lumberjack — menu główne"></div>
-        </div>
-        <div class="tile tile-d">
-          <div class="about-photo" style="background-image:url('images/lumberjack-4.jpg?v=1')" role="img" aria-label="Indian Lumberjack — wybór mapy"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="project-7" class="project-slide has-media" data-dir="left" data-bg="#170D14" data-variant="6" style="--motif-color:#C9789F">
-  <div class="bg-decor" aria-hidden="true">
-    <div class="blob blob-fluffy"></div>
-    <div class="motif-wrap motif-paw motif-clickable" role="button" tabindex="0" aria-label="Zapal ikonę">
-      <img class="motif motif-custom" src="images/icons/project-7.svg" alt="" style="display:none" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
-      <svg class="motif motif-default" viewBox="5 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <ellipse cx="50" cy="68" rx="26" ry="20" stroke="currentColor" stroke-width="3.5"/>
-      <circle cx="22" cy="40" r="10" stroke="currentColor" stroke-width="3.5"/>
-      <circle cx="45" cy="24" r="10" stroke="currentColor" stroke-width="3.5"/>
-      <circle cx="68" cy="24" r="10" stroke="currentColor" stroke-width="3.5"/>
-      <circle cx="88" cy="42" r="10" stroke="currentColor" stroke-width="3.5"/>
-    </svg>
-    </div>
-  </div>
-  <div class="project-row">
-    <div class="project-content">
-      <span class="pindex reveal">Projekt 07 / 12</span>
-      <h3 class="reveal">Fluffy Savior</h3>
-      <p class="reveal" data-i18n="p6-p">Kilkupoziomowa gra zręcznościowa stworzona na game jamie — wcielasz się w obrońcę galaktyki i ratujesz kocią planetę przed zagładą, niszcząc wrogie komety i unikając ataków. Każda planeta to osobna mini-gierka z własnym zestawem zagrożeń. Byłem programistą i odpowiadałem za każdą warstwę gameplayu — od sterowania i kolizji, przez logikę fal wrogów, po system punktacji i przejścia między planetami.</p>
-      <div class="tags reveal"><span>Unity</span><span>C#</span><span>Game Jam</span><span>Arcade</span></div>
-    </div>
-    <div class="project-media">
-      <div class="tile-collage" data-count="3" data-layout="4">
-        <div class="tile tile-a">
-          <div class="about-photo" style="background-image:url('images/fluffy-1.jpg?v=1')" role="img" aria-label="Fluffy Savior — rozgrywka, niszczenie komet"></div>
-        </div>
-        <div class="tile tile-b">
-          <div class="about-photo" style="background-image:url('images/fluffy-3.jpg?v=1')" role="img" aria-label="Fluffy Savior — ekran tytułowy"></div>
-        </div>
-        <div class="tile tile-new1"><div class="about-photo" style="background-image:url('images/fluffy-2.jpg?v=1')"></div></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="project-8" class="project-slide has-media" data-dir="left" data-bg="#0B121A" data-variant="3" style="--motif-color:#5B8FD9">
+<section id="project-8" class="project-slide has-media" data-dir="left" data-bg="#0B121A" data-variant="3" style="--motif-color:#5B8FD9" data-group="narzedzia">
   <div class="bg-decor" aria-hidden="true">
     <div class="blob blob-signals"></div>
     <div class="motif-wrap motif-signal motif-clickable" role="button" tabindex="0" aria-label="Zapal ikonę">
-      <img class="motif motif-custom" src="images/icons/project-8.svg" alt="" style="display:none" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
+      <img class="motif motif-custom" src="images/icons/simply-signals.svg" alt="" style="display:none" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
       <svg class="motif motif-default" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
       <circle cx="50" cy="50" r="6" fill="currentColor" stroke="none"/>
       <path d="M32 32a25.5 25.5 0 0 1 36 0" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/>
@@ -2351,27 +2458,27 @@
     <div class="project-content">
       <span class="pindex reveal">Projekt 08 / 12</span>
       <h3 class="reveal">Simply Signals</h3>
-      <p class="reveal" data-i18n="p8-p">Silnie typowany, zero-alokacyjny system komunikacji między systemami gry, zaprojektowany tak, żeby komunikacja cross-assembly przestała być bólem głowy. Zamiast trzymać referencje między modułami albo przepychać dane przez singletony, wystarczy jedno wywołanie — <code>Signals.Send(...)</code> — i dane trafiają dokładnie tam, gdzie trzeba, niezależnie od tego, w którym assembly siedzi odbiorca. Systemy nie muszą nawzajem o sobie wiedzieć, a mimo to swobodnie się komunikują, bez ryzyka konfliktów między dostawcami sygnału w różnych modułach. Nowy sygnał deklaruje się przez dedykowane okno edytorowe — dodanie kolejnego kanału komunikacji to kwestia sekund. W planach: wizualny graf zależności pokazujący na żywo, kto z kim faktycznie rozmawia w danym momencie gry.</p>
+      <p class="reveal" data-i18n="p8-p">Silnie typowany, zero-alokacyjny system komunikacji między systemami gry, zaprojektowany tak, żeby komunikacja cross-assembly przestała być bólem głowy. Zamiast trzymać referencje między modułami albo przepychać dane przez singletony, wystarczy jedno wywołanie — <code>Signals.Send(...)</code> — i dane trafiają dokładnie tam, gdzie trzeba, niezależnie od tego, w którym assembly siedzi odbiorca. Systemy nie muszą nawzajem o sobie wiedzieć, a mimo to swobodnie się komunikują, bez ryzyka konfliktów między dostawcami sygnału w różnych modułach. </p>
+      <p class="reveal" data-i18n="p8-p-split">W planach: wizualny graf zależności pokazujący na żywo, kto z kim rozmawia w danym momencie gry.</p>
       <div class="tags reveal"><span>Source Generators</span><span>IL Weaving</span><span>Cecil</span><span>Zero-Allocation</span></div>
     </div>
     <div class="project-media">
       <div class="tile-collage" data-count="2" data-layout="3">
         <div class="tile tile-a">
-          <div class="about-photo" style="background-image:url('images/simplysignals-1.png?v=1')" role="img" aria-label="Struktura projektu Unity z folderem SimplySignals w Plugins"></div>
+          <div class="about-photo" style="background-image:url('images/simply-signals-1.jpg?v=1')" role="img" aria-label="Struktura projektu Unity z folderem SimplySignals w Plugins"></div>
         </div>
         <div class="tile tile-b">
-          <div class="about-photo" style="background-image:url('images/simplysignals-2.png?v=1')" role="img" aria-label="Simply Signals — widok w inspektorze Unity"></div>
+          <div class="about-photo" style="background-image:url('images/simply-signals-2.jpg?v=1')" role="img" aria-label="Simply Signals — widok w inspektorze Unity"></div>
         </div>
       </div>
     </div>
   </div>
 </section>
-
-<section id="project-9" class="project-slide has-media" data-dir="right" data-bg="#0B1712" data-variant="2" style="--motif-color:#3FBF8F">
+<section id="project-9" class="project-slide has-media" data-dir="right" data-bg="#0B1712" data-variant="2" style="--motif-color:#3FBF8F" data-group="narzedzia">
   <div class="bg-decor" aria-hidden="true">
     <div class="blob blob-inspector"></div>
     <div class="motif-wrap motif-console motif-clickable" role="button" tabindex="0" aria-label="Zapal ikonę">
-      <img class="motif motif-custom" src="images/icons/project-9.svg" alt="" style="display:none" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
+      <img class="motif motif-custom" src="images/icons/runtime-inspector.svg" alt="" style="display:none" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
       <svg class="motif motif-default" viewBox="0 0 110 90" fill="none" xmlns="http://www.w3.org/2000/svg">
       <rect x="10" y="10" width="90" height="70" rx="6" stroke="currentColor" stroke-width="3.5"/>
       <path d="M24 34 L36 45 L24 56" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -2383,27 +2490,27 @@
     <div class="project-content">
       <span class="pindex reveal">Projekt 09 / 12</span>
       <h3 class="reveal">Runtime Inspector</h3>
-      <p class="reveal" data-i18n="p9-p">Wysuwana konsola deweloperska działająca w runtime, wewnątrz builda gry — dowolna metoda w kodzie staje się silnie typowaną, wywoływalną komendą (exec), bez pisania osobnego panelu do każdego testu. Bezpieczna w buildach IL2CPP dzięki punktowemu atrybutowi <code>[Preserve]</code>, dzięki czemu trafia też do builda testowego dla QA, nie tylko do Edytora. Każde wywołanie zapisywane jest w logu — dokładnie widać, jaka komenda, z jakimi argumentami i z jakim wynikiem została wykonana, co ułatwia odtworzenie i zgłoszenie buga. Pełny autocomplete z podpowiedziami sygnatur, zagnieżdżanie wywołań (wynik jednej komendy jako argument drugiej) oraz undo/redo, dzięki czemu cofnięcie serii testowych zmian to jedna komenda, nie restart sceny — świetne narzędzie do szybkich testów bezpośrednio na buildzie, bez podpinania debuggera.</p>
+      <p class="reveal" data-i18n="p9-p">Wysuwana konsola deweloperska działająca w runtime, wewnątrz builda gry — dowolna metoda w kodzie staje się silnie typowaną, wywoływalną komendą (exec), bez pisania osobnego panelu do każdego testu. Każde wywołanie zapisywane jest w logu — dokładnie widać, jaka komenda, z jakimi argumentami i z jakim wynikiem została wykonana, co ułatwia odtworzenie i zgłoszenie buga. </p>
+      <p class="reveal" data-i18n="p9-p-split">Pełny autocomplete z podpowiedziami sygnatur, zagnieżdżanie wywołań oraz undo/redo, dzięki czemu cofnięcie serii testowych zmian to jedna komenda, nie restart sceny — świetne narzędzie do szybkich testów bez podpinania debuggera.</p>
       <div class="tags reveal"><span>Reflection</span><span>Editor Tools</span><span>Debug Console</span><span>IL2CPP</span></div>
     </div>
     <div class="project-media">
       <div class="tile-collage" data-count="2" data-layout="2">
         <div class="tile tile-a">
-          <div class="about-photo" style="background-image:url('images/runtimeinspector-1.jpg?v=1')" role="img" aria-label="Runtime Inspector — konsola deweloperska z listą komend"></div>
+          <div class="about-photo" style="background-image:url('images/runtime-inspector-1.jpg?v=1')" role="img" aria-label="Runtime Inspector — konsola deweloperska z listą komend"></div>
         </div>
         <div class="tile tile-b">
-          <div class="about-photo" style="background-image:url('images/runtimeinspector-2.jpg?v=1')" role="img" aria-label="Runtime Inspector — autouzupełnianie komend"></div>
+          <div class="about-photo" style="background-image:url('images/runtime-inspector-2.jpg?v=1')" role="img" aria-label="Runtime Inspector — autouzupełnianie komend"></div>
         </div>
       </div>
     </div>
   </div>
 </section>
-
-<section id="project-10" class="project-slide has-media" data-dir="left" data-bg="#13151A" data-variant="6" style="--motif-color:#8A93A6">
+<section id="project-10" class="project-slide has-media" data-dir="left" data-bg="#13151A" data-variant="6" style="--motif-color:#8A93A6" data-group="narzedzia">
   <div class="bg-decor" aria-hidden="true">
     <div class="blob blob-toolkit"></div>
     <div class="motif-wrap motif-screwdriver motif-clickable" role="button" tabindex="0" aria-label="Zapal ikonę">
-      <img class="motif motif-custom" src="images/icons/project-10.svg" alt="" style="display:none" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
+      <img class="motif motif-custom" src="images/icons/narzedzia-edytorskie.svg" alt="" style="display:none" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
       <svg class="motif motif-default" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
       <rect x="38" y="8" width="24" height="32" rx="4" stroke="currentColor" stroke-width="3.5"/>
       <line x1="50" y1="40" x2="50" y2="78" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
@@ -2421,21 +2528,20 @@
     <div class="project-media">
       <div class="tile-collage" data-count="2" data-layout="4">
         <div class="tile tile-a">
-          <div class="about-photo" style="background-image:url('images/edytorskie-1.png?v=1')" role="img" aria-label="Struktura projektu — foldery Plugins i Resources"></div>
+          <div class="about-photo" style="background-image:url('images/narzedzia-edytorskie-1.jpg?v=1')" role="img" aria-label="Struktura projektu — foldery Plugins i Resources"></div>
         </div>
         <div class="tile tile-b">
-          <div class="about-photo" style="background-image:url('images/edytorskie-2.png?v=1')" role="img" aria-label="Struktura atrybutu OnValueChange z IL Weaverem"></div>
+          <div class="about-photo" style="background-image:url('images/narzedzia-edytorskie-2.jpg?v=1')" role="img" aria-label="Struktura atrybutu OnValueChange z IL Weaverem"></div>
         </div>
       </div>
     </div>
   </div>
 </section>
-
-<section id="project-11" class="project-slide has-media" data-dir="right" data-bg="#171208" data-variant="7" style="--motif-color:#C9A227">
+<section id="project-11" class="project-slide has-media" data-dir="right" data-bg="#171208" data-variant="7" style="--motif-color:#C9A227" data-group="narzedzia">
   <div class="bg-decor" aria-hidden="true">
     <div class="blob blob-wip"></div>
     <div class="motif-wrap motif-wip motif-clickable" role="button" tabindex="0" aria-label="Zapal ikonę">
-      <img class="motif motif-custom" src="images/icons/project-11.svg" alt="" style="display:none" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
+      <img class="motif motif-custom" src="images/icons/systemy.svg" alt="" style="display:none" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
       <svg class="motif motif-default" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
       <g stroke="currentColor" stroke-width="3.5" stroke-linejoin="round">
         <rect x="45" y="4" width="10" height="16" transform="rotate(0 50 50)"/>
@@ -2455,34 +2561,35 @@
   <div class="project-row">
     <div class="project-content">
       <span class="pindex reveal">Projekt 11 / 12</span>
-      <h3 class="reveal" data-i18n="p11-h3">W rozwoju — kolejne systemy</h3>
-      <p class="reveal" data-i18n="p11-p">Równolegle rozwijam kilka większych systemów, które upublicznię, gdy osiągną stabilną wersję beta:</p>
+      <h3 class="reveal" data-i18n="p11-h3">Systemy</h3>
+      <p class="reveal" data-i18n="p11-p">To nie duże, samodzielne produkty — to mniejsze systemy pomocnicze, które przyspieszają mi codzienną pracę nad grami. Gdy osiągną stabilniejszą wersję, planuję udostępnić je publicznie, za darmo:</p>
       <ul class="reveal wip-list" data-i18n="p11-list">
         <li><strong>LScene</strong> — loader scen wspierający ładowanie sieciowe, z architekturą core / menu / mapa</li>
         <li><strong>Storex</strong> — system zapisu stanu gry</li>
         <li><strong>Config Injector</strong> — wstrzykiwanie configów z Resources przez reflection</li>
         <li><strong>Hermes</strong> — własna, sztywna architektura DI inspirowana Zenjectem</li>
       </ul>
-      <div class="tags reveal"><span>Scene Loading</span><span>Save System</span><span>Dependency Injection</span><span>Work in Progress</span></div>
+      <div class="tags reveal"><span>Scene Loading</span><span>Save System</span><span>Dependency Injection</span></div>
     </div>
     <div class="project-media">
-      <div class="tile-collage" data-count="2" data-layout="4">
+      <div class="tile-collage" data-count="4" data-layout="4">
         <div class="tile tile-a">
-          <div class="about-photo" style="background-image:url('images/wiprozwoju-1.png?v=1')" role="img" aria-label="Folder wip z systemami ConfigInjector, LScene i Storex"></div>
+          <div class="about-photo" style="background-image:url('images/systemy-1.jpg?v=1')" role="img" aria-label="Folder wip z systemami ConfigInjector, LScene i Storex"></div>
         </div>
         <div class="tile tile-b">
-          <div class="about-photo" style="background-image:url('images/wiprozwoju-2.png?v=1')" role="img" aria-label="Kolejny fragment systemu w budowie"></div>
+          <div class="about-photo" style="background-image:url('images/systemy-2.jpg?v=1')" role="img" aria-label="Kolejny fragment systemu w budowie"></div>
         </div>
+        <div class="tile tile-new2"><div class="about-photo" style="background-image:url('images/systemy-3.jpg?v=1')"></div></div>
+        <div class="tile tile-new4"><div class="about-photo" style="background-image:url('images/systemy-4.jpg?v=1')"></div></div>
       </div>
     </div>
   </div>
 </section>
-
-<section id="project-12" class="project-slide" data-dir="left" data-bg="#14100B" data-variant="8" style="--motif-color:#A67C52">
+<section id="project-12" class="project-slide" data-dir="left" data-bg="#14100B" data-variant="8" style="--motif-color:#A67C52" data-group="oprogramowanie">
   <div class="bg-decor" aria-hidden="true">
     <div class="blob blob-route"></div>
     <div class="motif-wrap motif-route motif-clickable" role="button" tabindex="0" aria-label="Zapal ikonę">
-      <img class="motif motif-custom" src="images/icons/project-12.svg" alt="" style="display:none" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
+      <img class="motif motif-custom" src="images/icons/system-tras.svg" alt="" style="display:none" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
       <svg class="motif motif-default" viewBox="0 0 100 110" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M50 8 C68 8 82 22 82 40 C82 62 50 100 50 100 C50 100 18 62 18 40 C18 22 32 8 50 8 Z" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round"/>
       <circle cx="50" cy="40" r="10" stroke="currentColor" stroke-width="3.5"/>
@@ -2490,12 +2597,41 @@
     </svg>
     </div>
   </div>
-  <span class="ghost-num">12</span>
+  <span class="ghost-num">11</span>
   <div class="project-content">
       <span class="pindex reveal">Projekt 12 / 12</span>
-    <h3 class="reveal" data-i18n="p12-h3">System tras — branża odpadowa</h3>
+    <h3 class="reveal" data-i18n="p12-h3">System tras</h3>
     <p class="reveal" data-i18n="p12-p">Aplikacja transportowa napisana na zlecenie firmy z branży gospodarki odpadami. System generuje trasy zbiórki w formacie GPX, a moduł nawigacji prowadzi kierowcę punkt po punkcie zgodnie z zaplanowaną trasą — bez konieczności ręcznego wyznaczania kolejnych przystanków.</p>
     <div class="tags reveal"><span>C#</span><span>GPX</span><span>Nawigacja</span><span>Zlecenie komercyjne</span></div>
+  </div>
+</section>
+
+<section id="roadmap" data-bg="#12140D" data-variant="8" style="--motif-color:#9AA84A" data-group="roadmap">
+  <div class="bg-decor" aria-hidden="true">
+    <div class="blob blob-roadmap"></div>
+    <div class="motif-wrap motif-roadmap motif-clickable" role="button" tabindex="0" aria-label="Zapal ikonę">
+      <img class="motif motif-custom" src="images/icons/roadmap.svg" alt="" style="display:none" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
+      <svg class="motif motif-default" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <line x1="10" y1="80" x2="90" y2="80" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+      <circle cx="22" cy="80" r="5" fill="currentColor"/>
+      <circle cx="50" cy="80" r="5" fill="currentColor"/>
+      <line x1="78" y1="80" x2="78" y2="20" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+      <path d="M78 20 L96 28 L78 36 Z" fill="currentColor"/>
+    </svg>
+    </div>
+  </div>
+  <div class="inner roadmap-inner">
+    <span class="kicker reveal" data-i18n="roadmap-eyebrow">Roadmap</span>
+    <h3 class="reveal" data-i18n="roadmap-h3">Co dalej</h3>
+    <p class="reveal" data-i18n="roadmap-p">Nad czym aktualnie pracuję albo co planuję zabrać się w najbliższym czasie:</p>
+    <div class="roadmap-track reveal" id="roadmapTrack">
+      <div class="roadmap-line"></div>
+      <div class="roadmap-item">
+        <span class="roadmap-dot"></span>
+        <span class="roadmap-name">Wild Bar</span>
+        <span class="roadmap-status" data-i18n="roadmap-status-0">W produkcji</span>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -2503,7 +2639,7 @@
   <div class="bg-decor" aria-hidden="true">
     <div class="blob blob-about"></div>
     <div class="motif-wrap motif-about motif-clickable" role="button" tabindex="0" aria-label="Zapal ikonę">
-      <img class="motif motif-custom" src="images/icons/about-technical.svg" alt="" style="display:none" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
+      <img class="motif motif-custom" src="images/icons/to-moja-dzialka.svg" alt="" style="display:none" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
       <svg class="motif motif-default" viewBox="0 0 120 80" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M46 20 L24 40 L46 60" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
       <path d="M74 20 L96 40 L74 60" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -2525,6 +2661,10 @@
             <p data-i18n="about-quote">„Osoba zaangażowana i chętna do nauki, otwarta na feedback i konsekwentnie rozwijająca swoje umiejętności — od pisania czytelnego kodu, przez rozwiązywanie problemów, po pracę z repozytorium. Rzetelny, ambitny i godny zaufania współpracownik.”</p>
             <cite data-i18n="about-quote-cite">— referencja, 2025</cite>
           </div>
+          <div class="testimonial">
+            <p data-i18n="about-quote2">„Zawsze można było na niego liczyć — chętnie wspierał innych członków zespołu i dzielił się swoją wiedzą. Z pełnym przekonaniem mogę polecić Tobiasza jako osobę zaangażowaną, kompetentną i godną zaufania.”</p>
+            <cite data-i18n="about-quote2-cite">— referencja, Radikate, 2026</cite>
+          </div>
         </div>
         <button type="button" class="test-nav test-next" id="test-next" aria-label="Następna referencja" disabled>›</button>
       </div>
@@ -2534,16 +2674,16 @@
     <div class="project-media">
       <div class="tile-collage" data-count="4" data-layout="4">
         <div class="tile tile-a">
-          <div class="about-photo" style="background-image:url('images/dzialka-3.jpg?v=1')" role="img" aria-label="Zdjęcie: przy pracy"></div>
+          <div class="about-photo" style="background-image:url('images/to-moja-dzialka-3.jpg?v=1')" role="img" aria-label="Zdjęcie: przy pracy"></div>
         </div>
         <div class="tile tile-b has-tape tape-left">
-          <div class="about-photo" style="background-image:url('images/dzialka-1.jpg?v=1')" role="img" aria-label="Zdjęcie: kod"></div>
+          <div class="about-photo" style="background-image:url('images/to-moja-dzialka-1.jpg?v=1')" role="img" aria-label="Zdjęcie: kod"></div>
         </div>
         <div class="tile tile-c">
-          <div class="about-photo" style="background-image:url('images/dzialka-2.jpg?v=1')" role="img" aria-label="Zdjęcie: przy monitorze"></div>
+          <div class="about-photo" style="background-image:url('images/to-moja-dzialka-2.jpg?v=1')" role="img" aria-label="Zdjęcie: przy monitorze"></div>
         </div>
         <div class="tile tile-d has-tape tape-right">
-          <div class="about-photo" style="background-image:url('images/dzialka-4.jpg?v=1')" role="img" aria-label="Zdjęcie: warsztat"></div>
+          <div class="about-photo" style="background-image:url('images/to-moja-dzialka-4.jpg?v=1')" role="img" aria-label="Zdjęcie: warsztat"></div>
         </div>
       </div>
     </div>
@@ -2553,6 +2693,12 @@
 <section id="about-life" class="project-slide has-media" data-dir="left" data-bg="#170D14" data-variant="1" style="--motif-color:#C9789F">
   <div class="bg-decor" aria-hidden="true">
     <div class="blob blob-about"></div>
+    <div class="motif-wrap motif-star motif-clickable" role="button" tabindex="0" aria-label="Zapal ikonę">
+      <img class="motif motif-custom" src="images/icons/tak-to-ja.svg" alt="" style="display:none" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
+      <svg class="motif motif-default" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M50 8 L58 40 L90 48 L58 56 L50 88 L42 56 L10 48 L42 40 Z" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/>
+    </svg>
+    </div>
   </div>
   <div class="project-row">
     <div class="project-content">
@@ -2565,16 +2711,16 @@
     <div class="project-media">
       <div class="tile-collage" data-count="4" data-layout="2">
         <div class="tile tile-a">
-          <div class="about-photo" style="background-image:url('images/takto-3.jpg?v=1')" role="img" aria-label="Zdjęcie: ja"></div>
+          <div class="about-photo" style="background-image:url('images/tak-to-ja-3.jpg?v=1')" role="img" aria-label="Zdjęcie: ja"></div>
         </div>
         <div class="tile tile-b has-tape tape-right">
-          <div class="about-photo" style="background-image:url('images/takto-2.jpg?v=1')" role="img" aria-label="Zdjęcie: squash"></div>
+          <div class="about-photo" style="background-image:url('images/tak-to-ja-2.jpg?v=1')" role="img" aria-label="Zdjęcie: squash"></div>
         </div>
         <div class="tile tile-c has-tape tape-left">
-          <div class="about-photo" style="background-image:url('images/takto-4.jpg?v=1')" role="img" aria-label="Zdjęcie: bieganie"></div>
+          <div class="about-photo" style="background-image:url('images/tak-to-ja-4.jpg?v=1')" role="img" aria-label="Zdjęcie: bieganie"></div>
         </div>
         <div class="tile tile-d">
-          <div class="about-photo" style="background-image:url('images/takto-1.jpg?v=1')" role="img" aria-label="Zdjęcie: widok z podróży"></div>
+          <div class="about-photo" style="background-image:url('images/tak-to-ja-1.jpg?v=1')" role="img" aria-label="Zdjęcie: widok z podróży"></div>
         </div>
       </div>
     </div>
@@ -2584,25 +2730,36 @@
 <section id="about-recommend" class="project-slide has-media" data-dir="right" data-bg="#14120E" data-variant="4" style="--motif-color:#C9A227">
   <div class="bg-decor" aria-hidden="true">
     <div class="blob blob-about"></div>
+    <div class="motif-wrap motif-controller motif-clickable" role="button" tabindex="0" aria-label="Zapal ikonę">
+      <img class="motif motif-custom" src="images/icons/w-co-gram.svg" alt="" style="display:none" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
+      <svg class="motif motif-default" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="12" y="38" width="76" height="38" rx="19" stroke="currentColor" stroke-width="4"/>
+      <line x1="20" y1="49" x2="20" y2="65" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+      <line x1="12" y1="57" x2="28" y2="57" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+      <circle cx="65" cy="50" r="4.5" stroke="currentColor" stroke-width="3.5"/>
+      <circle cx="78" cy="63" r="4.5" stroke="currentColor" stroke-width="3.5"/>
+    </svg>
+    </div>
   </div>
   <div class="project-row">
     <div class="project-content">
       <span class="pindex reveal" data-i18n="about-eyebrow-2">O mnie 03/03</span>
       <h3 class="reveal" data-i18n="about-h-2">W co gram</h3>
-      <p class="reveal" data-i18n="about-p-2">Zapytaj developera, co gra po godzinach, a zwykle usłyszysz research przebrany za odpoczynek. U mnie szczerze — po prostu lubię, kiedy gameplay jest dopracowany i satysfakcjonujący, niezależnie od gatunku. Kilka tytułów, przy których się nie oszukiwałem:</p>
+      <p class="reveal" data-i18n="about-p-2">Granie towarzyszy mi od zawsze, długo zanim jeszcze pomyślałem o pisaniu kodu. Ograłem mnóstwo tytułów w różnych gatunkach, od soulslike'ów po strzelanki. Ostatnio najbardziej wciągają mnie FPS-y i extraction shootery. Wciąż czekam, aż w końcu wyjdzie dobrze zrobiony The Day Before — chyba w innym wszechświecie.</p>
       <div class="tags reveal"><span>Cuphead</span><span>Age of Empires IV</span><span>Rust</span><span>Lies of P</span><span>Black Myth: Wukong</span></div>
       <div class="links reveal">
         <a href="https://steamcommunity.com/profiles/76561198025641193/" target="_blank" rel="noopener" data-i18n="about-steam-link">Mój profil Steam ↗</a>
       </div>
     </div>
     <div class="project-media">
-      <div class="tile-collage" data-count="2" data-layout="1">
+      <div class="tile-collage" data-count="3" data-layout="1">
         <div class="tile tile-a">
-          <div class="about-photo" style="background-image:url('images/wcogram-1.jpg?v=1')" role="img" aria-label="Zrzut ekranu: CS2"></div>
+          <div class="about-photo" style="background-image:url('images/w-co-gram-1.jpg?v=1')" role="img" aria-label="Zrzut ekranu: CS2"></div>
         </div>
         <div class="tile tile-b">
-          <div class="about-photo" style="background-image:url('images/wcogram-2.jpg?v=1')" role="img" aria-label="Zdjęcie: setup do gier"></div>
+          <div class="about-photo" style="background-image:url('images/w-co-gram-2.jpg?v=1')" role="img" aria-label="Zdjęcie: setup do gier"></div>
         </div>
+        <div class="tile tile-new1"><div class="about-photo" style="background-image:url('images/w-co-gram-3.jpg?v=1')"></div></div>
       </div>
     </div>
   </div>
@@ -2612,7 +2769,7 @@
   <div class="bg-decor" aria-hidden="true">
     <div class="blob blob-contact"></div>
     <div class="motif-wrap motif-contact motif-clickable" role="button" tabindex="0" aria-label="Zapal ikonę">
-      <img class="motif motif-custom" src="images/icons/contact.svg" alt="" style="display:none" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
+      <img class="motif motif-custom" src="images/icons/kontakt.svg" alt="" style="display:none" onload="this.style.display='block'; this.nextElementSibling.style.display='none';" onerror="this.style.display='none';">
       <svg class="motif motif-default" viewBox="0 0 100 110" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M50 6 L92 30 L92 80 L50 104 L8 80 L8 30 Z" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round"/>
       <path d="M50 6 L50 54 L92 30 M50 54 L92 80 M50 54 L8 80 M50 54 L8 30" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>
@@ -2672,16 +2829,12 @@
   let animating = false;
 
   const ABOUT_IDS = ['about-technical','about-life','about-recommend'];
-  const PRODUCTION_IDS = ['project-1','project-2','project-3'];
-  const GAME_IDS = ['project-4','project-5','project-6','project-7'];
-  const TOOL_IDS = ['project-8','project-9','project-10','project-11'];
 
   function idToNavKey(id){
     if(ABOUT_IDS.includes(id)) return 'omnie';
-    if(PRODUCTION_IDS.includes(id)) return 'produkcje';
-    if(GAME_IDS.includes(id)) return 'gry';
-    if(TOOL_IDS.includes(id)) return 'narzedzia';
-    return id; // hero, skills, project-12 (Oprogramowanie), contact
+    const sec = document.getElementById(id);
+    if(sec && sec.dataset.group) return 'projekty'; // każda sekcja projektowa (ma data-group) → jedna zakładka "Projekty"
+    return id; // hero, skills, career, contact
   }
 
   function setActiveNav(id){
@@ -2689,18 +2842,18 @@
     navLinks.forEach(a => a.classList.remove('active'));
     const link = navMap[key];
     if(link) link.classList.add('active');
-    // Highlight the exact sub-link too (data-nav matches the section id directly)
+    // Highlight the exact sub-link: "O mnie" matcuje po id sekcji, "Projekty" po kategorii (data-group)
     const exact = navMap[id];
     if(exact && exact.classList.contains('subnav-link')) exact.classList.add('active');
-    // Expand only the relevant group (Gry / Narzędzia), collapse the other
+    const sec = document.getElementById(id);
+    const group = sec && sec.dataset.group;
+    if(group && navMap[group] && navMap[group].classList.contains('subnav-link')) navMap[group].classList.add('active');
     const omnieLi = document.querySelector('.sidenav li.has-sub[data-group="omnie"]');
-    const prodLi = document.querySelector('.sidenav li.has-sub[data-group="produkcje"]');
-    const gryLi = document.querySelector('.sidenav li.has-sub[data-group="gry"]');
-    const narzLi = document.querySelector('.sidenav li.has-sub[data-group="narzedzia"]');
+    const projektyLi = document.querySelector('.sidenav li.has-sub[data-group="projekty"]');
     if(omnieLi) omnieLi.classList.toggle('expanded', ABOUT_IDS.includes(id));
-    if(prodLi) prodLi.classList.toggle('expanded', PRODUCTION_IDS.includes(id));
-    if(gryLi) gryLi.classList.toggle('expanded', GAME_IDS.includes(id));
-    if(narzLi) narzLi.classList.toggle('expanded', TOOL_IDS.includes(id));
+    if(projektyLi) projektyLi.classList.toggle('expanded', !!group);
+    const summaryFab = document.getElementById('summary-fab');
+    if(summaryFab) summaryFab.classList.toggle('auto-expand', id === 'hero');
   }
 
   function sizeSections(){
@@ -2720,6 +2873,8 @@
     sections.forEach((s, i) => s.classList.toggle('in-view', i === index));
     const content = getScrollableContent(sections[index]);
     if(content) content.scrollTop = 0; // always start at the top of the content
+    const media = sections[index].querySelector('.project-media');
+    if(media) media.scrollTop = 0; // zdjęcia też zawsze wracają na górę, nie zostają "zjechane" po powrocie
     setActiveNav(sections[index].id);
     // Smooth page-wide background color wash, D&D-style
     const bg = sections[index].dataset.bg;
@@ -2739,6 +2894,32 @@
     window.clearTimeout(goTo._t);
     goTo._t = window.setTimeout(() => { animating = false; }, TRANSITION_MS);
   }
+
+  // --- Dolne przyciski nawigacji: ‹‹ (poprzednia kategoria) ‹ › (krok) ›› (następna kategoria) ---
+  function groupOf(i){
+    // sekcje projektowe mają wspólny data-group (produkcje/gry/narzedzia/...) — reszta liczy się jako własna, osobna "grupa"
+    return sections[i].dataset.group || sections[i].id;
+  }
+  function skipToGroup(dir){
+    if(animating) return;
+    const curGroup = groupOf(index);
+    let i = index;
+    while(i + dir >= 0 && i + dir < sections.length){
+      i += dir;
+      if(groupOf(i) !== curGroup){ goTo(i); return; }
+    }
+    goTo(i); // koniec/początek listy — idź tak daleko jak się da
+  }
+  document.addEventListener('DOMContentLoaded', function(){
+    const navPrevBtn = document.getElementById('nav-prev');
+    const navNextBtn = document.getElementById('nav-next');
+    const navSkipPrevBtn = document.getElementById('nav-skip-prev');
+    const navSkipNextBtn = document.getElementById('nav-skip-next');
+    if(navPrevBtn) navPrevBtn.addEventListener('click', () => goTo(index - 1));
+    if(navNextBtn) navNextBtn.addEventListener('click', () => goTo(index + 1));
+    if(navSkipPrevBtn) navSkipPrevBtn.addEventListener('click', () => skipToGroup(-1));
+    if(navSkipNextBtn) navSkipNextBtn.addEventListener('click', () => skipToGroup(1));
+  });
 
   // Initialize
   sizeSections();
@@ -2794,6 +2975,7 @@
   // --- Keyboard nav (desktop only) ---
   window.addEventListener('keydown', (e) => {
     if(!isDesktop() || animating) return;
+    if(e.target && (e.target.isContentEditable || e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return; // pisanie tekstu — spacja/strzałki mają działać normalnie, nie przełączać sekcji
     const lb = document.getElementById('lightbox');
     if(lb && lb.classList.contains('active')) return; // preview open — arrows belong to it, not page nav
     const sm = document.getElementById('summary-modal');
@@ -2816,10 +2998,19 @@
   }, { passive:true });
 
   // --- Sidebar links jump straight to target index ---
+  const NAV_TARGETS = {
+    'omnie':'about-technical',
+    'projekty':'project-1',
+    'produkcje':'project-1',
+    'gry':'project-6',
+    'narzedzia':'project-8',
+    'oprogramowanie':'project-12',
+    'roadmap':'roadmap',
+  };
   navLinks.forEach(a => {
     a.addEventListener('click', (e) => {
       e.preventDefault();
-      const targetId = a.dataset.nav === 'omnie' ? 'about-technical' : a.dataset.nav === 'produkcje' ? 'project-1' : a.dataset.nav === 'gry' ? 'project-4' : a.dataset.nav === 'narzedzia' ? 'project-8' : a.dataset.nav;
+      const targetId = NAV_TARGETS[a.dataset.nav] || a.dataset.nav;
       if(isDesktop()){
         const i = sections.findIndex(s => s.id === targetId);
         if(i !== -1) goTo(i);
@@ -2879,8 +3070,12 @@
   // --- PL/EN language toggle ---
   (function(){
     const EN = {
-      'nav-start':'Home','nav-about':'About','nav-career':'Career','nav-skills':'Skills','nav-productions':'Productions','nav-games':'Games',
-      'nav-tools':'Tools','nav-software':'Software','nav-contact':'Contact',
+      'nav-start':'Home','nav-about':'About','nav-career':'Career','nav-skills':'Skills','nav-productions':'Productions','nav-games':'Games','nav-projects':'Projects',
+      'nav-tools':'Tools','nav-software':'Software','nav-contact':'Contact','nav-roadmap':'Roadmap',
+      'roadmap-eyebrow':'Roadmap',
+      'roadmap-h3':"What's next",
+      'roadmap-p':"What I'm currently working on, or planning to pick up soon:",
+      'roadmap-status-0':'In production',
       'nav-editor':'Editor Tools','nav-wip':'More',
 
       'hero-loc':'RELOCATION / REMOTE — OPEN TO EITHER',
@@ -2901,20 +3096,23 @@
       'about-p-0c':'I can hold my own in a team — I\'ve worked solo, in small crews (game jams, university projects), and in a 13-person production team. Communication has never been a problem for me.',
       'about-p-1':'Calisthenics and running keep me in enough shape that the screen hasn\'t fully absorbed me yet — winning, for now. I watch my diet too, though I don\'t always beat the midnight pizza.',
       'about-p-1b':'Gaming has always been a passion of mine — not just downtime, but inspiration for my own projects. I pick up a squash racket sometimes, and whenever I get the chance, I pack a bag and disappear somewhere new — the best reset I know.',
-      'about-p-2':'Ask a developer what they play after hours and you\'ll usually get research disguised as relaxation. Honestly, for me it\'s simpler — I just like it when gameplay is polished and satisfying, whatever the genre. A few titles I wasn\'t faking it with:',
+      'about-p-2':'Gaming has been with me forever, long before I ever thought about writing code. I\'ve played a ton of titles across genres, from soulslikes to shooters. Lately I\'m most into FPS games and extraction shooters. I\'m still waiting for a properly finished version of The Day Before to come out — probably in a different universe.',
       'about-steam-link':'My Steam profile ↗',
       'about-cs2-caption':'“I can shoot a little bit”',
       'about-stat1':'years in Unity','about-stat2':'completed projects','about-stat3':'titles on Steam',
       'about-quote':'“An engaged, eager learner — open to feedback and consistently leveling up, from writing clean code, to problem-solving, to working with a repo. A reliable, ambitious, trustworthy collaborator.”',
       'about-quote-cite':'— reference, 2025',
+      'about-quote2':'“You could always count on him — he was always happy to support other team members and share his knowledge. I can confidently recommend Tobiasz as an engaged, competent, and trustworthy person.”',
+      'about-quote2-cite':'— reference, Radikate, 2026',
 
       'career-kicker':'Career',
       'career-h2':'Step by step, from a student club to Steam',
       'career-role-0':'Education',
-      'career-role-1':'Junior Unity Developer',
-      'career-role-2':'Unity Developer Freelance',
-      'career-role-3':'Unity Developer',
-      'career-role-4':'Unity Developer Freelance',
+      'career-role-1':'Student club',
+      'career-role-2':'Junior Unity Developer',
+      'career-role-3':'Unity Developer Freelance',
+      'career-role-4':'Unity Developer',
+      'career-role-5':'Unity Developer Freelance',
 
       'skills-kicker':'Skills',
       'skills-h2':'What I work with day to day',
@@ -2923,23 +3121,27 @@
       'skills-items1':'C# (advanced), C/C++ (basic), Python',
       'skills-items2':'Unity (advanced, URP), Unreal Engine 5 (basic)',
 
-      'p1-p':'And since you were just reading about scrubbing a toilet — yes, I also made a game literally about being a nerd. Quite the pairing. A short, comedic point-and-click adventure where you help forty-year-old Mervin move out of his mom\'s house — through absurd odd jobs and even more absurd trouble. I was responsible for a broad range of gameplay work, including a standalone pseudo-clicker minigame woven into one of those absurd odd jobs.',
-      'p2-p':'Yes, it\'s literally a simulator about cleaning a public restroom — sometimes the best gameplay hides in the least glamorous premise. Clean up, charge fees, kick out freeloaders, and grow your bathroom empire. I was responsible for a broad range of gameplay systems — from early prototypes through to polished, finished mechanics, including UI and object customization. This was the project where I learned the real process of shipping a game on Steam — platform requirements, build configuration, and how that process differs across other distribution channels.',
+      'p1-p':'And since you were just reading about scrubbing a toilet — yes, I also made a game literally about being a nerd. Quite the pairing. A short, comedic point-and-click adventure where you help forty-year-old Mervin move out of his mom\'s house — through absurd odd jobs and even more absurd trouble. ',
+      'p1-p-split':'I was responsible for a broad range of gameplay work, including a standalone pseudo-clicker minigame woven into one of those absurd odd jobs.',
+      'p2-p':'Yes, it\'s literally a simulator about cleaning a public restroom — sometimes the best gameplay hides in the least glamorous premise. Clean up, charge fees, kick out freeloaders, and grow your bathroom empire. ',
+      'p2-p-split':'I was responsible for a broad range of gameplay systems — from early prototypes through to polished, finished mechanics, including UI and object customization. This was the project where I learned the real process of shipping a game on Steam — platform requirements, build configuration, and how that process differs across other distribution channels.',
       'p3-h3':'Space Defense',
       'p3-p':'A cyberpunk-styled Tower Defense — you defend a path from waves of enemies by placing and upgrading defense turrets. Built as a university project with a four-person team, run fully by SCRUM — short sprints, stand-ups, retrospectives, planning. I was the gameplay programmer.',
       'p4-p':'The first game I ever made — in a three-person team at the PolskiGamedev.pl Game Jam. The game itself is short and not exactly deep in terms of gameplay, but it\'s where I learned the most as a beginner programmer. The goal is to defeat Popiel by collecting mice across three different maps, which change once you\'ve gathered everything needed for that round.',
-      'p5-p':'An endless arcade game — a lumberjack has to gather enough wood to survive winter, chopping a tree into pieces with a single hit. I coded the whole thing myself, managing assets from external artists, composers, and a sound designer and wiring them into the game. This was the project where I learned to work with generative systems driving the whole game — including a generative tree-tile system, where the tree breaks apart differently depending on where and how hard it\'s hit.',
+      'p5-p':'An endless arcade game — a lumberjack has to gather enough wood to survive winter, chopping a tree into pieces with a single hit. I coded the whole thing myself, managing assets from external artists, composers, and a sound designer and wiring them into the game. This was the project where I learned to work with generative systems driving the whole game — including a generative tree-tile system.',
+      'pblade-p':'A top-down hack and slash — you fight off waves of enemies, combining a basic attack with four cooldown-based skills. I coded the whole thing myself: the combat system, enemy AI, spawn waves, and the full skill set.',
       'p6-p':"A multi-level arcade game made at a game jam — you play a galaxy defender saving a cat planet from destruction, destroying enemy comets and dodging attacks. Each planet is its own self-contained minigame, with its own set of threats. I was the programmer, responsible for every layer of gameplay — from controls and collision, through enemy wave logic, to the scoring system and transitions between planets.",
-      'p7-h3':'Wild Bar — in development',
       'p7-p':'My own game, which I\'m building myself — pitched as <em>“Overcooked meets base defense”</em>. You defend a backyard from living, attacking food, cook it up on the grill, and race to serve hungry guests before the forest breaks through the fence. Co-op for 1–4 players. I\'m aiming to release a demo in January 2027 — I\'ll leave the rest as a surprise.',
-      'p8-p':'A strongly-typed, zero-allocation communication system between game systems, built so cross-assembly communication stops being a headache. Instead of holding references between modules or pushing data through singletons, one call — <code>Signals.Send(...)</code> — is enough, and the data lands exactly where it needs to, no matter which assembly the receiver lives in. Systems don\'t need to know about each other, yet they communicate freely, with no risk of signal-provider conflicts across modules. A new signal is declared through a dedicated editor window — adding another communication channel takes seconds. Coming up: a visual dependency graph showing, live, who\'s actually talking to whom at any given moment in the game.',
-      'p9-p':'A slide-out developer console that runs at runtime, inside the game build — any method in the code becomes a strongly-typed, callable command (exec), with no need to write a dedicated panel for every test. Safe in IL2CPP builds thanks to a targeted <code>[Preserve]</code> attribute, so it ships in QA test builds too, not just the Editor. Every call gets logged — you can see exactly which command ran, with which arguments, and what it returned, which makes reproducing and reporting bugs far easier. Full autocomplete with signature hints, command nesting (using one command\'s result as another\'s argument), and undo/redo, so rolling back a batch of test changes is one command, not a scene restart — great for fast testing directly on the build, without ever attaching a debugger.',
+      'p8-p':'A strongly-typed, zero-allocation communication system between game systems, built so cross-assembly communication stops being a headache. Instead of holding references between modules or pushing data through singletons, one call — <code>Signals.Send(...)</code> — is enough, and the data lands exactly where it needs to, no matter which assembly the receiver lives in. Systems don\'t need to know about each other, yet they communicate freely, with no risk of signal-provider conflicts across modules. ',
+      'p8-p-split':'Coming up: a visual dependency graph showing, live, who\'s talking to whom at any given moment in the game.',
+      'p9-p':'A slide-out developer console that runs at runtime, inside the game build — any method in the code becomes a strongly-typed, callable command (exec), with no need to write a dedicated panel for every test. Every call gets logged — you can see exactly which command ran, with which arguments, and what it returned, which makes reproducing and reporting bugs far easier. ',
+      'p9-p-split':'Full autocomplete with signature hints, command nesting, and undo/redo, so rolling back a batch of test changes is one command, not a scene restart — great for fast testing without ever attaching a debugger.',
       'p10-h3':'Editor Tools',
       'p10-p':'Nobody brags about editor tools in a first interview, yet they\'re what speeds up the whole team the most. A set of smaller tools used daily: an Anchor Converter that turns UI elements into screen-relative anchors, a Font Auto-Size Converter that unifies text scaling across resolutions, and an Interface Drawer that serializes interfaces in the Inspector — something Unity can\'t do out of the box. All tied together by my own attribute- and reflection-based reference injection system, plus the <code>[OnValueChange]</code> attribute that generates a backing field via IL Weaving.',
-      'p11-h3':'In Progress — More Systems',
-      'p11-p':'I\'m developing several bigger systems in parallel, which I\'ll open up once they hit a stable beta:',
+      'p11-h3':'Systems',
+      'p11-p':"These aren't big, standalone products — they're smaller support systems that speed up my day-to-day game dev work. Once they hit a more stable version, I plan to release them publicly, for free:",
       'p11-list':'<li><strong>LScene</strong> — a scene loader with network-loading support, built around a core / menu / map architecture</li><li><strong>Storex</strong> — a game-state save system</li><li><strong>Config Injector</strong> — reflection-based config injection from Resources</li><li><strong>Hermes</strong> — my own opinionated DI architecture inspired by Zenject</li>',
-      'p12-h3':'Route System — Waste Management',
+      'p12-h3':'Route System',
       'p12-p':'A transport app built for a waste management company. The system generates collection routes in GPX format, and the navigation module guides the driver point by point along the planned route — no manual stop-by-stop planning needed.',
 
       'contact-kicker':'Contact',
@@ -3026,7 +3228,11 @@
               en:"I joined a student tech club at university — my first real Unity projects, game jams (Popiel, Fluffy Savior), and my first taste of working in a team toward a shared goal."
             },
             tags: ['Unity', 'C#', 'Game Jams']
-          },
+          }
+        ]
+      },
+      {
+        items: [
           {
             date: { pl:'Listopad 2022 – Czerwiec 2023', en:'November 2022 – June 2023' },
             title: { pl:'Dream Eater Interactive', en:'Dream Eater Interactive' },
@@ -3238,12 +3444,45 @@
     currentGroup = els.map(function(g){
       return { url: getImageUrl(g), alt: g.getAttribute('aria-label') };
     }).filter(function(item){ return item.url; });
+    // Sortuj po numerze w nazwie pliku (kolejność w kodzie zależy od z-index/warstw, nie od numeracji) —
+    // dzięki temu "dalej/wstecz" zawsze idzie 1,2,3,4..., niezależnie od tego jak są poukładane na stronie.
+    currentGroup.sort(function(a, b){
+      const na = (a.url.match(/(\d+)(\.[a-zA-Z0-9]+)(\?.*)?$/) || [])[1];
+      const nb = (b.url.match(/(\d+)(\.[a-zA-Z0-9]+)(\?.*)?$/) || [])[1];
+      return (parseInt(na, 10) || 0) - (parseInt(nb, 10) || 0);
+    });
     const startEl = getImageUrl(el);
     let startIndex = currentGroup.findIndex(function(item){ return item.url === startEl; });
     if(startIndex < 0) startIndex = 0;
     showIndex(startIndex);
     lightbox.classList.add('active');
     lightbox.setAttribute('aria-hidden', 'false');
+
+    // Automatyczne dociąganie kolejnych, ponumerowanych zdjęć spoza widocznych kafelków
+    // (np. widoczne to takto-1..4.jpg — spróbuj takto-5.jpg, 6.jpg... aż któryś nie istnieje).
+    // Dzięki temu można dorzucić pliki do folderu images/ bez zmiany kodu.
+    const firstUrl = currentGroup[0] && currentGroup[0].url;
+    const m = firstUrl && firstUrl.match(/^(.*?)(\d+)(\.[a-zA-Z0-9]+)(\?.*)?$/);
+    if(m){
+      const prefix = m[1], ext = m[3];
+      let maxNum = 0;
+      currentGroup.forEach(function(item){
+        const mm = item.url.match(/(\d+)(\.[a-zA-Z0-9]+)(\?.*)?$/);
+        if(mm){ const n = parseInt(mm[1], 10); if(n > maxNum) maxNum = n; }
+      });
+      (function probe(n, triesLeft){
+        if(triesLeft <= 0) return;
+        const testUrl = prefix + n + ext + '?v=1';
+        const img = new Image();
+        img.onload = function(){
+          currentGroup.push({ url: testUrl, alt: '' });
+          if(currentGroup.length > 1){ lbPrev.hidden = false; lbNext.hidden = false; }
+          probe(n + 1, triesLeft - 1);
+        };
+        img.onerror = function(){}; // brak kolejnego pliku — koniec doszukiwania
+        img.src = testUrl;
+      })(maxNum + 1, 30);
+    }
   }
   function closeLightbox(){
     lightbox.classList.remove('active');
@@ -3331,7 +3570,12 @@
 })();
 </script>
 
-<button id="summary-fab" type="button" title="Szybkie podsumowanie" aria-label="Szybkie podsumowanie">⚡ Szybkie podsumowanie</button>
+<div class="section-nav" id="section-nav" aria-label="Nawigacja między sekcjami">
+  <button type="button" id="nav-skip-prev" aria-label="Poprzednia kategoria" title="Poprzednia kategoria">‹‹</button>
+  <button type="button" id="nav-prev" aria-label="Poprzednia sekcja" title="Poprzednia sekcja">‹</button>
+  <button type="button" id="nav-next" aria-label="Następna sekcja" title="Następna sekcja">›</button>
+  <button type="button" id="nav-skip-next" aria-label="Następna kategoria" title="Następna kategoria">››</button>
+</div>
 <div id="summary-modal">
   <div id="summary-card">
     <div id="summary-modal-inner">
@@ -3367,7 +3611,7 @@
       <div class="sum-projects">
         <a href="#project-1" class="sum-project" data-jump="project-1"><strong>Mr Toilet</strong><span>Steam</span></a>
         <a href="#project-2" class="sum-project" data-jump="project-2"><strong>Nerd Simulator</strong><span>Steam</span></a>
-        <a href="#project-3" class="sum-project" data-jump="project-3"><strong>Wild Bar</strong><span>W produkcji</span></a>
+        <a href="#roadmap" class="sum-project" data-jump="roadmap"><strong>Roadmap</strong><span>Co dalej</span></a>
         <a href="#project-4" class="sum-project" data-jump="project-4"><strong>Space Defense</strong><span>Projekt uczelniany</span></a>
         <a href="#project-9" class="sum-project" data-jump="project-9"><strong>Runtime Inspector</strong><span>Narzędzie autorskie</span></a>
         <a href="#project-8" class="sum-project" data-jump="project-8"><strong>Simply Signals</strong><span>Narzędzie autorskie</span></a>
@@ -3444,8 +3688,8 @@
     </div>
     <div class="ep-row">
       <label>Nazwa pliku (output) <span class="ep-val" id="ep-filename-val"></span></label>
-      <input type="text" id="ep-filename" placeholder="np. fluffy-3" style="width:100%; box-sizing:border-box; background:#0E0F11; color:#EDEDE9; border:1px solid #2A2D31; border-radius:6px; padding:8px 10px; font-family:monospace; font-size:13px;">
-      <p class="ep-hint" style="margin:6px 0 0;">To tylko nazwa pliku (bez ".jpg"), zachowuje folder "images/" i rozszerzenie. Zmienia się na żywo w podglądzie — jeśli plik o tej nazwie jeszcze nie istnieje, zdjęcie na chwilę zniknie, dopóki nie wgrasz pliku pod tą nazwą.</p>
+      <input type="text" id="ep-filename" placeholder="np. fluffy-3.jpg" style="width:100%; box-sizing:border-box; background:#0E0F11; color:#EDEDE9; border:1px solid #2A2D31; border-radius:6px; padding:8px 10px; font-family:monospace; font-size:13px;">
+      <p class="ep-hint" style="margin:6px 0 0;">Wpisz pełną nazwę pliku RAZEM z rozszerzeniem (np. "edytorskie-2.jpg" albo "wildbar-1.png") — sam dopisuję tylko folder "images/". Zmienia się na żywo w podglądzie — jeśli plik o tej nazwie jeszcze nie istnieje, zdjęcie na chwilę zniknie, dopóki nie wgrasz pliku pod tą nazwą.</p>
     </div>
     <div class="ep-row">
       <button type="button" id="ep-delete-tile" style="background:#B8452E;">Usuń to zdjęcie</button>
@@ -3489,9 +3733,14 @@
     <p class="ep-hint" style="margin:6px 0 0;">Nowe zdjęcie pojawi się na środku z szarym placeholderem — przeciągnij/obróć/zmień rozmiar jak każde inne, a w wygenerowanym kodzie dostaniesz też gotowy fragment HTML do wklejenia.</p>
   </div>
   <div class="ep-row">
-    <label>Rozmiar kontenera zdjęć (sekcja: <span id="ep-container-section">—</span>) <span class="ep-val" id="ep-container-val">—</span></label>
+    <label>Rozmiar kontenera zdjęć — szerokość (sekcja: <span id="ep-container-section">—</span>) <span class="ep-val" id="ep-container-val">—</span></label>
     <input type="range" id="ep-container-size" min="20" max="70" step="1" value="38">
-    <p class="ep-hint" style="margin:6px 0 0;">To realnie powiększa "pudełko", w którym mieszczą się zdjęcia tej sekcji — nie tylko podgląd. Im większy kontener, tym więcej miejsca dla zdjęć bez ucinania.</p>
+    <p class="ep-hint" style="margin:6px 0 0;">To realnie powiększa "pudełko", w którym mieszczą się zdjęcia tej sekcji — nie tylko podgląd. Domyślnie wysokość rośnie razem z szerokością (stała proporcja) — jeśli chcesz szerzej BEZ automatycznego wzrostu wysokości, ustaw wysokość osobno suwakiem niżej.</p>
+  </div>
+  <div class="ep-row">
+    <label>Rozmiar kontenera zdjęć — wysokość, niezależnie od szerokości <span class="ep-val" id="ep-container-height-val">AUTO</span></label>
+    <input type="range" id="ep-container-height" min="10" max="80" step="1" value="30">
+    <p class="ep-hint" style="margin:6px 0 0;">Odblokowuje szerokość od proporcji — po dotknięciu tego suwaka możesz rozciągać szerokość dowolnie w bok, bo wysokość jest już ustawiona osobno i jej nie zmieni. "Reset tej sekcji" wraca do stałej proporcji.</p>
   </div>
   <div class="ep-row">
     <label>Pozycja kontenera zdjęć — poziomo <span class="ep-val" id="ep-media-x-val">0px</span></label>
@@ -3520,6 +3769,10 @@
   <div class="ep-row">
     <label>Odstęp między tekstem a zdjęciami <span class="ep-val" id="ep-gap-val">—</span></label>
     <input type="range" id="ep-gap" min="0" max="6" step="0.1" value="3">
+  </div>
+  <div class="ep-row">
+    <button type="button" id="ep-split-p">Podziel na akapit (na kursorze)</button>
+    <p class="ep-hint" style="margin:6px 0 0;">Kliknij w tekst w miejscu, gdzie ma być podział, potem kliknij ten przycisk — reszta zdania odklei się jako nowy akapit z odstępem. Nie działa Enter, bo psuje eksport.</p>
   </div>
   <div class="ep-row">
     <button type="button" id="ep-generate">Wygeneruj CSS</button>
@@ -3772,20 +4025,16 @@
     return m ? m[2] : '';
   }
   function getFilenameFromUrl(url){
-    const base = url.split('/').pop().split('?')[0];
-    const dot = base.lastIndexOf('.');
-    return dot > -1 ? base.slice(0, dot) : base;
+    return url.split('/').pop().split('?')[0];
   }
   function setFilenameOnUrl(url, newName){
+    url = url || '';
     const qIdx = url.indexOf('?');
     const query = qIdx > -1 ? url.slice(qIdx) : '';
     const path = qIdx > -1 ? url.slice(0, qIdx) : url;
     const lastSlash = path.lastIndexOf('/');
-    const dir = lastSlash > -1 ? path.slice(0, lastSlash + 1) : '';
-    const base = lastSlash > -1 ? path.slice(lastSlash + 1) : path;
-    const dot = base.lastIndexOf('.');
-    const ext = dot > -1 ? base.slice(dot) : '';
-    return dir + newName + ext + query;
+    const dir = lastSlash > -1 ? path.slice(0, lastSlash + 1) : 'images/';
+    return dir + newName + query;
   }
 
   function currentRotation(el){
@@ -4151,11 +4400,12 @@
         if(undoStack.length > 60) undoStack.shift();
       }
       const cur = containerState.has(sid) ? containerState.get(sid) : Math.round(pxToRem(media.getBoundingClientRect().width));
-      const next = Math.max(20, Math.min(70, cur - Math.round(e.deltaY * 0.03)));
+      const collage = media.querySelector('.tile-collage');
+      const safeMax = getSafeContainerMaxRem(collage, media);
+      const next = Math.max(20, Math.min(safeMax, cur - Math.round(e.deltaY * 0.03)));
       containerState.set(sid, next);
       media.style.flexBasis = next + 'rem';
       media.style.maxWidth = next + 'rem';
-      const collage = media.querySelector('.tile-collage');
       if(collage){ collage.style.width = next + 'rem'; collage.style.maxWidth = 'none'; }
       const solo = media.querySelector('.solo-photo');
       if(solo){ solo.style.maxWidth = next + 'rem'; }
@@ -4211,6 +4461,9 @@
     const curUrl = getBgUrl(imgEl);
     const newUrl = setFilenameOnUrl(curUrl, newName);
     imgEl.style.backgroundImage = "url('" + newUrl + "')";
+    imgEl.style.backgroundSize = '';
+    imgEl.style.backgroundPosition = '';
+    imgEl.style.backgroundRepeat = '';
     tileFilenameState.set(key, newUrl);
   });
 
@@ -4268,6 +4521,7 @@
 
 
   const textEditState = new Map(); // data-i18n key -> nowy tekst
+  const newParagraphs = new Map(); // nowy data-i18n key -> {afterKey, className}
   document.querySelectorAll('[data-i18n]').forEach(function(el){
     el.dataset.origText = el.textContent;
     el.addEventListener('input', function(){
@@ -4276,8 +4530,75 @@
       else textEditState.set(key, el.textContent);
     });
     el.addEventListener('keydown', function(e){
-      if(e.key === 'Enter' && el.tagName !== 'P') e.preventDefault(); // nagłówki/etykiety bez Entera
+      if(e.key === 'Enter') e.preventDefault(); // Enter nie dzieli akapitu poprawnie — użyj przycisku "Podziel na akapit"
     });
+  });
+
+  document.getElementById('ep-split-p').addEventListener('click', function(){
+    const sel = window.getSelection();
+    if(!sel || sel.rangeCount === 0){
+      alert('Najpierw kliknij w tekście, w miejscu gdzie ma być podział.');
+      return;
+    }
+    const range = sel.getRangeAt(0);
+    const node = range.startContainer;
+    const startEl = node.nodeType === 3 ? node.parentElement : node;
+    const sourceEl = startEl && startEl.closest ? startEl.closest('[data-i18n]') : null;
+    if(!sourceEl || sourceEl.tagName !== 'P'){
+      alert('Podział akapitu działa tylko w zwykłym tekście (akapicie), nie w nagłówkach.');
+      return;
+    }
+    const sourceKey = sourceEl.getAttribute('data-i18n');
+    const prevHTML = sourceEl.innerHTML;
+    undoStack.push(function(){
+      sourceEl.innerHTML = prevHTML;
+      textEditState.delete(sourceKey);
+      const madeKey = sourceEl.dataset.lastSplitKey;
+      if(madeKey){
+        const madeEl = document.querySelector('[data-i18n="' + madeKey + '"]');
+        if(madeEl) madeEl.remove();
+        newParagraphs.delete(madeKey);
+        textEditState.delete(madeKey);
+      }
+    });
+    if(undoStack.length > 60) undoStack.shift();
+
+    const afterRange = range.cloneRange();
+    afterRange.selectNodeContents(sourceEl);
+    afterRange.setStart(range.endContainer, range.endOffset);
+    const afterFragment = afterRange.extractContents();
+    while(afterFragment.firstChild && afterFragment.firstChild.nodeType === 3 && !afterFragment.firstChild.textContent.trim()){
+      afterFragment.removeChild(afterFragment.firstChild);
+    }
+    if(!afterFragment.textContent.trim()){
+      alert('Kursor jest na końcu tekstu — nie ma czego przenieść do nowego akapitu.');
+      return;
+    }
+
+    const newP = document.createElement('p');
+    newP.className = sourceEl.className;
+    let newKey = sourceKey + '-split';
+    let counter = 2;
+    while(document.querySelector('[data-i18n="' + newKey + '"]')){ newKey = sourceKey + '-split' + counter; counter++; }
+    newP.setAttribute('data-i18n', newKey);
+    newP.contentEditable = true;
+    newP.appendChild(afterFragment);
+    sourceEl.after(newP);
+    sourceEl.dataset.lastSplitKey = newKey;
+
+    newP.dataset.origText = '';
+    newP.addEventListener('input', function(){
+      if(newP.textContent.trim() === '') textEditState.delete(newKey);
+      else textEditState.set(newKey, newP.textContent);
+    });
+    newP.addEventListener('keydown', function(e){
+      if(e.key === 'Enter') e.preventDefault();
+    });
+
+    newParagraphs.set(newKey, { afterKey: sourceKey, className: newP.className });
+    textEditState.set(sourceKey, sourceEl.textContent);
+    textEditState.set(newKey, newP.textContent);
+    newP.focus();
   });
 
   function toggleEditMode(){
@@ -4329,10 +4650,16 @@
     el.style.top = '35%';
     el.style.left = '35%';
     el.style.transform = 'rotate(0deg)';
-    el.style.background = 'repeating-linear-gradient(45deg,#555,#555 10px,#777 10px,#777 20px)';
-    el.style.border = '0.5rem solid #F2EEE6';
-    el.style.borderWidth = '0.5rem 0.5rem 1.75rem 0.5rem';
     el.style.boxSizing = 'border-box';
+    const photo = document.createElement('div');
+    photo.className = 'about-photo';
+    photo.style.width = '100%';
+    photo.style.height = '100%';
+    photo.style.boxSizing = 'border-box';
+    photo.style.background = 'repeating-linear-gradient(45deg,#555,#555 10px,#777 10px,#777 20px)';
+    photo.style.border = '0.5rem solid #F2EEE6';
+    photo.style.borderWidth = '0.5rem 0.5rem 1.75rem 0.5rem';
+    el.appendChild(photo);
     collage.appendChild(el);
     initTile(el);
     addedTiles.set(tag, { sectionId: sid, orientation: orientation === 'h' ? '16/10' : '4/5' });
@@ -4341,10 +4668,13 @@
   document.getElementById('ep-add-h').addEventListener('click', function(){ addNewTile('h'); });
   document.getElementById('ep-add-v').addEventListener('click', function(){ addNewTile('v'); });
 
-  const containerState = new Map(); // sectionId -> rem value
+  const containerState = new Map(); // sectionId -> rem (szerokość)
+  const containerHeightState = new Map(); // sectionId -> rem (wysokość, tylko gdy odblokowana od proporcji) value
   const containerSlider = document.getElementById('ep-container-size');
   const containerVal = document.getElementById('ep-container-val');
   const containerSectionLabel = document.getElementById('ep-container-section');
+  const containerHeightSlider = document.getElementById('ep-container-height');
+  const containerHeightVal = document.getElementById('ep-container-height-val');
   let containerSyncedFor = null;
 
   function getMediaEl(sid){
@@ -4367,6 +4697,17 @@
       }
     }
     containerVal.textContent = containerSlider.value + 'rem';
+    if(containerHeightState.has(sid)){
+      containerHeightSlider.value = containerHeightState.get(sid);
+      containerHeightVal.textContent = containerHeightSlider.value + 'rem';
+    } else {
+      containerHeightVal.textContent = 'AUTO';
+      const media2 = getMediaEl(sid);
+      const collage2 = media2 && media2.querySelector('.tile-collage');
+      if(collage2){
+        containerHeightSlider.value = Math.round(pxToRem(collage2.getBoundingClientRect().height));
+      }
+    }
     const st = getTextState(sid);
     txtScaleInput.value = st.scale;
     txtScaleVal.textContent = Math.round(st.scale * 100) + '%';
@@ -4398,21 +4739,82 @@
     });
     if(undoStack.length > 60) undoStack.shift();
   });
+  // Liczy maksymalny bezpieczny rozmiar kontenera (rem), żeby nigdy nie przekroczyć dostępnej wysokości —
+  // to samo zabezpieczenie co formuła min()/calc() w CSS, tylko liczone na żywo w JS, żeby suwak/scroll
+  // w edytorze nie mogły ustawić czegoś, co i tak zostałoby ucięte na docelowej stronie.
+  function getSafeContainerMaxRem(collage, media){
+    if(!collage || !media) return 70;
+    if(getComputedStyle(collage).aspectRatio === 'auto') return 70; // wysokość już niezależna — szerokość wolna
+    const mediaMaxHPx = parseFloat(getComputedStyle(media).maxHeight);
+    if(!mediaMaxHPx || !isFinite(mediaMaxHPx)) return 70;
+    let ratio = 0.82;
+    const ar = getComputedStyle(collage).aspectRatio;
+    if(ar && ar.indexOf('/') > -1){
+      const parts = ar.split('/').map(function(s){ return parseFloat(s); });
+      if(parts[0] > 0 && parts[1] > 0) ratio = parts[1] / parts[0];
+    }
+    const rootPx = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
+    const bufferPx = 6 * rootPx;
+    const maxWidthPx = Math.max(0, (mediaMaxHPx - bufferPx) / ratio);
+    return Math.max(10, Math.floor(maxWidthPx / rootPx));
+  }
+  function getSafeContainerMaxHeightRem(media){
+    if(!media) return 80;
+    const mediaMaxHPx = parseFloat(getComputedStyle(media).maxHeight);
+    if(!mediaMaxHPx || !isFinite(mediaMaxHPx)) return 80;
+    const rootPx = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
+    const bufferPx = 6 * rootPx;
+    const maxHeightPx = Math.max(0, mediaMaxHPx - bufferPx);
+    return Math.max(10, Math.floor(maxHeightPx / rootPx));
+  }
+
   containerSlider.addEventListener('input', function(){
     const sid = currentSectionId();
     if(!sid) return;
-    const rem = parseInt(containerSlider.value, 10);
+    let rem = parseInt(containerSlider.value, 10);
+    const media = getMediaEl(sid);
+    const collage = document.querySelector('#' + sid + ' .tile-collage');
+    const safeMax = getSafeContainerMaxRem(collage, media);
+    if(rem > safeMax){ rem = safeMax; containerSlider.value = rem; }
     containerVal.textContent = rem + 'rem';
     containerState.set(sid, rem);
-    const media = getMediaEl(sid);
     if(media){
       media.style.flexBasis = rem + 'rem';
       media.style.maxWidth = rem + 'rem';
     }
-    const collage = document.querySelector('#' + sid + ' .tile-collage');
     if(collage){ collage.style.width = rem + 'rem'; collage.style.maxWidth = 'none'; }
     const solo = document.querySelector('#' + sid + ' .solo-photo');
     if(solo){ solo.style.maxWidth = rem + 'rem'; }
+  });
+
+  containerHeightSlider.addEventListener('mousedown', function(){
+    const sid = currentSectionId(); if(!sid) return;
+    const collage = document.querySelector('#' + sid + ' .tile-collage');
+    if(!collage) return;
+    const hadKey = containerHeightState.has(sid);
+    const prevVal = hadKey ? containerHeightState.get(sid) : null;
+    const prev = { height: collage.style.height, aspectRatio: collage.style.aspectRatio };
+    undoStack.push(function(){
+      collage.style.height = prev.height; collage.style.aspectRatio = prev.aspectRatio;
+      if(hadKey) containerHeightState.set(sid, prevVal); else containerHeightState.delete(sid);
+      containerHeightVal.textContent = (hadKey ? prevVal + 'rem' : 'AUTO');
+      containerHeightSlider.value = hadKey ? prevVal : containerHeightSlider.value;
+    });
+    if(undoStack.length > 60) undoStack.shift();
+  });
+  containerHeightSlider.addEventListener('input', function(){
+    const sid = currentSectionId();
+    if(!sid) return;
+    const media = getMediaEl(sid);
+    const collage = document.querySelector('#' + sid + ' .tile-collage');
+    if(!collage || !media) return;
+    let rem = parseInt(containerHeightSlider.value, 10);
+    const safeMax = getSafeContainerMaxHeightRem(media);
+    if(rem > safeMax){ rem = safeMax; containerHeightSlider.value = rem; }
+    containerHeightVal.textContent = rem + 'rem';
+    containerHeightState.set(sid, rem);
+    collage.style.aspectRatio = 'auto'; // rozprzęga wysokość od szerokości — szerokość może już iść dowolnie w bok
+    collage.style.height = rem + 'rem';
   });
 
   const textState = new Map(); // sectionId -> {scale,x,y}
@@ -4615,8 +5017,39 @@
     let css = '';
     containerState.forEach(function(rem, sid){
       css += '#' + sid + ' .project-media{ flex-basis:' + rem + 'rem; max-width:' + rem + 'rem; }\n';
-      css += '#' + sid + ' .tile-collage{ width:' + rem + 'rem; max-width:none; }\n';
+      const heightRem = containerHeightState.get(sid);
+      if(heightRem){
+        css += '#' + sid + ' .tile-collage{ width:' + rem + 'rem; max-width:none; height:' + heightRem + 'rem; aspect-ratio:auto; }\n';
+      } else {
+        css += '#' + sid + ' .tile-collage{ width:' + rem + 'rem; max-width:none; }\n';
+      }
     });
+    containerHeightState.forEach(function(heightRem, sid){
+      if(!containerState.has(sid)){
+        css += '#' + sid + ' .tile-collage{ height:' + heightRem + 'rem; aspect-ratio:auto; }\n';
+      }
+    });
+    // Normalizacja z-index: zamiast ciągnąć surowy, wciąż rosnący globalny licznik,
+    // ustaw małe, uporządkowane wartości (1,2,3...) OSOBNO w każdej sekcji — zachowuje
+    // kolejność "co jest nad czym", ale nigdy nie zbliża się do niebezpiecznych liczb.
+    (function normalizeZIndex(){
+      const bySection = new Map();
+      tileState.forEach(function(v, key){
+        if(deletedTiles.has(v.sectionId + ' :: ' + v.tag)) return;
+        if(!bySection.has(v.sectionId)) bySection.set(v.sectionId, []);
+        bySection.get(v.sectionId).push(v);
+      });
+      bySection.forEach(function(list){
+        list.sort(function(a, b){ return (parseFloat(a.zIndex) || 0) - (parseFloat(b.zIndex) || 0); });
+        list.forEach(function(v, i){
+          const newZ = i + 1;
+          v.zIndex = newZ;
+          const el = document.querySelector('#' + v.sectionId + ' .' + v.tag);
+          if(el) el.style.setProperty('z-index', newZ, 'important');
+        });
+      });
+      zCounter = 10;
+    })();
     tileState.forEach(function(v){
       if(deletedTiles.has(v.sectionId + ' :: ' + v.tag)) return; // usunięte - nie eksportuj pozycji
       const posProps = [];
@@ -4631,9 +5064,12 @@
       deletedTiles.forEach(function(k){ css += '  ' + k + '\n'; });
     }
     if(addedTiles.size){
-      css += '\n/* Nowe zdjęcia — dodaj ten fragment HTML do .tile-collage w danej sekcji (podmień obrazek na właściwy plik): */\n';
+      css += '\n/* Nowe zdjęcia — dodaj ten fragment HTML do .tile-collage w danej sekcji (podmień obrazek na właściwy plik, jeśli dalej jest tam TWOJ-PLIK): */\n';
       addedTiles.forEach(function(info, tag){
-        css += '  <div class="tile ' + tag + '"><div class="about-photo" style="background-image:url(\'images/TWOJ-PLIK.jpg?v=1\')"></div></div>  /* sekcja: ' + info.sectionId + ', proporcje: ' + info.orientation + ' */\n';
+        const key = info.sectionId + ' :: ' + tag;
+        const customUrl = tileFilenameState.get(key);
+        const finalUrl = customUrl || 'images/TWOJ-PLIK.jpg?v=1';
+        css += '  <div class="tile ' + tag + '"><div class="about-photo" style="background-image:url(\'' + finalUrl + '\')"></div></div>  /* sekcja: ' + info.sectionId + ', proporcje: ' + info.orientation + ' */\n';
       });
     }
     const txtOrigin = document.getElementById('ep-txt-center').checked ? 'center' : 'top left';
@@ -4672,7 +5108,15 @@
     if(textEditState.size){
       css += '\n/* Zmieniony tekst (podmień ręcznie w HTML przy tym data-i18n="..."): */\n';
       textEditState.forEach(function(newText, key){
+        if(newParagraphs.has(key)) return; // te pokazujemy osobno niżej, jako nowy HTML
         css += '  ' + key + ': "' + newText.replace(/"/g,'\\"') + '"\n';
+      });
+    }
+    if(newParagraphs.size){
+      css += '\n/* Nowe akapity — dodaj ten fragment HTML zaraz PO elemencie z podanym data-i18n: */\n';
+      newParagraphs.forEach(function(info, key){
+        const text = textEditState.has(key) ? textEditState.get(key) : '';
+        css += '  po data-i18n="' + info.afterKey + '" dodaj: <p class="' + info.className + '" data-i18n="' + key + '">' + text.replace(/</g,'&lt;') + '</p>\n';
       });
     }
     outputBox.value = css || '/* Nie wprowadzono jeszcze żadnych zmian. */';
@@ -4704,7 +5148,8 @@
     const media = scope.querySelector('.project-media');
     if(media){ media.style.transform = ''; media.style.flexBasis = ''; media.style.maxWidth = ''; }
     const collage = scope.querySelector('.tile-collage');
-    if(collage){ collage.style.width = ''; collage.style.maxWidth = ''; }
+    if(collage){ collage.style.width = ''; collage.style.maxWidth = ''; collage.style.height = ''; collage.style.aspectRatio = ''; }
+    containerHeightState.delete(sid);
     const row = scope.querySelector('.project-row');
     if(row) row.style.gap = '';
     scope.querySelectorAll('[data-i18n]').forEach(function(el){
@@ -4767,7 +5212,7 @@
       el.style.transform = ''; el.style.flexBasis = ''; el.style.maxWidth = '';
     });
     document.querySelectorAll('.tile-collage').forEach(function(el){
-      el.style.width = ''; el.style.maxWidth = '';
+      el.style.width = ''; el.style.maxWidth = ''; el.style.height = ''; el.style.aspectRatio = '';
     });
     document.querySelectorAll('.project-row').forEach(function(el){ el.style.gap = ''; });
     document.querySelectorAll('.motif-wrap').forEach(function(el){
@@ -4790,6 +5235,11 @@
     document.querySelectorAll('[data-i18n]').forEach(function(el){
       if(el.dataset.origText !== undefined) el.textContent = el.dataset.origText;
     });
+    newParagraphs.forEach(function(info, key){
+      const el = document.querySelector('[data-i18n="' + key + '"]');
+      if(el) el.remove();
+    });
+    newParagraphs.clear();
     textEditState.clear();
     tileFilenameOriginal.forEach(function(origUrl, key){
       const parts = key.split(' :: ');
@@ -4799,7 +5249,7 @@
       if(imgEl) imgEl.style.backgroundImage = origUrl;
     });
     tileFilenameState.clear(); tileFilenameOriginal.clear();
-    tileState.clear(); textState.clear(); containerState.clear(); mediaPosState.clear(); gapState.clear();
+    tileState.clear(); textState.clear(); containerState.clear(); containerHeightState.clear(); mediaPosState.clear(); gapState.clear();
     deletedTiles.clear(); addedTiles.clear();
     activeEl = null;
     tileControls.style.display = 'none';
