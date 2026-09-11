@@ -486,6 +486,7 @@
   .motif-custom-mask{
     aspect-ratio:1/1;
     position:relative;
+    z-index:0;
     -webkit-mask-image:var(--custom-mask-url);
     mask-image:var(--custom-mask-url);
     -webkit-mask-size:contain; mask-size:contain;
@@ -494,11 +495,12 @@
     background-color:currentColor;
   }
   /* drop-shadow nie zawsze współpracuje poprawnie z mask-image w przeglądarkach —
-     zamiast liczyć na filtr, tworzymy rozmytą kopię tego samego kształtu za spodem */
+     zamiast liczyć na filtr, tworzymy rozmytą kopię tego samego kształtu za spodem.
+     inset trzymamy małe, bo rodzic (.bg-decor) przycina to co wychodzi poza jego brzeg. */
   .motif-wrap.motif-clickable.lit .motif-custom-mask::before{
     content:"";
     position:absolute;
-    inset:-15%;
+    inset:-6%;
     background-color:currentColor;
     -webkit-mask-image:var(--custom-mask-url);
     mask-image:var(--custom-mask-url);
@@ -506,7 +508,7 @@
     -webkit-mask-repeat:no-repeat; mask-repeat:no-repeat;
     -webkit-mask-position:center; mask-position:center;
     filter:blur(18px);
-    opacity:.85;
+    opacity:.9;
     z-index:-1;
   }
   .motif-wrap.motif-clickable{
