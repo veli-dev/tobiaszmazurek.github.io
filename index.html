@@ -485,12 +485,29 @@
   }
   .motif-custom-mask{
     aspect-ratio:1/1;
+    position:relative;
     -webkit-mask-image:var(--custom-mask-url);
     mask-image:var(--custom-mask-url);
     -webkit-mask-size:contain; mask-size:contain;
     -webkit-mask-repeat:no-repeat; mask-repeat:no-repeat;
     -webkit-mask-position:center; mask-position:center;
     background-color:currentColor;
+  }
+  /* drop-shadow nie zawsze współpracuje poprawnie z mask-image w przeglądarkach —
+     zamiast liczyć na filtr, tworzymy rozmytą kopię tego samego kształtu za spodem */
+  .motif-wrap.motif-clickable.lit .motif-custom-mask::before{
+    content:"";
+    position:absolute;
+    inset:-15%;
+    background-color:currentColor;
+    -webkit-mask-image:var(--custom-mask-url);
+    mask-image:var(--custom-mask-url);
+    -webkit-mask-size:contain; mask-size:contain;
+    -webkit-mask-repeat:no-repeat; mask-repeat:no-repeat;
+    -webkit-mask-position:center; mask-position:center;
+    filter:blur(18px);
+    opacity:.85;
+    z-index:-1;
   }
   .motif-wrap.motif-clickable{
     pointer-events:auto;
