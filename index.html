@@ -493,26 +493,6 @@
     -webkit-mask-position:center; mask-position:center;
     background-color:currentColor;
   }
-  /* Prawdziwy, osobny element (nie pseudo-element) — wstawiany JS-em jako PIERWSZE dziecko
-     .motif-wrap, więc maluje się za ikonką bez potrzeby z-index. Jako rodzeństwo (nie dziecko)
-     zamaskowanej ikonki, nie jest przez nią przycinany. */
-  .motif-glow{
-    position:absolute;
-    inset:-8%;
-    background-color:var(--motif-icon-color, var(--motif-color, var(--accent)));
-    -webkit-mask-image:var(--custom-mask-url);
-    mask-image:var(--custom-mask-url);
-    -webkit-mask-size:contain; mask-size:contain;
-    -webkit-mask-repeat:no-repeat; mask-repeat:no-repeat;
-    -webkit-mask-position:center; mask-position:center;
-    filter:blur(18px);
-    opacity:0;
-    pointer-events:none;
-    transition:opacity .4s ease;
-  }
-  .motif-wrap.motif-clickable.lit .motif-glow{
-    opacity:.9;
-  }
   .motif-wrap.motif-clickable{
     pointer-events:auto;
     cursor:pointer;
@@ -5301,13 +5281,6 @@
       el.style.setProperty('--custom-mask-url', "url('" + src + "')");
       el.style.display = 'block';
       if(el.nextElementSibling) el.nextElementSibling.style.display = 'none';
-      const wrap = el.parentElement;
-      if(wrap && !wrap.querySelector('.motif-glow')){
-        const glow = document.createElement('div');
-        glow.className = 'motif-glow';
-        glow.style.setProperty('--custom-mask-url', "url('" + src + "')");
-        wrap.insertBefore(glow, wrap.firstChild);
-      }
     };
     test.onerror = function(){}; // plik nie istnieje — zostaje ukryta, pokazuje się domyślna ikonka SVG obok
     test.src = src;
