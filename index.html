@@ -494,14 +494,14 @@
     -webkit-mask-position:center; mask-position:center;
     background-color:currentColor;
   }
-  /* drop-shadow nie zawsze współpracuje poprawnie z mask-image w przeglądarkach —
-     zamiast liczyć na filtr, tworzymy rozmytą kopię tego samego kształtu za spodem.
-     inset trzymamy małe, bo rodzic (.bg-decor) przycina to co wychodzi poza jego brzeg. */
-  .motif-wrap.motif-clickable.lit .motif-custom-mask::before{
+  /* Poświata NIE może siedzieć wewnątrz zamaskowanego elementu — mask-image przycina
+     wszystko w środku, łącznie z pseudo-elementami, więc rozmycie nigdy by się nie rozlało.
+     Dlatego poświata siedzi na rodzicu (.motif-wrap), który maski nie ma. */
+  .motif-wrap.motif-clickable.lit.has-custom-mask::before{
     content:"";
     position:absolute;
     inset:-6%;
-    background-color:currentColor;
+    background-color:var(--motif-icon-color, var(--motif-color, var(--accent)));
     -webkit-mask-image:var(--custom-mask-url);
     mask-image:var(--custom-mask-url);
     -webkit-mask-size:contain; mask-size:contain;
@@ -5299,6 +5299,11 @@
       el.style.setProperty('--custom-mask-url', "url('" + src + "')");
       el.style.display = 'block';
       if(el.nextElementSibling) el.nextElementSibling.style.display = 'none';
+      const wrap = el.parentElement;
+      if(wrap){
+        wrap.style.setProperty('--custom-mask-url', "url('" + src + "')");
+        wrap.classList.add('has-custom-mask');
+      }
     };
     test.onerror = function(){}; // plik nie istnieje — zostaje ukryta, pokazuje się domyślna ikonka SVG obok
     test.src = src;
