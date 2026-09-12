@@ -503,9 +503,6 @@
   .motif-wrap.motif-clickable.lit .motif{
     opacity:1;
   }
-  .motif-wrap.motif-clickable.lit{
-    filter:drop-shadow(0 0 calc(var(--motif-glow-size, 1) * 22px) color-mix(in srgb, var(--motif-color, var(--accent)) calc(var(--motif-glow-strength, 1) * 100%), transparent)) drop-shadow(0 0 calc(var(--motif-glow-size, 1) * 55px) color-mix(in srgb, var(--motif-color, var(--accent)) calc(var(--motif-glow-strength, 1) * 100%), transparent)) drop-shadow(0 0 calc(var(--motif-glow-size, 1) * 90px) color-mix(in srgb, var(--motif-color, var(--accent)) calc(var(--motif-glow-strength, 1) * 100%), transparent));
-  }
   @keyframes driftBlob{
     0%{transform:translate(0,0) scale(1);}
     50%{transform:translate(36px,-26px) scale(1.08);}
@@ -3367,10 +3364,42 @@
   });
 
   // --- Big background icon click-to-toggle glow ---
-  function toggleMotif(wrap){
-    wrap.classList.toggle('lit');
-    wrap.setAttribute('aria-label', wrap.classList.contains('lit') ? 'Zgaś ikonę' : 'Zapal ikonę');
+  function hexToRgb(hex){
+    hex = (hex || '').trim().replace('#', '');
+    if(hex.length === 3) hex = hex.split('').map(c => c + c).join('');
+    if(hex.length !== 6) return null;
+    const num = parseInt(hex, 16);
+    if(isNaN(num)) return null;
+    return { r: (num >> 16) & 255, g: (num >> 8) & 255, b: num & 255 };
   }
+  function applyMotifFilter(wrap, isLit){
+    if(isLit){
+      const cs = getComputedStyle(wrap);
+      let glowColor = cs.getPropertyValue('--motif-color').trim() || cs.getPropertyValue('--accent').trim() || '#7C6A4A';
+      const glowSize = parseFloat(cs.getPropertyValue('--motif-glow-size')) || 1;
+      const glowStrength = Math.max(0, Math.min(1.5, parseFloat(cs.getPropertyValue('--motif-glow-strength')) || 1));
+      const rgb = hexToRgb(glowColor) || { r: 124, g: 106, b: 74 };
+      // Wpisujemy KONKRETNY kolor (nie zmienną CSS) — przeglądarki potrafią płynnie animować
+      // przejście między dwiema konkretnymi wartościami koloru, ale często NIE animują płynnie,
+      // gdy kolor pochodzi ze zmiennej CSS (var()) — stąd wcześniejsze "skakanie" poświaty.
+      const rgba = 'rgba(' + rgb.r + ',' + rgb.g + ',' + rgb.b + ',' + glowStrength + ')';
+      wrap.style.filter =
+        'drop-shadow(0 0 ' + Math.round(22 * glowSize) + 'px ' + rgba + ') ' +
+        'drop-shadow(0 0 ' + Math.round(55 * glowSize) + 'px ' + rgba + ') ' +
+        'drop-shadow(0 0 ' + Math.round(90 * glowSize) + 'px ' + rgba + ')';
+    } else {
+      wrap.style.filter = 'drop-shadow(0 0 0px transparent) drop-shadow(0 0 0px transparent) drop-shadow(0 0 0px transparent)';
+    }
+  }
+  window.applyMotifFilter = applyMotifFilter;
+  function toggleMotif(wrap){
+    const isLit = wrap.classList.toggle('lit');
+    wrap.setAttribute('aria-label', isLit ? 'Zgaś ikonę' : 'Zapal ikonę');
+    applyMotifFilter(wrap, isLit);
+  }
+  // Ikonki, które startują "zapalone" już w samym HTML (bez kliknięcia), też muszą dostać
+  // ten sam, poprawny styl od razu — inaczej pokazywałyby się bez poświaty aż do pierwszego kliknięcia.
+  document.querySelectorAll('.motif-wrap.motif-clickable.lit').forEach(wrap => applyMotifFilter(wrap, true));
   document.querySelectorAll('.motif-wrap.motif-clickable').forEach(wrap => {
     const toggle = (e) => { e.stopPropagation(); toggleMotif(wrap); };
     wrap.addEventListener('click', toggle);
@@ -4199,6 +4228,7 @@
     motifColorInput.value = hex;
     motifColorHex.value = hex;
     motifColorState.set(sectionEl.id, hex);
+    if(activeMotif && activeMotif.classList.contains('lit') && window.applyMotifFilter) window.applyMotifFilter(activeMotif, true);
   }
   function applyIconColor(hex, sectionEl){
     sectionEl.style.setProperty('--motif-icon-color', hex);
@@ -4271,6 +4301,7 @@
     motifGlowSizeVal.textContent = pct + '%';
     motifGlowSizeSlider.value = pct;
     motifGlowSizeState.set(sectionEl.id, mult);
+    if(activeMotif && activeMotif.classList.contains('lit') && window.applyMotifFilter) window.applyMotifFilter(activeMotif, true);
   }
   motifGlowSizeSlider.addEventListener('mousedown', function(){
     if(!activeMotif) return;
@@ -4290,6 +4321,7 @@
     motifGlowStrengthVal.textContent = pct + '%';
     motifGlowStrengthSlider.value = pct;
     motifGlowStrengthState.set(sectionEl.id, mult);
+    if(activeMotif && activeMotif.classList.contains('lit') && window.applyMotifFilter) window.applyMotifFilter(activeMotif, true);
   }
   motifGlowStrengthSlider.addEventListener('mousedown', function(){
     if(!activeMotif) return;
